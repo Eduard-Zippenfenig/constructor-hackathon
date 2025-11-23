@@ -21,6 +21,11 @@ const englishLibrary = document.getElementById("english-library");
 const materialsList = document.getElementById("materials-list");
 const openCourseButton = document.getElementById("open-course");
 const logoutButton = document.getElementById("logout-btn");
+const stepNodes = {
+  account: document.getElementById("step-account"),
+  survey: document.getElementById("step-survey"),
+  course: document.getElementById("step-course"),
+};
 
 const requestJson = async (url, options = {}) => {
   const response = await fetch(url, {
@@ -131,6 +136,21 @@ const showAuthError = (message) => {
   authError.classList.remove("hidden");
 };
 
+const setStepState = (currentStep) => {
+  const order = ["account", "survey", "course"];
+  const currentIndex = order.indexOf(currentStep);
+  order.forEach((key, index) => {
+    const node = stepNodes[key];
+    if (!node) return;
+    node.classList.remove("current", "completed");
+    if (index === currentIndex) {
+      node.classList.add("current");
+    } else if (currentIndex > index) {
+      node.classList.add("completed");
+    }
+  });
+};
+
 const redirectAfterAuth = (nextUrl) => {
   window.location.href = nextUrl || "/catalog";
 };
@@ -145,6 +165,7 @@ const loadSession = async () => {
   try {
     const data = await requestJson("/api/session");
     if (!data.authenticated) {
+      setStepState("account");
       state.account = null;
       state.survey = null;
       if (accountSection) {
@@ -156,6 +177,7 @@ const loadSession = async () => {
     }
     state.account = data.user;
     state.survey = data.survey;
+    setStepState(state.survey ? "course" : "survey");
     logoutButton?.classList.remove("hidden");
     if (accountSection) {
       accountSection.classList.add("hidden");
@@ -168,6 +190,7 @@ const loadSession = async () => {
   } catch (error) {
     console.error("Unable to load session", error);
     showAuthError(error.message || "Session error");
+    setStepState("account");
   }
 };
 
@@ -1020,5 +1043,6 @@ if (authTabs.length) {
   });
   setAuthView("signup");
 }
+setStepState("account");
 hideCourseSections();
 loadSession();

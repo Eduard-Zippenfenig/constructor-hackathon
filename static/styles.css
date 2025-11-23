@@ -275,6 +275,7 @@ a {
   gap: 0.6rem;
   font-weight: 600;
   color: var(--slate);
+  background: #fff;
 }
 
 .step-node span {
@@ -288,9 +289,26 @@ a {
   color: var(--accent);
 }
 
-.step-node.active {
-  border-color: rgba(90, 103, 255, 0.35);
+.step-node.completed {
+  border-color: rgba(90, 103, 255, 0.22);
   color: var(--ink);
+}
+
+.step-node.current {
+  border-color: rgba(90, 103, 255, 0.55);
+  background: linear-gradient(120deg, rgba(90, 103, 255, 0.1), rgba(90, 103, 255, 0.04));
+  color: var(--ink);
+  box-shadow: 0 12px 24px rgba(90, 103, 255, 0.16);
+}
+
+.step-node.completed span {
+  background: rgba(90, 103, 255, 0.2);
+  color: var(--accent);
+}
+
+.step-node.current span {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
 }
 
 .glass-grid {
