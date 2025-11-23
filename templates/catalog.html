@@ -13,7 +13,6 @@
           <span class="brand-icon">◎</span>
           <div>
             <strong>PulsePrep</strong>
-            <p>Course catalog</p>
           </div>
         </div>
         <div class="nav-actions">
@@ -28,10 +27,11 @@
         <div class="panel-header">
           <p class="eyebrow">Catalog</p>
           <h2>Available courses</h2>
-          <p>Start with Probability; more tracks will arrive here soon.</p>
+          <p>Probability is live; Biology Foundations just landed.</p>
         </div>
         <div class="library-grid">
-          <article class="card">
+          <article class="card catalog-card probability-card">
+            <div class="course-badge">Adaptive · Probability</div>
             <h3>Probability · Adaptive track</h3>
             <p class="muted">
               Chapters 1–9 with guided exercises, adaptive practice, and downloadable slides/homeworks.
@@ -47,9 +47,41 @@
               <span class="pill">CLT</span>
               <span class="pill">Simulation</span>
             </div>
-            <div class="cta-row" style="margin-top: 1rem;">
+            <div class="cta-row spaced">
               <a class="primary pill" href="/course" target="_blank">Open course workspace</a>
               <a class="ghost pill" href="/survey">Tune settings</a>
+            </div>
+          </article>
+          <article class="card catalog-card biology-card">
+            <div class="course-badge">Lab-first · Biology</div>
+            <h3>Biology Foundations · Lab-first track</h3>
+            <p class="muted">
+              Cells, genetics, evolution, and ecology with lab-ready checklists and quick MC checks to confirm understanding.
+            </p>
+            <ul class="profile-list">
+              <li><strong>Modules:</strong> Cell biology, genetics, evolution, ecology, systems</li>
+              <li><strong>Includes:</strong> Guided lab prompts, reflections, graphing cues</li>
+              <li><strong>Mode:</strong> Self-paced with lab notebook discipline</li>
+            </ul>
+            <div class="pill-row">
+              <span class="pill">Cells</span>
+              <span class="pill">Genetics</span>
+              <span class="pill">Evolution</span>
+              <span class="pill">Ecology</span>
+            </div>
+            <div class="module-teaser">
+              <p class="eyebrow">Quick outline</p>
+              <ul class="outline-list" id="biology-module-list">
+                <li>Cell structure &amp; energy flow</li>
+                <li>Genetics &amp; heredity</li>
+                <li>Evolution &amp; natural selection</li>
+                <li>Systems, homeostasis, &amp; ecology</li>
+                <li>Lab writing, graphing, &amp; ethics</li>
+              </ul>
+            </div>
+            <div class="cta-row spaced">
+              <button type="button" class="primary pill" id="open-biology-workspace">Open biology workspace</button>
+              <a class="ghost pill" href="/course" target="_blank">Preview layout</a>
             </div>
           </article>
           <article class="card muted" style="opacity: 0.6;">
@@ -59,5 +91,6 @@
         </div>
       </section>
     </main>
+    <script src="{{ url_for('static', filename='catalog.js') }}"></script>
   </body>
 </html>

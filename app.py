@@ -393,5 +393,18 @@ def health():
     return {"status": "ok"}
 
 
+# Development: prevent client caching so changes appear immediately in the browser
+@app.after_request
+def disable_client_caching(response):
+    try:
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    except Exception:
+        # If response has no headers attribute for some reason, ignore in dev
+        pass
+    return response
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -480,6 +480,43 @@ a {
   border-radius: 22px;
   padding: 1.5rem;
   background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+}
+
+.catalog-card {
+  isolation: isolate;
+  border: none;
+  color: #0f172a;
+}
+
+.catalog-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(90, 103, 255, 0.12), rgba(127, 86, 217, 0.08));
+  z-index: -2;
+}
+
+.catalog-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.95));
+  z-index: -1;
+}
+
+.probability-card::before {
+  background: radial-gradient(circle at 20% 20%, rgba(90, 103, 255, 0.2), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(127, 86, 217, 0.2), transparent 45%),
+    linear-gradient(135deg, rgba(90, 103, 255, 0.14), rgba(127, 86, 217, 0.1));
+}
+
+.biology-card::before {
+  background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.2), transparent 55%),
+    radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.18), transparent 45%),
+    linear-gradient(135deg, rgba(52, 211, 153, 0.12), rgba(74, 222, 128, 0.08));
 }
 
 .profile-list {
@@ -503,6 +540,33 @@ a {
   border: 1px solid rgba(15, 23, 42, 0.15);
   padding: 0.35rem 0.9rem;
   font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.course-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.biology-card .pill {
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #065f46;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.probability-card .pill {
+  border-color: rgba(90, 103, 255, 0.3);
+  color: #312e81;
+  background: rgba(90, 103, 255, 0.1);
 }
 
 .math-view-toggle {
@@ -586,9 +650,35 @@ a {
   background: #fff;
 }
 
+.module-teaser {
+  margin-top: 1.1rem;
+}
+
+.outline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.outline-list li {
+  padding-bottom: 0.35rem;
+  border-bottom: 1px dashed rgba(15, 23, 42, 0.12);
+  font-weight: 600;
+  color: #0b1430;
+}
+
 .cta-row {
   margin-top: 1.25rem;
   text-align: right;
+}
+
+.cta-row.spaced {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .cta-row .primary,
@@ -614,6 +704,11 @@ a {
   background: #f5f7fb;
   color: var(--ink);
   font-family: "Inter", sans-serif;
+}
+
+/* Only keep the dedicated back button; hide any other catalog link that may slip in */
+.workspace-body a[href="/catalog"]:not(.back-button) {
+  display: none !important;
 }
 
 .workspace-shell {
@@ -707,6 +802,22 @@ a {
   padding: 2rem clamp(1.5rem, 4vw, 3rem);
 }
 
+.workspace-top-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  background: #fff;
+}
+
 .workspace-hero {
   border-radius: 22px;
   padding: 1.5rem;
@@ -719,6 +830,60 @@ a {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.tag-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.dropdown-toggle {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.2rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.dropdown-toggle .chevron {
+  font-size: 0.9rem;
+}
+
+.dropdown-menu {
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: #fff;
+  color: #0f172a;
+  border-radius: 14px;
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.12);
+  display: none;
+  z-index: 20;
+}
+
+.tag-dropdown.open .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li {
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.dropdown-menu li:hover {
+  background: rgba(90, 103, 255, 0.12);
 }
 
 .stage-screen {
