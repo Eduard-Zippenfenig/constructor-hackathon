@@ -1,0 +1,23 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+
+# Virtualenvs
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Environment
+.env
+
+# Instance DB
+instance/pulseprep.db
+
+# Editor configs
+.vscode/
+.idea/
+
+# Logs
+*.log

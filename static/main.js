@@ -902,8 +902,8 @@ const handleAccountSubmit = async (event) => {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    if (data.confirmationSent) {
-      alert("Account created. Check your email to confirm before logging in.");
+    if (data.accountCreated) {
+      alert("Account created. You can log in now.");
       setAuthView("login");
     }
   } catch (error) {

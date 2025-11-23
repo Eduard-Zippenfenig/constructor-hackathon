@@ -1,11 +1,8 @@
 import json
 import os
 import re
-import smtplib
 import sqlite3
-from email.message import EmailMessage
 from typing import Optional
-import secrets
 
 from flask import (
     Flask,
@@ -15,7 +12,6 @@ from flask import (
     request,
     send_from_directory,
     session,
-    url_for,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -67,7 +63,9 @@ def ensure_schema():
         conn.execute("ALTER TABLE users ADD COLUMN email_confirmed INTEGER DEFAULT 0")
     if "confirmation_token" not in cols:
         conn.execute("ALTER TABLE users ADD COLUMN confirmation_token TEXT")
-    conn.execute("UPDATE users SET email_confirmed = 1 WHERE email_confirmed IS NULL")
+    conn.execute(
+        "UPDATE users SET email_confirmed = 1 WHERE email_confirmed IS NULL OR email_confirmed = 0"
+    )
     conn.commit()
     conn.close()
 
@@ -138,42 +136,6 @@ def list_materials():
     return materials
 
 
-def send_confirmation_email(recipient: str, full_name: str, token: str):
-    host = os.environ.get("SMTP_HOST")
-    if not host:
-        app.logger.info("SMTP_HOST not configured; skipping confirmation email.")
-        return
-    port = int(os.environ.get("SMTP_PORT", "587"))
-    username = os.environ.get("SMTP_USERNAME") or os.environ.get("SMTP_USER")
-    password = os.environ.get("SMTP_PASSWORD")
-    sender = os.environ.get("SMTP_SENDER") or username or "PulsePrep <no-reply@pulseprep>"
-    use_tls = os.environ.get("SMTP_USE_TLS", "true").lower() in {"1", "true", "yes"}
-
-    message = EmailMessage()
-    message["Subject"] = "Confirm your PulsePrep signup"
-    message["From"] = sender
-    message["To"] = recipient
-    greeting = full_name or "there"
-    confirm_link = url_for("confirm_email", token=token, _external=True)
-    message.set_content(
-        f"Hi {greeting},\n\n"
-        "Welcome to PulsePrep! Please confirm your email address to activate your account.\n\n"
-        f"Confirm here: {confirm_link}\n\n"
-        "If this wasn't you, you can ignore this message.\n\n"
-        "Stay focused,\nPulsePrep Team"
-    )
-
-    try:
-        with smtplib.SMTP(host, port, timeout=10) as server:
-            if use_tls:
-                server.starttls()
-            if username and password:
-                server.login(username, password)
-            server.send_message(message)
-            app.logger.info("Confirmation email sent to %s", recipient)
-    except Exception as exc:  # pragma: no cover - best effort
-        app.logger.warning("Failed to send confirmation email: %s", exc)
-
 def register_user(full_name: str, email: str, password: Optional[str], goal: str, provider: str = "password"):
     full_name = (full_name or "").strip()
     email = (email or "").strip().lower()
@@ -187,10 +149,9 @@ def register_user(full_name: str, email: str, password: Optional[str], goal: str
     # (some macOS/Python builds may not expose newer algorithms like scrypt)
     password_hash = generate_password_hash(password, method="pbkdf2:sha256") if password else None
     try:
-        token = secrets.token_urlsafe(32)
         conn.execute(
             "INSERT INTO users (full_name, email, password_hash, goal, provider, email_confirmed, confirmation_token) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (full_name, email, password_hash, goal, provider, 0, token),
+            (full_name, email, password_hash, goal, provider, 1, None),
         )
         user_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
         conn.execute(
@@ -199,7 +160,6 @@ def register_user(full_name: str, email: str, password: Optional[str], goal: str
         )
         conn.commit()
         conn.close()
-        send_confirmation_email(email, full_name, token)
         return user_id
     except sqlite3.IntegrityError as exc:
         conn.close()
@@ -260,7 +220,7 @@ def auth_form():
             if len(password) < 6:
                 raise ValueError("Password must be at least 6 characters")
             user_id = register_user(form["full_name"], form["email"], password, form["goal"])
-            message = "Account created. Check your email to confirm before logging in."
+            message = "Account created. You can log in now."
         except ValueError as exc:
             error = str(exc)
     return render_template("auth.html", error=error, message=message, form=form)
@@ -271,13 +231,6 @@ def api_session():
     user = current_user()
     if not user:
         return jsonify({"authenticated": False})
-    # ensure email confirmed; if not, clear session
-    conn = get_db()
-    confirmed = conn.execute("SELECT email_confirmed FROM users WHERE id = ?", (user["id"],)).fetchone()
-    conn.close()
-    if not confirmed or not confirmed["email_confirmed"]:
-        session.clear()
-        return jsonify({"authenticated": False, "error": "Email not confirmed"})
     progress = ensure_progress(user["id"])
     survey = json.loads(user["survey_json"]) if user["survey_json"] else None
     return jsonify(
@@ -299,25 +252,6 @@ def validate_email(email):
     return bool(email and EMAIL_REGEX.match(email))
 
 
-@app.route("/confirm/<token>")
-def confirm_email(token):
-    conn = get_db()
-    row = conn.execute(
-        "SELECT id FROM users WHERE confirmation_token = ?", (token,)
-    ).fetchone()
-    if not row:
-        conn.close()
-        return "Invalid or expired confirmation link.", 400
-    user_id = row["id"]
-    conn.execute(
-        "UPDATE users SET email_confirmed = 1, confirmation_token = NULL WHERE id = ?",
-        (user_id,),
-    )
-    conn.commit()
-    conn.close()
-    session["user_id"] = user_id
-    return redirect("/catalog")
-
 
 @app.post("/api/signup")
 def api_signup():
@@ -336,7 +270,7 @@ def api_signup():
         user_id = register_user(full_name, email, password, goal)
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
-    return jsonify({"confirmationSent": True})
+    return jsonify({"accountCreated": True})
 
 
 @app.post("/api/login")
@@ -348,13 +282,11 @@ def api_login():
         return jsonify({"error": "Valid email is required"}), 400
     conn = get_db()
     row = conn.execute(
-        "SELECT id, password_hash, survey_json, email_confirmed FROM users WHERE email = ?", (email,)
+        "SELECT id, password_hash, survey_json FROM users WHERE email = ?", (email,)
     ).fetchone()
     conn.close()
     if not row or not row["password_hash"] or not check_password_hash(row["password_hash"], password):
         return jsonify({"error": "Invalid credentials"}), 400
-    if not row["email_confirmed"]:
-        return jsonify({"error": "Please confirm your email before logging in."}), 403
     session["user_id"] = row["id"]
     needs_survey = row["survey_json"] is None
     return jsonify({"authenticated": True, "needsSurvey": needs_survey})
@@ -368,16 +300,10 @@ def api_google_login():
     if not validate_email(email):
         return jsonify({"error": "Valid Google email required"}), 400
     conn = get_db()
-    row = conn.execute("SELECT id, survey_json, email_confirmed FROM users WHERE email = ?", (email,)).fetchone()
+    row = conn.execute("SELECT id, survey_json FROM users WHERE email = ?", (email,)).fetchone()
     if row:
         user_id = row["id"]
         needs_survey = row["survey_json"] is None
-        if not row["email_confirmed"]:
-            conn.execute(
-                "UPDATE users SET email_confirmed = 1, confirmation_token = NULL WHERE id = ?",
-                (user_id,),
-            )
-            conn.commit()
     else:
         conn.execute(
             "INSERT INTO users (full_name, email, provider, email_confirmed) VALUES (?, ?, 'google', 1)",
@@ -389,7 +315,6 @@ def api_google_login():
             (user_id, json.dumps({"modules": [], "exercises": []})),
         )
         conn.commit()
-        send_confirmation_email(email, full_name)
         needs_survey = True
     conn.close()
     session["user_id"] = user_id
