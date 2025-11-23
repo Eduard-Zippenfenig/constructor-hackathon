@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulsePrep · Adaptive Probability Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="landing">
+    <div class="hero-shell">
+      <nav class="primary-nav">
+        <div class="brand">
+          <span class="brand-icon">◎</span>
+          <div>
+            <strong>PulsePrep</strong>
+            <p>Adaptive probability studio</p>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <a class="ghost-link" href="#course-section">Course view</a>
+          <a class="ghost-link" href="/course">Workspace</a>
+          <button id="logout-btn" class="ghost pill small hidden">Log out</button>
+        </div>
+      </nav>
+
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Designed for deep focus</p>
+          <h1>
+            Spin up a probability course that mirrors <span>your</span> attention span, soundscape, and pace.
+          </h1>
+          <p>
+            PulsePrep blends an adaptability survey and a full-stack course builder. Each step tunes the probability experience—music, format, explanations—so learners get into flow faster.
+          </p>
+          <div class="hero-actions">
+            <button class="primary pill" data-scroll="#account-section">Launch onboarding</button>
+            <button class="ghost pill" data-scroll="#curriculum-section">Preview the blueprint</button>
+          </div>
+          <p class="microcopy">
+            3 simple moves: 01 create profile, 02 capture adaptability, 03 explore your adaptive course—unlock a living workspace instantly.
+          </p>
+          <div class="hero-metrics">
+            <div>
+              <strong>3-step</strong>
+              <p>diagnostic funnel</p>
+            </div>
+            <div>
+              <strong>18+</strong>
+              <p>adaptive levers</p>
+            </div>
+            <div>
+              <strong>6 week</strong>
+              <p>launch plan</p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="track-card">
+            <p class="eyebrow">Live progress</p>
+            <h3>Adaptive journey</h3>
+            <ul class="progress-list">
+              <li class="active"><span>01</span> Profile &amp; goal</li>
+              <li><span>02</span> Focus survey</li>
+              <li><span>03</span> Probability course</li>
+            </ul>
+          </div>
+          <div class="floating-pill">Lo-fi • Deep work</div>
+          <div class="floating-pill secondary">Graphs • Story problems</div>
+        </div>
+      </header>
+    </div>
+
+    <main class="flow-layout">
+      <section class="step-belt">
+        <div class="step-node active">
+          <span>1</span>
+          Account fingerprint
+        </div>
+        <div class="step-node">
+          <span>2</span>
+          Focus survey
+        </div>
+        <div class="step-node">
+          <span>3</span>
+          Adaptive course
+        </div>
+      </section>
+
+      <section class="form-stack">
+        <article id="account-section" class="glass-panel">
+          <header>
+            <p class="eyebrow">Step 01</p>
+            <h2>Account fingerprint</h2>
+            <p>Create or access your learner profile so the system can personalize tone and reminders.</p>
+          </header>
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" data-auth="signup">Sign up</button>
+            <button type="button" class="auth-tab" data-auth="login">Log in</button>
+          </div>
+          <div id="auth-error" class="form-error hidden"></div>
+          <form id="account-form" class="smart-form">
+            <label>
+              <span>Full name</span>
+              <input type="text" name="fullName" placeholder="Taylor Learner" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" placeholder="you@email.com" required />
+            </label>
+            <label>
+              <span>Password</span>
+              <input type="password" name="password" placeholder="Create a secure password" required />
+            </label>
+            <label>
+              <span>Study goal</span>
+              <input type="text" name="goal" placeholder="Target score or milestone" required />
+            </label>
+            <button type="submit" class="primary pill large">Create account &amp; continue</button>
+          </form>
+
+          <form id="login-form" class="smart-form hidden">
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" placeholder="you@email.com" required />
+            </label>
+            <label>
+              <span>Password</span>
+              <input type="password" name="password" placeholder="Your password" required />
+            </label>
+            <button type="submit" class="primary pill large">Log in</button>
+          </form>
+
+          <div class="google-inline">
+            <input type="text" id="google-name" placeholder="Google display name" />
+            <input type="email" id="google-email" placeholder="google_account@email.com" />
+            <button type="button" class="google-btn" id="google-signup">
+              <span>Continue with Google</span>
+            </button>
+          </div>
+          <p class="muted" style="margin-top:1rem;">
+            Want the classic secure signup? <a href="/auth">Open the standalone signup page.</a>
+          </p>
+        </article>
+
+      </section>
+
+      <section id="course-section" class="panel hidden neon-panel">
+        <div class="panel-header">
+          <p class="eyebrow">Step 03</p>
+          <h2>Your adaptive probability course</h2>
+          <p>Profile highlights, probability modules, and background modes tuned for you.</p>
+        </div>
+        <div class="course-grid">
+          <article class="card">
+            <h3>Profile snapshot</h3>
+            <ul class="profile-list" id="profile-summary"></ul>
+            <div class="audio-settings">
+              <h4>Focus soundtrack</h4>
+              <div id="audio-pills" class="pill-row"></div>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Probability control center</h3>
+            <p class="muted">Switch representation styles whenever you want a new lens.</p>
+            <div class="math-view-toggle" id="math-toggle"></div>
+            <div id="math-panel" class="math-panel"></div>
+            <div class="modules" id="math-modules"></div>
+          </article>
+          <article class="card">
+            <h3>Applied inference</h3>
+            <div class="modules" id="english-modules"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="curriculum-section" class="panel hidden">
+        <div class="panel-header">
+          <h2>Course blueprint</h2>
+          <p>The end-to-end plan: goals, modes, and modules.</p>
+        </div>
+        <div class="blueprint-grid">
+          <article class="card">
+            <h3>Course overview</h3>
+            <ul class="profile-list" id="blueprint-essentials"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="course-library" class="panel hidden">
+        <div class="panel-header">
+          <h2>Library of drills</h2>
+          <p>Every module, lab, and storytelling task surfaced for quick access.</p>
+        </div>
+        <div class="library-grid">
+          <article class="card">
+            <h3>Probability track</h3>
+            <div id="math-library" class="library-column"></div>
+          </article>
+          <article class="card">
+            <h3>Inference &amp; communication</h3>
+            <div id="english-library" class="library-column"></div>
+          </article>
+          <article class="card">
+            <h3>Downloads</h3>
+            <p class="muted">Slides, homeworks, and solutions from your probability course.</p>
+            <div id="materials-list" class="library-column"></div>
+          </article>
+        </div>
+        <div class="cta-row">
+          <button id="open-course" class="primary ghost large">Open immersive workspace</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Need a focused space? Jump straight into the <a href="/course">course workspace</a>.</p>
+      <span>Made for learners chasing flow.</span>
+    </footer>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </body>
+</html>

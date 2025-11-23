@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulsePrep · Secure Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <style>
+      body {
+        background: #f5f7fb;
+        font-family: "Inter", system-ui, sans-serif;
+        margin: 0;
+        color: #0f172a;
+      }
+      .auth-shell {
+        max-width: 520px;
+        margin: 4rem auto;
+        padding: 2.5rem;
+        background: #fff;
+        border-radius: 28px;
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.12);
+      }
+      form {
+        display: grid;
+        gap: 1rem;
+      }
+      input {
+        border-radius: 12px;
+        border: 1px solid rgba(15, 23, 42, 0.15);
+        padding: 0.85rem 1rem;
+        font-size: 1rem;
+      }
+      .primary {
+        border: none;
+        border-radius: 999px;
+        padding: 0.95rem 1.6rem;
+        background: linear-gradient(135deg, #5a67ff, #7f56d9);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .message {
+        margin: 0.75rem 0;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        background: #ecfdf5;
+        color: #065f46;
+      }
+      .error {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="auth-shell">
+      <h1>Create your PulsePrep account</h1>
+      <p class="muted">
+        Use the classic form below if you prefer submitting credentials directly. We’ll keep your information safe and
+        redirect you to the survey after signup.
+      </p>
+      {% if error %}
+      <div class="message error">{{ error }}</div>
+      {% elif message %}
+      <div class="message">{{ message }}</div>
+      {% endif %}
+      <form action="/auth" method="POST">
+        <label>
+          <span>Full name</span>
+          <input type="text" name="full_name" value="{{ form.full_name }}" required />
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" value="{{ form.email }}" required />
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" name="password" placeholder="At least 6 characters" required />
+        </label>
+        <label>
+          <span>Study goal</span>
+          <input type="text" name="goal" value="{{ form.goal }}" placeholder="Target score or milestone" />
+        </label>
+        <button type="submit" class="primary">Create account</button>
+      </form>
+      <p style="margin-top:1rem;">
+        Prefer the guided onboarding instead?
+        <a href="/">Return to adaptive onboarding</a>
+      </p>
+    </main>
+  </body>
+</html>

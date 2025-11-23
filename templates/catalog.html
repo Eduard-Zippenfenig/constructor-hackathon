@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Catalog · PulsePrep</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="landing">
+    <div class="hero-shell">
+      <nav class="primary-nav">
+        <div class="brand">
+          <span class="brand-icon">◎</span>
+          <div>
+            <strong>PulsePrep</strong>
+            <p>Course catalog</p>
+          </div>
+        </div>
+        <div class="nav-actions">
+          <a class="ghost-link" href="/">Home</a>
+          <a class="ghost-link" href="/course" target="_blank">Workspace</a>
+        </div>
+      </nav>
+    </div>
+
+    <main class="flow-layout" style="padding-top: 2rem;">
+      <section class="panel">
+        <div class="panel-header">
+          <p class="eyebrow">Catalog</p>
+          <h2>Available courses</h2>
+          <p>Start with Probability; more tracks will arrive here soon.</p>
+        </div>
+        <div class="library-grid">
+          <article class="card">
+            <h3>Probability · Adaptive track</h3>
+            <p class="muted">
+              Chapters 1–9 with guided exercises, adaptive practice, and downloadable slides/homeworks.
+            </p>
+            <ul class="profile-list">
+              <li><strong>Chapters:</strong> 9 (Foundations → CLT & Markov)</li>
+              <li><strong>Includes:</strong> Slides, homeworks, and solutions</li>
+              <li><strong>Mode:</strong> Adaptive + practice-more lane</li>
+            </ul>
+            <div class="pill-row">
+              <span class="pill">Foundations</span>
+              <span class="pill">Bayes</span>
+              <span class="pill">CLT</span>
+              <span class="pill">Simulation</span>
+            </div>
+            <div class="cta-row" style="margin-top: 1rem;">
+              <a class="primary pill" href="/course" target="_blank">Open course workspace</a>
+              <a class="ghost pill" href="/survey">Tune settings</a>
+            </div>
+          </article>
+          <article class="card muted" style="opacity: 0.6;">
+            <h3>More courses</h3>
+            <p>Additional tracks will appear here. Stay tuned.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

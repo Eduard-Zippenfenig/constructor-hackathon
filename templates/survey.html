@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulsePrep · Focus Survey</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="survey-body">
+    <main class="survey-shell">
+      <section class="survey-screen">
+        <div class="survey-content">
+          <div>
+            <p class="eyebrow">Step 02</p>
+            <h1>Focus + adaptability survey</h1>
+            <p class="muted">
+              Tune your soundscape, structure, math explanation style, and coaching preferences. We’ll use these inputs
+              to personalize the readiness pulse and course.
+            </p>
+          </div>
+          <form id="survey-form" class="smart-form">
+            <label>
+              <span>Preferred soundscape</span>
+              <select name="audio" required>
+                <option value="" disabled selected>Select soundscape</option>
+                <option value="white noise">White noise</option>
+                <option value="silence">Silence</option>
+                <option value="lofi">Lo-fi music</option>
+                <option value="classical">Classical music</option>
+                <option value="genz">Gen Z learning playlist</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Plan structure</span>
+              <div class="range-field">
+                <span>Flexible</span>
+                <input type="range" name="structure" min="1" max="5" step="1" value="3" />
+                <span>Precise</span>
+              </div>
+            </label>
+
+            <fieldset>
+              <legend>Math explanation style</legend>
+              <label><input type="radio" name="mathStyle" value="text" required /> Story-first (narratives)</label>
+              <label><input type="radio" name="mathStyle" value="formula" /> Formula-forward</label>
+              <label><input type="radio" name="mathStyle" value="graph" /> Visual / graph focus</label>
+              <label><input type="radio" name="mathStyle" value="explain" /> Tutor-style breakdown</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>When things get tough…</legend>
+              <label><input type="radio" name="grit" value="solo" required /> Let me wrestle solo first</label>
+              <label><input type="radio" name="grit" value="hint" /> Drop gentle hints mid-way</label>
+              <label><input type="radio" name="grit" value="coach" /> Coach-style prompts + hype</label>
+            </fieldset>
+
+            <button type="submit" class="primary pill large">Submit survey</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='survey.js') }}"></script>
+  </body>
+</html>
