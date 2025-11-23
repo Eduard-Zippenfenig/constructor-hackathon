@@ -131,8 +131,8 @@ const showAuthError = (message) => {
   authError.classList.remove("hidden");
 };
 
-const redirectAfterAuth = () => {
-  window.location.href = "/catalog";
+const redirectAfterAuth = (nextUrl) => {
+  window.location.href = nextUrl || "/catalog";
 };
 
 const ensureCourseReady = () => {
@@ -903,8 +903,7 @@ const handleAccountSubmit = async (event) => {
       body: JSON.stringify(payload),
     });
     if (data.accountCreated) {
-      alert("Account created. You can log in now.");
-      setAuthView("login");
+      redirectAfterAuth(data.next || "/focus-test");
     }
   } catch (error) {
     showAuthError(error.message || "Unable to sign up.");
@@ -923,7 +922,7 @@ const handleLoginSubmit = async (event) => {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    redirectAfterAuth(data.needsSurvey);
+    redirectAfterAuth(data.next || "/focus-test");
   } catch (error) {
     showAuthError(error.message || "Unable to log in.");
   }
@@ -941,7 +940,7 @@ const handleGoogleSignup = async () => {
       method: "POST",
       body: JSON.stringify({ email, fullName }),
     });
-    redirectAfterAuth(data.needsSurvey);
+    redirectAfterAuth(data.next || "/focus-test");
   } catch (error) {
     showAuthError(error.message || "Unable to contact Google sign-in.");
   }

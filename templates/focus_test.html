@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Style Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='hackathon/style.css') }}" />
+  </head>
+  <body data-media-base="{{ url_for('static', filename='hackathon/media') }}" data-catalog-url="{{ url_for('catalog') }}">
+    <main class="app-shell">
+      <header>
+        <h1>Learning Style Test</h1>
+        <p class="tagline">8 quick questions that probe how you focus, learn, and react.</p>
+      </header>
+
+      <section id="intro" class="card">
+        <p>
+          Each prompt measures a different skill: visual recognition, general knowledge, math accuracy,
+          and how you respond to background distractions. You'll experience white noise, soft music,
+          silence, narration, and even a slime video distraction.
+        </p>
+        <p>Answer as quickly and accurately as you can. Ready?</p>
+        <button id="start-btn" class="primary">Start the test</button>
+      </section>
+
+      <section id="question-card" class="card hidden" aria-live="polite">
+        <div class="question-meta">
+          <span id="question-count">Question 1 / 8</span>
+          <span id="measurement-label"></span>
+          <span id="noise-label"></span>
+        </div>
+        <p id="question-text" class="question-text"></p>
+        <div id="question-media" class="question-media" aria-hidden="false"></div>
+        <div id="slime-wrapper" class="slime-wrapper hidden" aria-live="off">
+          <video id="slime-video" class="slime-video" autoplay muted loop playsinline></video>
+          <div class="slime-caption">Slime distraction zone</div>
+        </div>
+        <form id="answer-form" autocomplete="off">
+          <label class="sr-only" for="answer-input">Your answer</label>
+          <input id="answer-input" name="answer" type="text" placeholder="Type your answer" required />
+          <button type="submit" class="primary">Submit</button>
+        </form>
+        <p id="inline-feedback" class="inline-feedback" role="status"></p>
+      </section>
+
+      <section id="results-card" class="card hidden" aria-live="polite">
+        <h2>Insights</h2>
+        <div class="stats-grid">
+          <div>
+            <p class="stat-label">Accuracy</p>
+            <p id="accuracy-stat" class="stat-value">0%</p>
+          </div>
+          <div>
+            <p class="stat-label">Avg response</p>
+            <p id="speed-stat" class="stat-value">0.0s</p>
+          </div>
+          <div>
+            <p class="stat-label">Fastest correct</p>
+            <p id="fastest-stat" class="stat-value">—</p>
+          </div>
+        </div>
+        <div id="insight-panel" class="insight-panel"></div>
+        <button id="restart-btn" class="secondary">Try again</button>
+        <button id="catalog-btn" class="primary hidden" type="button">Go to course catalog</button>
+      </section>
+    </main>
+
+    <canvas id="slime-canvas" width="360" height="200" class="sr-only"></canvas>
+    <script src="{{ url_for('static', filename='hackathon/app.js') }}" defer></script>
+  </body>
+</html>

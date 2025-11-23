@@ -189,6 +189,14 @@ def catalog():
     return render_template("catalog.html", user=user)
 
 
+@app.route("/focus-test")
+def focus_test():
+    user = current_user()
+    if not user:
+        return redirect("/")
+    return render_template("focus_test.html", user=user)
+
+
 @app.get("/api/materials")
 def api_materials():
     return jsonify(list_materials())
@@ -220,7 +228,8 @@ def auth_form():
             if len(password) < 6:
                 raise ValueError("Password must be at least 6 characters")
             user_id = register_user(form["full_name"], form["email"], password, form["goal"])
-            message = "Account created. You can log in now."
+            session["user_id"] = user_id
+            return redirect("/focus-test")
         except ValueError as exc:
             error = str(exc)
     return render_template("auth.html", error=error, message=message, form=form)
@@ -270,7 +279,8 @@ def api_signup():
         user_id = register_user(full_name, email, password, goal)
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
-    return jsonify({"accountCreated": True})
+    session["user_id"] = user_id
+    return jsonify({"accountCreated": True, "next": "/focus-test"})
 
 
 @app.post("/api/login")
@@ -289,7 +299,7 @@ def api_login():
         return jsonify({"error": "Invalid credentials"}), 400
     session["user_id"] = row["id"]
     needs_survey = row["survey_json"] is None
-    return jsonify({"authenticated": True, "needsSurvey": needs_survey})
+    return jsonify({"authenticated": True, "needsSurvey": needs_survey, "next": "/focus-test"})
 
 
 @app.post("/api/google-login")
@@ -318,7 +328,7 @@ def api_google_login():
         needs_survey = True
     conn.close()
     session["user_id"] = user_id
-    return jsonify({"authenticated": True, "needsSurvey": needs_survey})
+    return jsonify({"authenticated": True, "needsSurvey": needs_survey, "next": "/focus-test"})
 
 
 @app.post("/api/logout")
