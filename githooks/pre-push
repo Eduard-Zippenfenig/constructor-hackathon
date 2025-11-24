@@ -1,0 +1,20 @@
+#!/bin/sh
+# pre-push hook: attempt to rebase current branch onto origin/main
+set -e
+
+# Identify current branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+echo "[githook] Current branch: $branch"
+
+echo "[githook] Fetching origin/main..."
+git fetch origin main
+
+echo "[githook] Rebasing $branch onto origin/main"
+if git rebase origin/main; then
+  echo "[githook] Rebase successful. Continuing push."
+  exit 0
+else
+  echo ""
+  echo "[githook] Rebase failed. Resolve conflicts, then run:'git rebase --continue' or 'git rebase --abort'. Push aborted." >&2
+  exit 1
+fi
