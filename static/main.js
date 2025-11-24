@@ -229,9 +229,9 @@ const chapterContent = [
   {
     id: 1,
     title: "Chapter 1 · Probability Foundations",
-    focus: "Sample spaces, events, complements, and P(A ∪ B) = P(A) + P(B) − P(A ∩ B).",
-    sprint: "State the experiment, enumerate outcomes, and compute complements before unions.",
-    commFocus: "State events crisply and describe complements in words.",
+    focus: "Sample spaces and events with layered examples (die roll, 2-coin flip, card draw), complements, and P(A ∪ B) = P(A) + P(B) − P(A ∩ B).",
+    sprint: "State the experiment, list outcomes, write two events, compute complements, and compare union vs. intersection on each example.",
+    commFocus: "State events crisply, narrate complements, and compare why some unions overlap.",
     commMove: "Always define the experiment and event labels before symbols.",
     resources: {
       slide: "ASL01-1_PRP25.pdf",
@@ -265,9 +265,9 @@ const chapterContent = [
   {
     id: 2,
     title: "Chapter 2 · Counting & Combinatorics",
-    focus: "Multiplication rule, permutations nPr, and combinations nCr.",
-    sprint: "Decide if order matters; pick nPr or nCr; verify with a quick tree.",
-    commFocus: "Narrate why order matters or not for each story.",
+    focus: "Multiplication rule with multi-stage stories, permutations nPr (seating, codes), and combinations nCr (teams, subsets).",
+    sprint: "Decide if order matters, sketch a mini tree/table, pick nPr or nCr, and sanity-check with a smaller case.",
+    commFocus: "Narrate why order matters (codes, lineups) vs. doesn’t (committees, lotteries).",
     commMove: "State n, k, and whether repetition is allowed before computing.",
     resources: {
       slide: "ASL02-1_PRP25.pdf",
@@ -301,9 +301,9 @@ const chapterContent = [
   {
     id: 3,
     title: "Chapter 3 · Conditional Probability & Independence",
-    focus: "P(A|B) = P(A ∩ B) / P(B) and independence checks.",
-    sprint: "Build a two-way table or tree, compute conditionals, then test independence.",
-    commFocus: "Explain conditionals in plain language and when independence fails.",
+    focus: "P(A|B) = P(A ∩ B) / P(B), independence checks, and case studies (bags without replacement, survey overlaps, diagnostic tables).",
+    sprint: "Build a two-way table or tree, compute conditionals, test independence two ways (compare P(A|B) to P(A), compare P(A∩B) to P(A)P(B)).",
+    commFocus: "Explain conditionals plainly and note when independence fails because of dependence between draws or overlapping groups.",
     commMove: "Always state the conditioning event and whether sampling is with/without replacement.",
     resources: {
       slide: "ASL03-1_PRP25.pdf",
@@ -337,9 +337,9 @@ const chapterContent = [
   {
     id: 4,
     title: "Chapter 4 · Bayes’ Rule & Diagnostics",
-    focus: "Posterior = prior × likelihood / evidence; sensitivity/specificity contexts.",
-    sprint: "Draw a tree, label priors/likelihoods, compute evidence, then posterior.",
-    commFocus: "Write posteriors as plain-language risks and decisions.",
+    focus: "Bayes with concrete diagnostics (disease tests, spam filters), posterior = prior × likelihood / evidence with explicit evidence term.",
+    sprint: "Draw a tree, label priors/likelihoods, compute evidence, then posterior; sanity-check with odds form.",
+    commFocus: "Write posteriors as plain-language risks and decisions; compare false positives/negatives.",
     commMove: "Distinguish between P(+|D) and P(D|+).",
     resources: {
       slide: "ASL04_PRP25.pdf",
@@ -373,9 +373,9 @@ const chapterContent = [
   {
     id: 5,
     title: "Chapter 5 · Discrete Random Variables",
-    focus: "PMFs, expectation E[X] = Σ x·p(x), variance Var(X) = Σ (x−μ)² p(x).",
-    sprint: "Build (x, p(x)) tables, compute μ and Var stepwise, use linearity.",
-    commFocus: "Interpret E[X] and Var(X) in context.",
+    focus: "PMFs with dice/lottery/quality-control examples, expectation E[X] = Σ x·p(x), variance Var(X) = Σ (x−μ)² p(x), linearity of expectation.",
+    sprint: "Build (x, p(x)) tables, compute μ and Var stepwise, then check with a second example (shift/scale).",
+    commFocus: "Interpret E[X] and Var(X) in context (long-run average, spread) with concrete story.",
     commMove: "Pair each numeric result with a one-sentence meaning.",
     resources: {
       slide: "ASL05_PRP25.pdf",
@@ -409,9 +409,9 @@ const chapterContent = [
   {
     id: 6,
     title: "Chapter 6 · Binomial & Geometric Models",
-    focus: "Binomial(n,p): P(X=k)=C(n,k) p^k (1−p)^{n−k}; Geometric waiting times.",
-    sprint: "Check independence/constant p, then choose binomial vs geometric.",
-    commFocus: "State parameters (n,p) and assumptions explicitly.",
+    focus: "Binomial(n,p): P(X=k)=C(n,k) p^k (1−p)^{n−k} with real setups (quality checks, quizzes), Geometric waiting times for first success.",
+    sprint: "Check independence/constant p, define n and p, compute a binomial probability; compare to a geometric waiting-time example.",
+    commFocus: "State parameters (n,p) and assumptions explicitly and flag when sampling without replacement breaks them.",
     commMove: "Always mention independence and constant probability when claiming binomial.",
     resources: {
       slide: "ASL06-1_PRP25.pdf",
@@ -445,9 +445,9 @@ const chapterContent = [
   {
     id: 7,
     title: "Chapter 7 · Continuous Models & Normal",
-    focus: "Densities integrate to 1; Normal Z = (X−μ)/σ.",
-    sprint: "Sketch density, shade region, standardize if normal.",
-    commFocus: "Describe areas as probabilities and note units disappear after standardizing.",
+    focus: "Densities integrate to 1; Normal Z = (X−μ)/σ with worked numeric examples (cut scores, manufacturing tolerances).",
+    sprint: "Sketch density, shade region, standardize if normal; practice two z-cut calculations with interpretation.",
+    commFocus: "Describe areas as probabilities, note units disappear after standardizing, and state conclusions in context.",
     commMove: "State mean/SD and the z-cut before quoting a probability.",
     resources: {
       slide: "ASL07-1_PRP25.pdf",
@@ -481,9 +481,9 @@ const chapterContent = [
   {
     id: 8,
     title: "Chapter 8 · Sampling & CLT",
-    focus: "Sampling mean: μ_{X̄}=μ, SE=σ/√n; CLT gives approximate normality.",
-    sprint: "Check n and tail heaviness; compute SE; standardize.",
-    commFocus: "Clarify when normal approximation is justified.",
+    focus: "Sampling mean: μ_{X̄}=μ, SE=σ/√n; CLT for proportions/means with small vs. large n comparisons.",
+    sprint: "Check n and tail heaviness; compute SE; standardize and interpret a CI-ish z-cut for two examples.",
+    commFocus: "Clarify when normal approximation is justified; call out skew/heavy tails explicitly.",
     commMove: "Always report n and any skew/heavy-tail caveats.",
     resources: {
       slide: "ASL08-1_PRP25.pdf",
@@ -517,9 +517,9 @@ const chapterContent = [
   {
     id: 9,
     title: "Chapter 9 · Simulation & Markov Chains",
-    focus: "Monte Carlo estimation; simple Markov transition matrices and steady state.",
-    sprint: "Design experiments, track long-run proportions, solve for stationary vectors.",
-    commFocus: "Document simulation design and interpret long-run behavior plainly.",
+    focus: "Monte Carlo estimation; simple Markov transition matrices and steady state; show a tiny simulation log and stationary check.",
+    sprint: "Design experiments, track long-run proportions, verify with steady-state equations, compare to simulated proportions.",
+    commFocus: "Document simulation design, seeds, iterations, and interpret long-run behavior plainly.",
     commMove: "State seed, iterations, and what convergence means in context.",
     resources: {
       slide: "ASL09-1_PRP25.pdf",

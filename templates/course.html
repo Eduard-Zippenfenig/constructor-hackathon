@@ -32,6 +32,25 @@
       <main class="workspace-main">
         <div class="workspace-top-actions">
           <a class="ghost pill back-button" href="/catalog">← Back to catalog</a>
+          <div class="preference-panel">
+            <label>
+              <span>Learning style</span>
+              <select id="learning-style-select">
+                <option value="visual">Visual learner</option>
+                <option value="reader">Reader</option>
+              </select>
+            </label>
+            <label>
+              <span>Music</span>
+              <select id="music-select">
+                <option value="none">No music</option>
+                <option value="white">White noise</option>
+                <option value="classical">Classical music</option>
+                <option value="lofi">Lo-fi</option>
+              </select>
+            </label>
+          </div>
+          <button type="button" class="ghost pill small" id="highlight-btn">Highlight selection</button>
           <button class="primary pill" id="notebook-toggle" type="button">Open notepad</button>
         </div>
         <header class="workspace-hero" id="workspace-hero">
