@@ -486,7 +486,7 @@ const chapterContent = [
     commFocus: "Clarify when normal approximation is justified.",
     commMove: "Always report n and any skew/heavy-tail caveats.",
     resources: {
-      slide: "ASL08-1_PRP25 2.pdf",
+      slide: "ASL08-1_PRP25.pdf",
       homework: "PS8_PRP25.pdf",
       solution: "SPS8_PRP25.pdf",
     },
@@ -641,7 +641,7 @@ const toResourceLinks = (res = {}) => {
   const links = [];
   if (res.slide) links.push({ label: "Slides", href: `/materials/slides/${encodeURIComponent(res.slide)}` });
   if (res.homework) links.push({ label: "Homework", href: `/materials/homeworks/${encodeURIComponent(res.homework)}` });
-  if (res.solution) links.push({ label: "Solutions", href: `/materials/homework-solutions/${encodeURIComponent(res.solution)}` });
+  if (res.solution) links.push({ label: "Solutions", href: `/materials/solutions/${encodeURIComponent(res.solution)}` });
   return links;
 };
 

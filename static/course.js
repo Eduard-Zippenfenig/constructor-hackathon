@@ -248,6 +248,9 @@ const defaultQuestionBank = [
 const heroTitle = document.getElementById("workspace-title");
 const heroSubtitle = document.getElementById("workspace-subtitle");
 const heroTags = document.getElementById("workspace-tags");
+const tagDropdown = document.getElementById("workspace-tag-dropdown");
+const tagDropdownToggle = document.getElementById("tag-dropdown-toggle");
+const tagDropdownMenu = document.getElementById("tag-dropdown-menu");
 
 const audioLabels = {
   "white noise": "White noise",
@@ -277,6 +280,13 @@ const loadWorkspace = () => {
 };
 
 const workspace = loadWorkspace();
+const courseQuestionBank =
+  Array.isArray(workspace.questionBank) && workspace.questionBank.length
+    ? workspace.questionBank
+    : defaultQuestionBank;
+const courseName = workspace.courseName || "Probability";
+const courseCode = workspace.courseCode || "34567";
+const trackLabels = workspace.trackLabels || { math: "Math", english: "English" };
 const cleanTitle = (title) => {
   if (!title) return "";
   return title.replace(/^(Launch|Boost|Excel)\s+(Lab|Studio)\s*·\s*/i, "").trim();
@@ -286,7 +296,7 @@ const withQuestions = (units) =>
   units.map((unit) => ({
     ...unit,
     title: cleanTitle(unit.title),
-    questions: unit.questions && unit.questions.length ? unit.questions : defaultQuestionBank,
+    questions: unit.questions && unit.questions.length ? unit.questions : courseQuestionBank,
   }));
 
 const practiceStorageKey = "practiceMoreQueue";
@@ -347,25 +357,56 @@ const createTag = (label) => {
 };
 
 const hydrateHero = () => {
-  heroTitle.textContent = `34567, your ${workspace.level.toUpperCase()} mission is ready`;
-  heroSubtitle.textContent = `Math focus: ${workspace.mathFocus
+  const missionLevel = (workspace.level || "course").toString().toUpperCase();
+  const mathFocusLabel = (workspace.mathFocus || "text")
     .replace("explain", "More Explanations")
     .replace("graph", "Graph View")
     .replace("text", "More Text")
-    .replace("formula", "Formula Pulse")}. Goal: ${
-    workspace.account?.goal || "Climb your next score band"
-  }.`;
+    .replace("formula", "Formula Pulse");
+  heroTitle.textContent =
+    workspace.heroTitle || `${courseCode}, your ${missionLevel} mission is ready`;
+  heroSubtitle.textContent =
+    workspace.heroSubtitle ||
+    `Focus: ${mathFocusLabel}. Goal: ${workspace.account?.goal || "Climb your next score band"}.`;
   heroTags.innerHTML = "";
-  heroTags.appendChild(
-    createTag(audioLabels[workspace?.survey?.audio] || "Lo-fi music")
-  );
-  heroTags.appendChild(
-    createTag(`Structure score: ${workspace?.survey?.structure || "3"}`)
-  );
-  heroTags.appendChild(createTag(gritLabels[workspace?.survey?.grit] || "Coaching prompts"));
+  const defaultTags = [
+    audioLabels[workspace?.survey?.audio] || "Lo-fi music",
+    `Structure score: ${workspace?.survey?.structure || "3"}`,
+    gritLabels[workspace?.survey?.grit] || "Coaching prompts",
+  ];
   if (workspace.account?.fullName) {
-    heroTags.appendChild(createTag(workspace.account.goal || "Score jump"));
+    defaultTags.push(workspace.account.goal || "Score jump");
   }
+  const tags = Array.isArray(workspace.heroTags) && workspace.heroTags.length
+    ? workspace.heroTags
+    : defaultTags;
+  heroTags.innerHTML = "";
+  tags.forEach((tag) => heroTags.appendChild(createTag(tag)));
+  renderTagDropdown(tags);
+};
+
+const renderTagDropdown = (tags = []) => {
+  if (!tagDropdownMenu || !tagDropdownToggle || !tagDropdown) return;
+  tagDropdownMenu.innerHTML = "";
+  const label = tags[0] || "Focus areas";
+  tagDropdownToggle.childNodes[0].nodeValue = `${label} `;
+  tags.forEach((tag) => {
+    const li = document.createElement("li");
+    li.textContent = tag;
+    tagDropdownMenu.appendChild(li);
+  });
+};
+
+const setupTagDropdown = () => {
+  if (!tagDropdown || !tagDropdownToggle || !tagDropdownMenu) return;
+  tagDropdownToggle.addEventListener("click", () => {
+    tagDropdown.classList.toggle("open");
+  });
+  document.addEventListener("click", (event) => {
+    if (!tagDropdown.contains(event.target)) {
+      tagDropdown.classList.remove("open");
+    }
+  });
 };
 
 const renderMediaTile = (type, media) => {
@@ -446,11 +487,41 @@ const renderQuestions = (unit) => {
   `;
 };
 
+const findPresentationLink = (resources = []) => {
+  return (resources || []).find((res = {}) => {
+    const label = (res.label || "").toLowerCase();
+    return label.includes("slide") || label.includes("presentation") || label.includes("deck");
+  });
+};
+
+const renderPresentationBlock = (presentation) => {
+  if (!presentation) return "";
+  return `
+    <div class="slide-viewer">
+      <div class="slide-viewer-header">
+        <p class="media-label">Presentation</p>
+        <div class="slide-viewer-actions">
+          <a class="ghost small" target="_blank" href="${presentation.href}">Open in new tab</a>
+        </div>
+      </div>
+      <div class="slide-frame-wrap">
+        <object data="${presentation.href}#toolbar=0&navpanes=0" type="application/pdf" class="slide-frame">
+          <p>Slide preview unavailable. <a href="${presentation.href}" target="_blank">Open the PDF</a>.</p>
+        </object>
+      </div>
+    </div>
+  `;
+};
+
 const buildModuleMarkup = (unit, track) => {
   const tasks = (unit.tasks || []).map((task) => `<li>${task}</li>`).join("");
   const resources = (unit.resources || [])
     .map((res) => `<li><a href="${res.href}" target="_blank">${res.label}</a></li>`)
     .join("");
+  const presentation = findPresentationLink(unit.resources);
+  const presentationCta = presentation
+    ? `<div class="module-presentation"><a class="ghost small" target="_blank" href="${presentation.href}">Open presentation</a></div>`
+    : "";
   return `
     <div class="module-card">
       <header class="module-header">
@@ -459,12 +530,14 @@ const buildModuleMarkup = (unit, track) => {
           <p class="module-eyebrow">Practice set</p>
           <h3>${unit.title}</h3>
           <p>${unit.description}</p>
+          ${presentationCta}
         </div>
       </header>
       <div class="module-media">
         ${renderMediaTile("video", unit.media)}
         ${renderMediaTile("graph", unit.media)}
         ${renderMediaTile("notes", unit.media)}
+        ${renderPresentationBlock(presentation)}
       </div>
       ${resources ? `<div class="module-resources"><h4>Resources</h4><ul>${resources}</ul></div>` : ""}
       <section class="module-actions">
@@ -500,14 +573,34 @@ const navExerciseList = document.getElementById("exercise-nav");
 const navPracticeList = document.getElementById("practice-nav");
 const contentStage = document.getElementById("content-stage");
 
+// Hide any stray "Course catalog" links that may linger from previous layouts.
+const hideRogueCatalogLinks = () => {
+  document.querySelectorAll("a, button").forEach((el) => {
+    const label = (el.textContent || "").trim().toLowerCase();
+    if (label === "course catalog" && !el.classList.contains("back-button")) {
+      el.style.display = "none";
+    }
+  });
+};
+
 const flattenUnits = (track) =>
   track.math.concat(track.english).map((unit, idx) => ({
     ...unit,
-    track: idx < track.math.length ? "Math" : "English",
+    track: idx < track.math.length ? trackLabels.math : trackLabels.english,
   }));
 
-const moduleUnits = flattenUnits(tracks.modules);
-const exerciseUnits = flattenUnits(tracks.exercises);
+const dedupeByTitle = (units) => {
+  const seen = new Set();
+  return units.filter((unit) => {
+    const key = (unit.title || "").toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+const moduleUnits = dedupeByTitle(flattenUnits(tracks.modules));
+const exerciseUnits = dedupeByTitle(flattenUnits(tracks.exercises));
 let practiceUnits = [];
 
 let progressState = {
@@ -543,7 +636,7 @@ const renderNav = (listEl, units, track) => {
       <span class="status ${status}"></span>
       <div>
         <div class="nav-item-title">${unit.title}</div>
-        <div class="nav-item-subtitle">${unit.track || "Probability"} · ${kind}</div>
+        <div class="nav-item-subtitle">${unit.track || courseName} · ${kind}</div>
       </div>
     `;
     listEl.appendChild(item);
@@ -668,7 +761,9 @@ const loadProgress = async () => {
 };
 
 const initWorkspace = async () => {
+  hideRogueCatalogLinks();
   hydrateHero();
+  setupTagDropdown();
   const progressLoaded = await loadProgress();
   if (!progressLoaded) return;
   rebuildPracticeUnits();

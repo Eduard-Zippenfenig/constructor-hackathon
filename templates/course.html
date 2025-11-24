@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Probability Workspace · PulsePrep</title>
+    <title>Course Workspace · PulsePrep</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
   </head>
   <body class="workspace-body">
     <div class="workspace-shell">
       <aside class="workspace-nav">
         <div class="nav-header">
-          <p class="eyebrow">Track 34567</p>
+          <p class="eyebrow">Course workspace</p>
           <h2 id="workspace-title">Loading mission…</h2>
           <p id="workspace-subtitle"> </p>
         </div>
@@ -29,8 +29,18 @@
         </nav>
       </aside>
       <main class="workspace-main">
+        <div class="workspace-top-actions">
+          <a class="ghost pill back-button" href="/catalog">← Back to catalog</a>
+        </div>
         <header class="workspace-hero" id="workspace-hero">
-          <div class="pill-row" id="workspace-tags"></div>
+          <div class="tag-dropdown" id="workspace-tag-dropdown">
+            <button type="button" class="dropdown-toggle" id="tag-dropdown-toggle">
+              Focus areas
+              <span class="chevron">▾</span>
+            </button>
+            <ul class="dropdown-menu" id="tag-dropdown-menu"></ul>
+          </div>
+          <div class="pill-row" id="workspace-tags" style="display:none;"></div>
         </header>
 
         <div id="workspace-content" class="workspace-content">
