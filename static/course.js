@@ -1022,7 +1022,18 @@ const loadSection = (track, index) => {
     setProgressStatus(track, index, "progress");
   }
   const completeBtn = document.querySelector(".mark-complete");
-  completeBtn?.addEventListener("click", () => setProgressStatus(track, index, "completed"));
+  completeBtn?.addEventListener("click", () => {
+    setProgressStatus(track, index, "completed");
+    const toast = document.createElement("div");
+    toast.className = "toast-notice";
+    toast.textContent = "Marked as completed";
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add("visible"));
+    setTimeout(() => {
+      toast.classList.remove("visible");
+      setTimeout(() => toast.remove(), 300);
+    }, 1800);
+  });
   attachQuestionHandlers(unit, track, index);
   wireModelViewers(contentStage);
 };
