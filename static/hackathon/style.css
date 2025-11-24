@@ -108,11 +108,11 @@ button:active {
 }
 
 .question-media {
-  min-height: 120px;
+  min-height: 0;
   margin-bottom: 1rem;
-  background: var(--surface);
-  border-radius: 16px;
-  padding: 1rem;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
 }
 
 .visual-grid {

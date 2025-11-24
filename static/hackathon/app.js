@@ -169,7 +169,8 @@ function prepareSlimeVideo() {
     if (!slimeVideoPrimed) {
       slimeVideo.src = src;
       slimeVideo.loop = true;
-      slimeVideo.muted = true;
+      slimeVideo.muted = false;
+      slimeVideo.volume = 0.5;
       slimeVideoPrimed = true;
     }
     slimeVideo.classList.remove('hidden');
@@ -185,7 +186,8 @@ function prepareSlimeVideo() {
       const stream = slimeCanvas.captureStream(30);
       slimeVideo.srcObject = stream;
       slimeVideo.loop = true;
-      slimeVideo.muted = true;
+      slimeVideo.muted = false;
+      slimeVideo.volume = 0.5;
       slimeVideoPrimed = true;
     }
     slimeVideo.classList.remove('hidden');
