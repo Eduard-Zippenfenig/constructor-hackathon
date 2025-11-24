@@ -487,11 +487,41 @@ const renderQuestions = (unit) => {
   `;
 };
 
+const findPresentationLink = (resources = []) => {
+  return (resources || []).find((res = {}) => {
+    const label = (res.label || "").toLowerCase();
+    return label.includes("slide") || label.includes("presentation") || label.includes("deck");
+  });
+};
+
+const renderPresentationBlock = (presentation) => {
+  if (!presentation) return "";
+  return `
+    <div class="slide-viewer">
+      <div class="slide-viewer-header">
+        <p class="media-label">Presentation</p>
+        <div class="slide-viewer-actions">
+          <a class="ghost small" target="_blank" href="${presentation.href}">Open in new tab</a>
+        </div>
+      </div>
+      <div class="slide-frame-wrap">
+        <object data="${presentation.href}#toolbar=0&navpanes=0" type="application/pdf" class="slide-frame">
+          <p>Slide preview unavailable. <a href="${presentation.href}" target="_blank">Open the PDF</a>.</p>
+        </object>
+      </div>
+    </div>
+  `;
+};
+
 const buildModuleMarkup = (unit, track) => {
   const tasks = (unit.tasks || []).map((task) => `<li>${task}</li>`).join("");
   const resources = (unit.resources || [])
     .map((res) => `<li><a href="${res.href}" target="_blank">${res.label}</a></li>`)
     .join("");
+  const presentation = findPresentationLink(unit.resources);
+  const presentationCta = presentation
+    ? `<div class="module-presentation"><a class="ghost small" target="_blank" href="${presentation.href}">Open presentation</a></div>`
+    : "";
   return `
     <div class="module-card">
       <header class="module-header">
@@ -500,12 +530,14 @@ const buildModuleMarkup = (unit, track) => {
           <p class="module-eyebrow">Practice set</p>
           <h3>${unit.title}</h3>
           <p>${unit.description}</p>
+          ${presentationCta}
         </div>
       </header>
       <div class="module-media">
         ${renderMediaTile("video", unit.media)}
         ${renderMediaTile("graph", unit.media)}
         ${renderMediaTile("notes", unit.media)}
+        ${renderPresentationBlock(presentation)}
       </div>
       ${resources ? `<div class="module-resources"><h4>Resources</h4><ul>${resources}</ul></div>` : ""}
       <section class="module-actions">
@@ -557,8 +589,18 @@ const flattenUnits = (track) =>
     track: idx < track.math.length ? trackLabels.math : trackLabels.english,
   }));
 
-const moduleUnits = flattenUnits(tracks.modules);
-const exerciseUnits = flattenUnits(tracks.exercises);
+const dedupeByTitle = (units) => {
+  const seen = new Set();
+  return units.filter((unit) => {
+    const key = (unit.title || "").toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+const moduleUnits = dedupeByTitle(flattenUnits(tracks.modules));
+const exerciseUnits = dedupeByTitle(flattenUnits(tracks.exercises));
 let practiceUnits = [];
 
 let progressState = {

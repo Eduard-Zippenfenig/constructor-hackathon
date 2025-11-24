@@ -220,6 +220,243 @@ const BIOLOGY_WORKSPACE = {
   },
 };
 
+const probabilityQuestionBank = [
+  {
+    prompt: "Roll a fair die. What is P(rolling an even number)?",
+    theory: "Sample space S = {1,2,3,4,5,6}. Event Even = {2,4,6}. Probability = |Even| / |S|.",
+    options: ["1/2", "1/3", "2/3", "1/6"],
+    correct: 0,
+    explain: "Even outcomes are {2,4,6} so 3 of 6 outcomes -> 1/2.",
+  },
+  {
+    prompt: "You flip two coins. What is P(exactly one head)?",
+    theory: "List outcomes: HH, HT, TH, TT. Exactly one head means 'HT' or 'TH'.",
+    options: ["1/4", "1/2", "3/4", "1/8"],
+    correct: 1,
+    explain: "Outcomes HH, HT, TH, TT. Exactly one head in HT and TH -> 2/4 = 1/2.",
+  },
+  {
+    prompt: "Choose 2 students from 5. How many unordered pairs?",
+    theory: "Order does not matter, so use combinations: nCk = n! / (k!(n-k)!).",
+    options: ["5", "10", "20", "15"],
+    correct: 1,
+    explain: "Combinations: 5 choose 2 = 10.",
+  },
+  {
+    prompt: "Bag has 3 red, 2 blue marbles. Draw 1 without replacement, then 1 more. P(second is blue)?",
+    theory: "Use a tree: first draw affects counts. Compute P(B on second) = P(R then B) + P(B then B).",
+    options: ["2/5", "1/2", "3/10", "7/10"],
+    correct: 0,
+    explain: "P(R then B)= (3/5)*(2/4)=6/20; P(B then B)=(2/5)*(1/4)=2/20; total 8/20=2/5.",
+  },
+  {
+    prompt: "Bernoulli(p=0.4) run 3 times. P(exactly 2 successes)?",
+    theory: "Binomial with n=3, k=2: C(3,2) p^2 (1-p).",
+    options: ["0.144", "0.288", "0.432", "0.6"],
+    correct: 1,
+    explain: "C(3,2)*0.4^2*0.6 = 3*0.16*0.6 = 0.288.",
+  },
+  {
+    prompt: "Normal(0,1): Which z captures the middle 68% of the mass (approx)?",
+    theory: "Empirical rule: ~68% of mass lies within 1 standard deviation.",
+    options: ["|z| < 0.5", "|z| < 1", "|z| < 2", "|z| < 3"],
+    correct: 1,
+    explain: "About 68% lies between -1 and 1.",
+  },
+];
+
+const probabilityChapters = [
+  {
+    id: 1,
+    title: "Chapter 1 · Probability Foundations",
+    focus: "Sample spaces, events, complements, and P(A or B) = P(A) + P(B) - P(A and B).",
+    sprint: "State the experiment, enumerate outcomes, and compute complements before unions.",
+    commFocus: "State events crisply and describe complements in words.",
+    commMove: "Always define the experiment and event labels before symbols.",
+    resources: {
+      slide: "ASL01-1_PRP25.pdf",
+      homework: "PS1_PRP25.pdf",
+      solution: "SPS1_PRP25.pdf",
+    },
+  },
+  {
+    id: 2,
+    title: "Chapter 2 · Counting & Combinatorics",
+    focus: "Multiplication rule, permutations nPr, and combinations nCr.",
+    sprint: "Decide if order matters; pick nPr or nCr; verify with a quick tree.",
+    commFocus: "Narrate why order matters or not for each story.",
+    commMove: "State n, k, and whether repetition is allowed before computing.",
+    resources: {
+      slide: "ASL02-1_PRP25.pdf",
+      homework: "PS2_PRP25.pdf",
+      solution: "SPS2_PRP25.pdf",
+    },
+  },
+  {
+    id: 3,
+    title: "Chapter 3 · Conditional Probability & Independence",
+    focus: "P(A|B) = P(A and B) / P(B) and independence checks.",
+    sprint: "Build a two-way table or tree, compute conditionals, then test independence.",
+    commFocus: "Explain conditionals in plain language and when independence fails.",
+    commMove: "Always state the conditioning event and whether sampling is with/without replacement.",
+    resources: {
+      slide: "ASL03-1_PRP25.pdf",
+      homework: "PS3_PRP25.pdf",
+      solution: "SPS3_PRP25.pdf",
+    },
+  },
+  {
+    id: 4,
+    title: "Chapter 4 · Bayes' Rule & Diagnostics",
+    focus: "Posterior = prior * likelihood / evidence; sensitivity/specificity contexts.",
+    sprint: "Draw a tree, label priors/likelihoods, compute evidence, then posterior.",
+    commFocus: "Write posteriors as plain-language risks and decisions.",
+    commMove: "Distinguish between P(+|D) and P(D|+).",
+    resources: {
+      slide: "ASL04_PRP25.pdf",
+      homework: "PS4_PRP25.pdf",
+      solution: "SPS4_PRP25.pdf",
+    },
+  },
+  {
+    id: 5,
+    title: "Chapter 5 · Discrete Random Variables",
+    focus: "PMFs, expectation E[X] = sum x*p(x), variance Var(X) = sum (x-mu)^2 p(x).",
+    sprint: "Build (x, p(x)) tables, compute mu and variance stepwise, use linearity.",
+    commFocus: "Interpret E[X] and Var(X) in context.",
+    commMove: "Pair each numeric result with a one-sentence meaning.",
+    resources: {
+      slide: "ASL05_PRP25.pdf",
+      homework: "PS5_PRP25.pdf",
+      solution: "SPS5_PRP25.pdf",
+    },
+  },
+  {
+    id: 6,
+    title: "Chapter 6 · Binomial & Geometric Models",
+    focus: "Binomial(n,p): P(X=k)=C(n,k) p^k (1-p)^(n-k); Geometric waiting times.",
+    sprint: "Check independence/constant p, then choose binomial vs geometric.",
+    commFocus: "State parameters (n,p) and assumptions explicitly.",
+    commMove: "Always mention independence and constant probability when claiming binomial.",
+    resources: {
+      slide: "ASL06-1_PRP25.pdf",
+      homework: "PS6_PRP23.pdf",
+      solution: "SPS6_PRP25.pdf",
+    },
+  },
+  {
+    id: 7,
+    title: "Chapter 7 · Continuous Models & Normal",
+    focus: "Densities integrate to 1; Normal Z = (X-mu)/sigma.",
+    sprint: "Sketch density, shade region, standardize if normal.",
+    commFocus: "Describe areas as probabilities and note units disappear after standardizing.",
+    commMove: "State mean/SD and the z-cut before quoting a probability.",
+    resources: {
+      slide: "ASL07-1_PRP25.pdf",
+      homework: "PS7_PRP25.pdf",
+      solution: "SPS7_PRP25.pdf",
+    },
+  },
+  {
+    id: 8,
+    title: "Chapter 8 · Sampling & CLT",
+    focus: "Sampling mean: mu_xbar = mu, SE = sigma/sqrt(n); CLT gives approximate normality.",
+    sprint: "Check n and tail heaviness; compute SE; standardize.",
+    commFocus: "Clarify when normal approximation is justified.",
+    commMove: "Always report n and any skew or heavy-tail caveats.",
+    resources: {
+      slide: "ASL08-1_PRP25.pdf",
+      homework: "PS8_PRP25.pdf",
+      solution: "SPS8_PRP25.pdf",
+    },
+  },
+  {
+    id: 9,
+    title: "Chapter 9 · Simulation & Markov Chains",
+    focus: "Monte Carlo estimation; simple Markov transition matrices and steady state.",
+    sprint: "Design experiments, track long-run proportions, solve for stationary vectors.",
+    commFocus: "Document simulation design and interpret long-run behavior plainly.",
+    commMove: "State seed, iterations, and what convergence means in context.",
+    resources: {
+      slide: "ASL09-1_PRP25.pdf",
+      homework: "PS9_PRP25.pdf",
+      solution: "SPS9_PRP25.pdf",
+    },
+  },
+];
+
+const toResourceLinks = (res = {}) => {
+  const links = [];
+  if (res.slide) links.push({ label: "Slides", href: `/materials/slides/${encodeURIComponent(res.slide)}` });
+  if (res.homework) links.push({ label: "Homework", href: `/materials/homeworks/${encodeURIComponent(res.homework)}` });
+  if (res.solution) links.push({ label: "Solutions", href: `/materials/solutions/${encodeURIComponent(res.solution)}` });
+  return links;
+};
+
+const workspaceUnitFromChapter = (chapter, track) => ({
+  title: chapter.title,
+  description: chapter.focus,
+  media: {
+    guideTitle: "Guided Exercise",
+    guideIntro: chapter.focus,
+    guideProblems: [chapter.focus, chapter.sprint],
+    graphPrompt: chapter.commFocus,
+    notesPrompt: chapter.commMove,
+  },
+  tasks: [
+    "Define the experiment and events before writing symbols.",
+    "Work one drill from the linked slide or homework.",
+    "Write a one-sentence takeaway for your answer.",
+  ],
+  resources: toResourceLinks(chapter.resources),
+  questions: probabilityQuestionBank,
+  track,
+});
+
+const workspaceCommunicationFromChapter = (chapter) => ({
+  title: chapter.title,
+  description: chapter.commFocus,
+  media: {
+    guideTitle: "Writing Drill",
+    guideIntro: chapter.commMove,
+    guideProblems: [
+      "State the scenario in words.",
+      "List assumptions and whether they hold.",
+      "Write the interpretation of a result.",
+    ],
+    notesPrompt: "Pair equations with narration and visuals.",
+  },
+  tasks: [
+    "Summarize the experiment and events in two sentences.",
+    "Name key assumptions (independence, replacement, model).",
+    "Explain one computed probability in plain language.",
+  ],
+  resources: toResourceLinks(chapter.resources),
+  questions: probabilityQuestionBank,
+  track: "Communication",
+});
+
+const PROBABILITY_WORKSPACE = {
+  courseName: "Probability · Adaptive track",
+  courseCode: "PRP-25",
+  level: "launch",
+  mathFocus: "text",
+  heroTitle: "Probability · Adaptive track",
+  heroSubtitle: "Foundations, Bayes, CLT, and Markov with your slides/homeworks wired in.",
+  heroTags: ["Slides + PS + solutions", "Bayes", "CLT", "Markov"],
+  trackLabels: { math: "Probability", english: "Communication" },
+  survey: {
+    audio: "lofi",
+    structure: "3",
+    grit: "coach",
+  },
+  questionBank: probabilityQuestionBank,
+  workspaceModules: {
+    math: probabilityChapters.map((chapter) => workspaceUnitFromChapter(chapter, "Math")),
+    english: probabilityChapters.map(workspaceCommunicationFromChapter),
+  },
+};
+
 const saveWorkspacePayload = (payload) => {
   try {
     localStorage.setItem("satCourseWorkspace", JSON.stringify(payload));
@@ -230,6 +467,11 @@ const saveWorkspacePayload = (payload) => {
 
 const openBiologyWorkspace = () => {
   saveWorkspacePayload(BIOLOGY_WORKSPACE);
+  window.open("/course", "_blank");
+};
+
+const openProbabilityWorkspace = () => {
+  saveWorkspacePayload(PROBABILITY_WORKSPACE);
   window.open("/course", "_blank");
 };
 
@@ -248,10 +490,81 @@ const renderBiologyOutline = () => {
   });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const openBtn = document.getElementById("open-biology-workspace");
-  if (openBtn) {
-    openBtn.addEventListener("click", openBiologyWorkspace);
+const renderProbabilityOutline = () => {
+  const outline = document.getElementById("probability-module-list");
+  if (!outline) return;
+  outline.innerHTML = "";
+  probabilityChapters.forEach((chapter) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${chapter.title}</strong><div class="muted">${chapter.focus}</div>`;
+    outline.appendChild(li);
+  });
+};
+
+const renderProbabilityMaterials = (materials) => {
+  const container = document.getElementById("probability-materials");
+  if (!container) return;
+  container.innerHTML = "";
+  const categories = [
+    { key: "slides", label: "Slides" },
+    { key: "homeworks", label: "Homeworks" },
+    { key: "solutions", label: "Solutions" },
+  ];
+  categories.forEach(({ key, label }) => {
+    const files = materials?.[key] || [];
+    const card = document.createElement("div");
+    card.className = "material-card";
+    const title = document.createElement("h4");
+    title.textContent = `${label} (${files.length})`;
+    card.appendChild(title);
+    if (!files.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = "No files found.";
+      card.appendChild(empty);
+    } else {
+      const list = document.createElement("ul");
+      files.forEach((file) => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `/materials/${key}/${encodeURIComponent(file)}`;
+        link.target = "_blank";
+        link.textContent = file;
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+      card.appendChild(list);
+    }
+    container.appendChild(card);
+  });
+};
+
+const loadProbabilityMaterials = async () => {
+  const container = document.getElementById("probability-materials");
+  if (!container) return;
+  container.innerHTML = '<p class="muted">Loading downloads...</p>';
+  try {
+    const response = await fetch("/api/materials");
+    if (!response.ok) {
+      throw new Error(`Unable to load materials (${response.status})`);
+    }
+    const data = await response.json();
+    renderProbabilityMaterials(data);
+  } catch (error) {
+    container.innerHTML = `<p class="form-error">${error.message || "Unable to load materials."}</p>`;
   }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const openBioBtn = document.getElementById("open-biology-workspace");
+  if (openBioBtn) {
+    openBioBtn.addEventListener("click", openBiologyWorkspace);
+  }
+  const openProbBtn = document.getElementById("open-probability-workspace");
+  if (openProbBtn) {
+    openProbBtn.addEventListener("click", openProbabilityWorkspace);
+  }
+  renderProbabilityOutline();
+  loadProbabilityMaterials();
   renderBiologyOutline();
 });
