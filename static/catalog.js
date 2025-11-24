@@ -86,6 +86,8 @@ const BIOLOGY_WORKSPACE = {
         ],
         resources: [
           { label: "Cell Texture", href: "/static/cell-texture.txt" },
+          { label: "3D Cell Model", href: "/static/cell.glb" },
+          { label: "Mitochondria Model", href: "/static/mitochondria.glb" },
         ],
       },
       {
@@ -107,6 +109,9 @@ const BIOLOGY_WORKSPACE = {
           "Set up a Punnett square before solving any worded cross.",
           "Explain genotype → phenotype for one trait in your own words.",
           "Draft a 2-sentence summary of an inheritance pattern from a pedigree.",
+        ],
+        resources: [
+          { label: "Mitochondria Model", href: "/static/mitochondria.glb" },
         ],
       },
       {

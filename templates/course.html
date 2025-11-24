@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Course Workspace · PulsePrep</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <script type="module" src="{{ url_for('static', filename='model-viewer.min.js') }}"></script>
   </head>
   <body class="workspace-body">
     <div class="workspace-shell">
@@ -41,9 +42,61 @@
             <ul class="dropdown-menu" id="tag-dropdown-menu"></ul>
           </div>
           <div class="pill-row" id="workspace-tags" style="display:none;"></div>
+          <div class="cell-viewer-panel">
+            <div>
+              <p class="eyebrow">Live lab asset</p>
+              <h3>Interactive cell model</h3>
+              <p class="muted">Explore the GLB cell model before you dive into the first module.</p>
+            </div>
+            <model-viewer
+              src="{{ url_for('static', filename='cell.glb') }}"
+              alt="3D cell model"
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="1500"
+              shadow-intensity="0.8"
+              ar
+              ar-modes="webxr scene-viewer quick-look"
+            >
+              <div class="slide-frame-wrap model-fallback">
+                <p>Unable to load the 3D model in this browser. Please enable WebGL or switch browsers to view it inline.</p>
+              </div>
+            </model-viewer>
+          </div>
         </header>
 
         <div id="workspace-content" class="workspace-content">
+          <section class="mito-section">
+            <div class="mito-text">
+              <p class="eyebrow">Section 02 · Mitochondria lab</p>
+              <h3>ATP factory walkthrough</h3>
+              <p class="muted">
+                Rotate the mitochondrion and trace where glycolysis feeds the Krebs cycle and electron transport.
+                Use the model before starting the mitochondria lecture.
+              </p>
+              <ul class="outline-list">
+                <li><strong>Outer/inner membrane:</strong> folded cristae boost surface area.</li>
+                <li><strong>Matrix:</strong> Krebs cycle enzymes + mitochondrial DNA.</li>
+                <li><strong>Intermembrane space:</strong> H<sup>+</sup> gradient powering ATP synthase.</li>
+              </ul>
+            </div>
+            <div class="mito-viewer">
+              <model-viewer
+                src="{{ url_for('static', filename='mitochondria.glb') }}"
+                alt="3D mitochondrion model"
+                camera-controls
+                auto-rotate
+                auto-rotate-delay="1200"
+                shadow-intensity="0.9"
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+              >
+                <div class="slide-frame-wrap model-fallback">
+                  <p>Unable to load the mitochondrion model. Please enable WebGL or switch browsers.</p>
+                </div>
+              </model-viewer>
+            </div>
+          </section>
           <article class="stage-screen" id="content-stage"></article>
         </div>
       </main>

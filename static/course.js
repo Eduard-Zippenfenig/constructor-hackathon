@@ -251,6 +251,8 @@ const heroTags = document.getElementById("workspace-tags");
 const tagDropdown = document.getElementById("workspace-tag-dropdown");
 const tagDropdownToggle = document.getElementById("tag-dropdown-toggle");
 const tagDropdownMenu = document.getElementById("tag-dropdown-menu");
+const modelViewerModuleSrc = "/static/model-viewer.min.js";
+const modelViewerLegacySrc = "/static/model-viewer-legacy.js";
 
 const audioLabels = {
   "white noise": "White noise",
@@ -315,6 +317,41 @@ const savePracticeQueue = (queue) => {
   } catch (error) {
     console.error("Unable to save practice queue", error);
   }
+};
+
+// Ensure the <model-viewer> custom element is registered even if the page script load order fails.
+const ensureModelViewer = async () => {
+  if (window.customElements?.get("model-viewer")) return;
+  try {
+    await import(modelViewerModuleSrc);
+  } catch (error) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = modelViewerLegacySrc;
+      script.onload = () => resolve();
+      script.onerror = () => resolve(); // continue even if legacy fails; fallback copy still available
+      document.head.appendChild(script);
+    });
+  }
+};
+
+const wireModelViewers = (root = document) => {
+  const elements = root.querySelectorAll("model-viewer");
+  elements.forEach((viewer) => {
+    const fallback = viewer.querySelector(".model-fallback");
+    const hideFallback = () => {
+      if (fallback) fallback.style.display = "none";
+    };
+    const showFallback = () => {
+      if (fallback) fallback.style.display = "";
+    };
+    viewer.addEventListener("load", hideFallback);
+    viewer.addEventListener("model-visibility", hideFallback);
+    viewer.addEventListener("error", showFallback);
+    if (viewer.modelIsVisible || viewer.loaded) {
+      hideFallback();
+    }
+  });
 };
 
 const addToPractice = (question) => {
@@ -513,12 +550,48 @@ const renderPresentationBlock = (presentation) => {
   `;
 };
 
+const findModelResource = (resources = []) => {
+  return (resources || []).find((res = {}) => {
+    const href = res.href || "";
+    const label = (res.label || "").toLowerCase();
+    return href.endsWith(".glb") || label.includes("model");
+  });
+};
+
+const renderModelBlock = (modelRes) => {
+  if (!modelRes) return "";
+  return `
+    <div class="model-viewer-card">
+      <div class="model-viewer-header">
+        <p class="media-label">3D Model</p>
+        <p class="muted-small">Interact with the cell model directly in this lecture.</p>
+      </div>
+      <model-viewer
+        src="${modelRes.href}"
+        alt="${modelRes.label || "3D model"}"
+        camera-controls
+        auto-rotate
+        auto-rotate-delay="1500"
+        shadow-intensity="0.8"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        class="module-model-viewer"
+      >
+        <div class="slide-frame-wrap model-fallback">
+          <p>Unable to load the 3D model in this browser. Please enable WebGL or switch browsers.</p>
+        </div>
+      </model-viewer>
+    </div>
+  `;
+};
+
 const buildModuleMarkup = (unit, track) => {
   const tasks = (unit.tasks || []).map((task) => `<li>${task}</li>`).join("");
   const resources = (unit.resources || [])
     .map((res) => `<li><a href="${res.href}" target="_blank">${res.label}</a></li>`)
     .join("");
   const presentation = findPresentationLink(unit.resources);
+  const modelRes = findModelResource(unit.resources);
   const presentationCta = presentation
     ? `<div class="module-presentation"><a class="ghost small" target="_blank" href="${presentation.href}">Open presentation</a></div>`
     : "";
@@ -538,6 +611,7 @@ const buildModuleMarkup = (unit, track) => {
         ${renderMediaTile("graph", unit.media)}
         ${renderMediaTile("notes", unit.media)}
         ${renderPresentationBlock(presentation)}
+        ${renderModelBlock(modelRes)}
       </div>
       ${resources ? `<div class="module-resources"><h4>Resources</h4><ul>${resources}</ul></div>` : ""}
       <section class="module-actions">
@@ -729,6 +803,7 @@ const loadSection = (track, index) => {
   const completeBtn = document.querySelector(".mark-complete");
   completeBtn?.addEventListener("click", () => setProgressStatus(track, index, "completed"));
   attachQuestionHandlers(unit, track, index);
+  wireModelViewers(contentStage);
 };
 
 const setupNav = () => {
@@ -764,6 +839,8 @@ const initWorkspace = async () => {
   hideRogueCatalogLinks();
   hydrateHero();
   setupTagDropdown();
+  await ensureModelViewer();
+  wireModelViewers(document);
   const progressLoaded = await loadProgress();
   if (!progressLoaded) return;
   rebuildPracticeUnits();
