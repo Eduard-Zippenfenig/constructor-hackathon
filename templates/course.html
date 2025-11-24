@@ -32,6 +32,7 @@
       <main class="workspace-main">
         <div class="workspace-top-actions">
           <a class="ghost pill back-button" href="/catalog">← Back to catalog</a>
+          <button class="primary pill" id="notebook-toggle" type="button">Open notepad</button>
         </div>
         <header class="workspace-hero" id="workspace-hero">
           <div class="tag-dropdown" id="workspace-tag-dropdown">
@@ -98,6 +99,37 @@
             </div>
           </section>
           <article class="stage-screen" id="content-stage"></article>
+        </div>
+        <div class="notebook-panel hidden" id="notebook-panel">
+          <header class="notebook-header">
+            <h3>Workspace notepad</h3>
+            <button class="ghost pill small" id="notebook-close" type="button">Close</button>
+          </header>
+          <div class="notebook-mode-toggle">
+            <button type="button" class="tool-btn active" data-mode="text">Typed notes</button>
+            <button type="button" class="tool-btn" data-mode="draw">Draw &amp; highlight</button>
+          </div>
+          <div class="notebook-body">
+            <section class="notebook-text">
+              <label for="notebook-textarea">Typed notes</label>
+              <textarea id="notebook-textarea" placeholder="Type quick reminders or answers here..."></textarea>
+            </section>
+            <section class="notebook-canvas hidden">
+              <div class="canvas-toolbar">
+                <span>Draw &amp; highlight</span>
+                <div class="tool-group">
+                  <button type="button" class="tool-btn" data-tool="pen" data-color="#0f172a">Black</button>
+                  <button type="button" class="tool-btn" data-tool="pen" data-color="#d92c2c">Red</button>
+                  <button type="button" class="tool-btn" data-tool="pen" data-color="#1d4ed8">Blue</button>
+                  <button type="button" class="tool-btn" data-tool="highlighter" data-color="#facc15">Highlighter</button>
+                  <button type="button" class="tool-btn" data-tool="eraser">Eraser</button>
+                  <button type="button" class="tool-btn" data-tool="clear">Clear</button>
+                </div>
+              </div>
+              <canvas id="notebook-canvas" width="640" height="360"></canvas>
+            </section>
+          </div>
+          <div class="notebook-resize" id="notebook-resize" aria-hidden="true"></div>
         </div>
       </main>
     </div>

@@ -251,6 +251,13 @@ const heroTags = document.getElementById("workspace-tags");
 const tagDropdown = document.getElementById("workspace-tag-dropdown");
 const tagDropdownToggle = document.getElementById("tag-dropdown-toggle");
 const tagDropdownMenu = document.getElementById("tag-dropdown-menu");
+const notebookToggle = document.getElementById("notebook-toggle");
+const notebookPanel = document.getElementById("notebook-panel");
+const notebookClose = document.getElementById("notebook-close");
+const notebookCanvas = document.getElementById("notebook-canvas");
+const notebookTextarea = document.getElementById("notebook-textarea");
+const notebookModeButtons = document.querySelectorAll(".notebook-mode-toggle .tool-btn");
+const notebookResize = document.getElementById("notebook-resize");
 const modelViewerModuleSrc = "/static/model-viewer.min.js";
 const modelViewerLegacySrc = "/static/model-viewer-legacy.js";
 
@@ -450,7 +457,7 @@ const renderMediaTile = (type, media) => {
   if (!media) return "";
   if (type === "video") {
     const problems = (media.guideProblems || [])
-      .map((problem) => `<li>${problem}</li>`)
+      .map((problem) => `<li>${problem}</li>`) 
       .join("");
     return `
       <div class="media-tile video">
@@ -466,6 +473,7 @@ const renderMediaTile = (type, media) => {
       <div class="media-tile graph">
         <p class="media-label">Visual Prompt</p>
         <p>${media.graphPrompt}</p>
+        ${media.modelSrc ? `<model-viewer src="${media.modelSrc}" camera-controls auto-rotate style="width:100%;height:280px;border-radius:16px;background:#0f172a10;"></model-viewer>` : ""}
       </div>
     `;
   }
@@ -522,6 +530,219 @@ const renderQuestions = (unit) => {
       </div>
     </section>
   `;
+};
+
+const setupNotebook = () => {
+  if (!notebookToggle || !notebookPanel || !notebookCanvas) return;
+  const ctx = notebookCanvas.getContext("2d");
+  const tools = Array.from(document.querySelectorAll(".tool-btn"));
+  let drawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let currentTool = "pen";
+  let currentColor = "#0f172a";
+  let currentMode = "text";
+  let dragOffset = { x: 0, y: 0 };
+  let dragging = false;
+  let dragPointerId = null;
+  let resizing = false;
+  let resizePointerId = null;
+  let resizeStart = { x: 0, y: 0, width: 0, height: 0, left: 0, top: 0 };
+
+  const resizeCanvas = () => {
+    const { width, height } = notebookCanvas.getBoundingClientRect();
+    const data = notebookCanvas.toDataURL();
+    notebookCanvas.width = Math.floor(width);
+    notebookCanvas.height = Math.floor(height);
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0);
+    img.src = data;
+  };
+
+  const setMode = (mode) => {
+    currentMode = mode;
+    const textSection = notebookPanel.querySelector(".notebook-text");
+    const drawSection = notebookPanel.querySelector(".notebook-canvas");
+    textSection?.classList.toggle("hidden", mode !== "text");
+    drawSection?.classList.toggle("hidden", mode !== "draw");
+    notebookModeButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.mode === mode));
+    if (mode === "draw") resizeCanvas();
+  };
+
+  const setActiveTool = (tool, color) => {
+    currentTool = tool;
+    if (color) currentColor = color;
+    tools.forEach((btn) => {
+      const isActive =
+        btn.dataset.tool === tool && (!color || btn.dataset.color === color || tool === "eraser" || tool === "clear");
+      btn.classList.toggle("active", isActive);
+    });
+  };
+
+  const startDraw = (x, y) => {
+    drawing = true;
+    [lastX, lastY] = [x, y];
+  };
+
+  const stopDraw = () => {
+    drawing = false;
+    ctx.beginPath();
+  };
+
+  const draw = (x, y) => {
+    if (!drawing) return;
+    ctx.lineWidth = currentTool === "highlighter" ? 12 : currentTool === "eraser" ? 16 : 4;
+    ctx.lineCap = "round";
+    if (currentTool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.strokeStyle = "rgba(0,0,0,1)";
+    } else if (currentTool === "highlighter") {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = currentColor;
+      ctx.globalAlpha = 0.35;
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = currentColor;
+      ctx.globalAlpha = 1;
+    }
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    [lastX, lastY] = [x, y];
+  };
+
+  const handlePointer = (event) => {
+    const rect = notebookCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    if (event.type === "pointerdown") {
+      notebookCanvas.setPointerCapture(event.pointerId);
+      startDraw(x, y);
+    } else if (event.type === "pointermove") {
+      draw(x, y);
+    } else if (event.type === "pointerup" || event.type === "pointercancel") {
+      notebookCanvas.releasePointerCapture(event.pointerId);
+      stopDraw();
+    }
+  };
+
+  tools.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tool = btn.dataset.tool;
+      if (tool === "clear") {
+        ctx.clearRect(0, 0, notebookCanvas.width, notebookCanvas.height);
+        setActiveTool(currentTool, currentColor);
+        return;
+      }
+      setActiveTool(tool, btn.dataset.color);
+    });
+  });
+
+  notebookCanvas.addEventListener("pointerdown", handlePointer);
+  notebookCanvas.addEventListener("pointermove", handlePointer);
+  notebookCanvas.addEventListener("pointerup", handlePointer);
+  notebookCanvas.addEventListener("pointercancel", handlePointer);
+
+  notebookToggle.addEventListener("click", () => {
+    notebookPanel.classList.toggle("hidden");
+    if (!notebookPanel.classList.contains("hidden")) {
+      setMode(currentMode);
+      resizeCanvas();
+      // Ensure inline dimensions exist for resizing math
+      const rect = notebookPanel.getBoundingClientRect();
+      notebookPanel.style.width = `${rect.width}px`;
+      notebookPanel.style.height = `${rect.height}px`;
+    }
+  });
+
+  notebookClose?.addEventListener("click", () => {
+    notebookPanel.classList.add("hidden");
+  });
+
+  window.addEventListener("resize", resizeCanvas);
+  setActiveTool("pen", currentColor);
+  resizeCanvas();
+  if (notebookModeButtons.length) {
+    notebookModeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => setMode(btn.dataset.mode));
+    });
+    setMode("text");
+  }
+
+  const handleDrag = (event) => {
+    if (event.type === "pointerdown") {
+      dragging = true;
+      dragPointerId = event.pointerId;
+      const rect = notebookPanel.getBoundingClientRect();
+      dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      window.addEventListener("pointermove", handleDrag);
+      window.addEventListener("pointerup", handleDrag);
+      window.addEventListener("pointercancel", handleDrag);
+    } else if (event.type === "pointermove" && dragging && event.pointerId === dragPointerId) {
+      const left = event.clientX - dragOffset.x;
+      const top = event.clientY - dragOffset.y;
+      notebookPanel.style.left = `${Math.max(0, left)}px`;
+      notebookPanel.style.top = `${Math.max(0, top)}px`;
+      notebookPanel.style.right = "auto";
+      notebookPanel.style.bottom = "auto";
+    } else if (event.type === "pointerup" || event.type === "pointercancel") {
+      if (event.pointerId !== dragPointerId) return;
+      dragging = false;
+      dragPointerId = null;
+      window.removeEventListener("pointermove", handleDrag);
+      window.removeEventListener("pointerup", handleDrag);
+      window.removeEventListener("pointercancel", handleDrag);
+    }
+  };
+
+  const handleResize = (event) => {
+    if (event.type === "pointerdown") {
+      resizing = true;
+      resizePointerId = event.pointerId;
+      const rect = notebookPanel.getBoundingClientRect();
+      resizeStart = {
+        x: event.clientX,
+        y: event.clientY,
+        width: rect.width,
+        height: rect.height,
+        left: rect.left,
+        top: rect.top,
+      };
+      window.addEventListener("pointermove", handleResize);
+      window.addEventListener("pointerup", handleResize);
+      window.addEventListener("pointercancel", handleResize);
+    } else if (event.type === "pointermove" && resizing && event.pointerId === resizePointerId) {
+      const deltaX = event.clientX - resizeStart.x;
+      const deltaY = event.clientY - resizeStart.y;
+      const newWidth = Math.max(320, resizeStart.width + deltaX);
+      const newHeight = Math.max(260, resizeStart.height + deltaY);
+      const maxWidth = window.innerWidth - resizeStart.left - 12;
+      const maxHeight = window.innerHeight - resizeStart.top - 12;
+      notebookPanel.style.width = `${Math.min(newWidth, maxWidth)}px`;
+      notebookPanel.style.height = `${Math.min(newHeight, maxHeight)}px`;
+      resizeCanvas();
+    } else if (event.type === "pointerup" || event.type === "pointercancel") {
+      if (event.pointerId !== resizePointerId) return;
+      resizing = false;
+      resizePointerId = null;
+      window.removeEventListener("pointermove", handleResize);
+      window.removeEventListener("pointerup", handleResize);
+      window.removeEventListener("pointercancel", handleResize);
+    }
+  };
+
+  notebookPanel.querySelector(".notebook-header")?.addEventListener("pointerdown", handleDrag);
+  notebookPanel.querySelector(".notebook-header")?.addEventListener("pointermove", handleDrag);
+  notebookPanel.querySelector(".notebook-header")?.addEventListener("pointerup", handleDrag);
+  notebookPanel.querySelector(".notebook-header")?.addEventListener("pointercancel", handleDrag);
+
+  if (notebookResize) {
+    notebookResize.addEventListener("pointerdown", handleResize);
+    notebookResize.addEventListener("pointermove", handleResize);
+    notebookResize.addEventListener("pointerup", handleResize);
+    notebookResize.addEventListener("pointercancel", handleResize);
+  }
 };
 
 const findPresentationLink = (resources = []) => {
@@ -839,6 +1060,7 @@ const initWorkspace = async () => {
   hideRogueCatalogLinks();
   hydrateHero();
   setupTagDropdown();
+  setupNotebook();
   await ensureModelViewer();
   wireModelViewers(document);
   const progressLoaded = await loadProgress();

@@ -39,7 +39,7 @@ let catalogRedirectTimer = null;
 const mediaLibrary = {
   whiteNoise: createLoopedAudio(buildMediaPath('rain.wav'), 0.2),
   softMusic: createLoopedAudio(buildMediaPath('MUSİC.mp3'), 0.25),
-  slimeVideo: buildMediaPath('slime.mp4'),
+  slimeVideo: buildMediaPath('default.mp4'),
 };
 const canStreamSlime = slimeCanvas && typeof slimeCanvas.captureStream === 'function';
 
