@@ -68,15 +68,13 @@ const BIOLOGY_WORKSPACE = {
         description:
           "Organelles, membranes, and how cells capture/store energy through respiration and photosynthesis.",
         media: {
-          guideIntro: "Map each organelle to its role, then trace how glucose becomes ATP.",
-          guideProblems: [
-            "Identify where glycolysis, Krebs, and ETC occur in a cell diagram.",
-            "Label chloroplast structures and where the light vs. dark reactions occur.",
-            "Explain how membrane structure supports gradients (H⁺, ions).",
-            "Predict how a missing mitochondrion would affect ATP yield.",
-          ],
-          graphPrompt: "Sketch a cell and annotate the energy flow arrows (glucose → ATP).",
-          notesPrompt: "Summarize how structure (membranes, surface area) links to function.",
+          graphPrompt: "Cell overview",
+          readerPrompt:
+            "Chapter 1: The Cell\nCell theory is the foundational principle of biology and states that all living organisms, from the simplest bacteria to the most complex animals, are composed of cells. These cells serve as the basic structural and functional units of life. According to this theory, cells are responsible for carrying out all essential processes that define living systems, including growth, metabolism, and reproduction. Another central idea is that all cells arise from pre-existing cells rather than forming spontaneously. This insight helped scientists understand how tissues heal, how organisms grow, and how hereditary traits are passed from one generation to the next. Examples: A cut on the skin heals because nearby cells divide to replace those that were damaged, and bacterial populations increase through the simple division of one cell into two identical descendants.\nCells exist in two major categories: prokaryotic and eukaryotic. Prokaryotic cells are the simpler of the two and lack internal membrane-bound organelles. Their DNA is not enclosed within a nucleus but is instead located in a region called the nucleoid. Despite their simplicity, they are incredibly adaptable and can survive in extreme environments such as hot springs, deep ocean vents, and frozen soil. Examples: Common bacteria like E. coli inhabit the human digestive system, cyanobacteria carry out photosynthesis in aquatic ecosystems, and archaea thrive in highly acidic or extremely hot environments. Eukaryotic cells, on the other hand, contain a nucleus and various organelles with specialized functions. These cells are larger, more complex, and form organisms such as plants, animals, fungi, and protists. Examples: Yeast used in baking is eukaryotic, plant cells contain chloroplasts for photosynthesis, and animal cells form tissues such as muscles and nerves.\nAlthough cells vary widely in form, they share certain essential components. Every cell possesses a cell membrane composed of a phospholipid bilayer that controls the movement of substances in and out of the cell. This membrane also contains receptors and channels that allow communication with the environment. Examples: Insulin binds to receptors on muscle cells and triggers glucose uptake, and nerve cells transmit electrical signals using ion channels in their membranes. Inside the membrane lies the cytoplasm, a gel-like fluid filled with enzymes and nutrients essential for metabolic reactions. Ribosomes, present in all cells, assemble proteins by translating genetic instructions. Examples: Pancreatic cells rely on ribosomes to produce digestive enzymes, while muscle cells produce large quantities of actin and myosin. At the core of cellular function is genetic material, primarily DNA, which stores the organism’s blueprint. RNA serves as the messenger and helper molecule during protein synthesis.\nCells in multicellular organisms are often highly specialized. Their structures are adapted to the specific tasks they perform. Examples: Nerve cells have long extensions that allow them to transmit impulses across long distances, red blood cells are concave discs optimized for oxygen transport, muscle cells contain abundant mitochondria to power contractions, and plant root hair cells have elongated projections that enhance water and nutrient absorption.",
+          modelSrc: "/static/cell.glb",
+          podcastSrc: "/static/Biology1.mp3",
+          videoSrc: "/static/Biology11.mov",
+          genzVideoSrc: "/static/bio1.mp4",
         },
         tasks: [
           "Pair each organelle with one sentence on its role.",
@@ -93,15 +91,12 @@ const BIOLOGY_WORKSPACE = {
         title: "Genetics & Heredity",
         description: "DNA → RNA → protein, Punnett squares, and interpreting pedigrees.",
         media: {
-          guideIntro: "Work a mono- and dihybrid cross, then connect genotype to phenotype.",
-          guideProblems: [
-            "Complete Aa × Aa Punnett; mark genotype ratios and phenotype ratios.",
-            "Predict offspring for RrYy × RrYy (dihybrid) and note expected phenotypic ratio.",
-            "Translate a short DNA sequence into mRNA and an amino acid chain.",
-            "Read a pedigree to classify inheritance (dominant, recessive, sex-linked).",
-          ],
-          graphPrompt: "Draw a quick Punnett square and color-code dominant vs. recessive outcomes.",
-          notesPrompt: "Write two cues for when to suspect linked genes vs. independent assortment.",
+          graphPrompt: "Mitochondria roles",
+          readerPrompt:
+            "Chapter 2: The Mitochondrion\nMitochondria are double-membraned organelles often called the “powerhouses of the cell” because they produce most of the ATP that fuels cellular activities. The outer membrane acts as a protective boundary, while the inner membrane folds into cristae that greatly increase surface area for energy-generating reactions. Inside the inner membrane is the matrix, which contains enzymes for metabolic pathways, ribosomes, and mitochondrial DNA. These characteristics allow mitochondria to produce some of their own proteins, granting them a degree of independence within the cell. Examples: Heart muscle cells contain many mitochondria because they require continuous energy, and endurance athletes often develop high mitochondrial density in their muscles.\nThe primary function of mitochondria is ATP production via cellular respiration. This begins with the Krebs cycle in the matrix, where nutrient molecules are broken down to release electrons. These electrons flow through the electron transport chain located in the inner membrane. Their movement establishes a proton gradient that powers ATP synthase, the enzyme responsible for producing ATP. Examples: Neurons require ATP to maintain electrical gradients that allow them to generate nerve impulses, and muscle cells need a constant supply of ATP for contraction during physical activity.\nMitochondria also carry out additional vital roles. They help regulate apoptosis, a form of programmed cell death that eliminates damaged or unnecessary cells in a controlled manner. Examples: Immune cells self-destruct after eliminating an infection, and cells with severely damaged DNA undergo apoptosis to prevent cancer formation. In specialized tissues such as brown fat, mitochondria generate heat through non-shivering thermogenesis. Examples: Infants rely on brown fat to maintain body temperature. Mitochondria also regulate calcium levels within cells, which is essential for signaling and muscle contraction.",
+          modelSrc: "/static/mitochondria.glb",
+          podcastSrc: "/static/Biology2.mp3",
+          genzVideoSrc: "/static/bio2.mp4",
         },
         tasks: [
           "Set up a Punnett square before solving any worded cross.",
@@ -113,109 +108,27 @@ const BIOLOGY_WORKSPACE = {
         ],
       },
       {
-        title: "Evolution & Natural Selection",
-        description: "Mechanisms of evolution, evidence, and reading phylogenetic trees.",
+        title: "Chapter 3: The Golgi Apparatus",
+        description: "Processing and packaging.",
         media: {
-          guideIntro: "Connect variation, selection pressure, and fitness; practice tree reading.",
-          guideProblems: [
-            "List the four conditions for natural selection using a real example.",
-            "Compare homologous vs. analogous structures with one example each.",
-            "Interpret a simple cladogram: identify the most recent common ancestor of two taxa.",
-            "Describe how genetic drift differs from selection in a bottleneck scenario.",
-          ],
-          graphPrompt: "Sketch a mini cladogram and mark shared derived traits.",
-          notesPrompt: "Capture one piece of evidence (fossil, molecular, anatomy) for evolution.",
+          graphPrompt: "Golgi pathways",
+          readerPrompt:
+            "Chapter 3: The Golgi Apparatus\nThe Golgi apparatus functions as the cell’s processing, modifying, and packaging center. It consists of flattened membrane-bound sacs called cisternae arranged in a stack. The cis face receives newly synthesized proteins and lipids from the endoplasmic reticulum (ER). As molecules move from the cis to the medial to the trans region, they undergo highly organized modifications. The trans face sorts and packages them for secretion or for delivery to specific cellular locations.\nThe Golgi apparatus performs chemical modifications such as glycosylation and phosphorylation, which determine molecular function and final destination. Processed molecules are packaged into vesicles that either fuse with the cell membrane, become part of lysosomes, or transport materials elsewhere within the cell. Examples: Intestinal cells rely on the Golgi to secrete mucus, and immune cells use it to package antibodies before releasing them into the bloodstream.\nProteins travel from the rough ER to the Golgi apparatus in transport vesicles. As they move through the Golgi’s layers, they are refined into fully functional molecules. Examples: Pancreatic cells manufacture digestive enzymes in the rough ER, process them in the Golgi, and ship them to lysosomes. Insulin is also processed in the Golgi before being released from the pancreas into the bloodstream.",
+          podcastSrc: "/static/Biology3.mp3",
+          genzVideoSrc: "/static/bio3.mp4",
         },
-        tasks: [
-          "Write the four pillars of natural selection beside one case study.",
-          "Annotate a phylogenetic tree with at least three derived traits.",
-          "Contrast selection vs. drift in 3 bullet points.",
-        ],
+        resources: [{ label: "Golgi Model", href: "/static/Golgi%20Aparatus%20Texture.glb" }],
       },
       {
-        title: "Systems, Homeostasis, & Ecology",
-        description: "Body systems integration, feedback loops, cycles, and energy flow in ecosystems.",
+        title: "Chapter 4: The Endoplasmic Reticulum (ER)",
+        description: "Synthesis and transport.",
         media: {
-          guideIntro: "Trace a feedback loop and follow matter/energy through an ecosystem snapshot.",
-          guideProblems: [
-            "Diagram negative feedback for blood glucose (insulin/glucagon).",
-            "Follow nitrogen through fixation → assimilation → denitrification.",
-            "Explain why energy pyramids taper; calculate energy at a higher trophic level.",
-            "Spot abiotic vs. biotic limits in a given biome description.",
-          ],
-          graphPrompt: "Draw a feedback loop with set point, sensors, and effectors labeled.",
-          notesPrompt: "List two examples of homeostasis breaking and the resulting symptoms.",
+          graphPrompt: "Rough vs smooth ER",
+          podcastSrc: "/static/Biology4.mp3",
+          readerPrompt:
+            "Chapter 4: The Endoplasmic Reticulum (ER)\nThe endoplasmic reticulum (ER) is a vast network of membranes connected to the nuclear envelope. It functions as the cell’s primary manufacturing and transportation system. The rough ER is studded with ribosomes and specializes in protein synthesis and folding. Examples: Liver and immune cells rely on the rough ER to produce high volumes of enzymes and antibodies.\nThe smooth ER, which lacks ribosomes, is responsible for lipid synthesis, detoxification, and calcium storage. Examples: Liver cells use the smooth ER to break down toxins such as alcohol, and muscle cells rely on its calcium-storing form, the sarcoplasmic reticulum, for contraction.\nWhen the ER malfunctions, serious diseases may occur. Misfolded proteins can accumulate and cause stress within the ER. Examples: In cystic fibrosis, a misfolded CFTR protein is destroyed in the ER instead of reaching the cell membrane, and disturbances in lipid regulation may result in fatty liver disease.",
         },
-        tasks: [
-          "Pair each major system with one homeostasis example.",
-          "Compute approximate energy transfer (10% rule) for a short food chain.",
-          "Identify one human impact on a cycle (carbon, nitrogen) and its consequence.",
-        ],
-      },
-    ],
-    english: [
-      {
-        title: "Lab Notebook Discipline",
-        description: "Strong methods sections, controls, and observation notes.",
-        media: {
-          guideTitle: "Lab Writing Sprint",
-          guideIntro: "Structure a method so a peer could replicate it without guessing.",
-          guideProblems: [
-            "Rewrite a sloppy method to include controls, volumes, and timing.",
-            "List dependent vs. independent variables for a sample experiment.",
-            "Draft a clean observation entry after running a quick simulation.",
-            "State one limitation and one follow-up step for the same lab.",
-          ],
-          graphPrompt: "Layout a tidy notebook page: date, goal, setup, observations, next steps.",
-          notesPrompt: "Capture one sentence on why controls matter for causation claims.",
-        },
-        tasks: [
-          "Bullet controls and variables before writing any procedure.",
-          "Record observations as evidence, not interpretation, then add a short inference line.",
-          "End with a next-step note for future you.",
-        ],
-      },
-      {
-        title: "Data Interpretation & Graphing",
-        description: "Choosing visuals, spotting outliers, and writing claims from evidence.",
-        media: {
-          guideTitle: "Graph & Explain",
-          guideIntro: "Pick the right plot for your data, then craft a one-sentence takeaway.",
-          guideProblems: [
-            "Decide between line, bar, scatter, or box plot for four mini-datasets.",
-            "Mark potential outliers and discuss whether to keep/remove them.",
-            "Calculate mean/median and explain which is better for skewed data.",
-            "Write a claim-evidence-reasoning blurb for a tiny dataset.",
-          ],
-          graphPrompt: "Sketch a quick scatterplot with trend line and labeled axes.",
-          notesPrompt: "List two rules for axis labels and units that keep graphs readable.",
-        },
-        tasks: [
-          "Select a graph type and justify it in one sentence.",
-          "State a claim using specific data values as evidence.",
-          "Note one possible source of error and its impact on interpretation.",
-        ],
-      },
-      {
-        title: "Scientific Communication & Ethics",
-        description: "Cite sources, avoid overclaiming, and acknowledge uncertainty or ethics flags.",
-        media: {
-          guideTitle: "Argue with Evidence",
-          guideIntro: "Turn results into a cautious, accurate conclusion with citations.",
-          guideProblems: [
-            "Rewrite an overconfident claim into a precise, supported conclusion.",
-            "Flag ethical considerations in a genetics or ecology scenario.",
-            "Add a limitation and future direction to a short discussion section.",
-            "Practice citing a primary source and a review article correctly.",
-          ],
-          graphPrompt: "Map a claim-evidence-reasoning chain with citations noted.",
-          notesPrompt: "Write two sentence starters that signal uncertainty responsibly.",
-        },
-        tasks: [
-          "Cite at least one primary source for any strong claim.",
-          "Pair every claim with concrete evidence and note uncertainty.",
-          "Name an ethical consideration (consent, ecosystem impact, data privacy) when relevant.",
-        ],
+        resources: [],
       },
     ],
   },
@@ -452,8 +365,54 @@ const PROBABILITY_WORKSPACE = {
   },
   questionBank: probabilityQuestionBank,
   workspaceModules: {
-    math: probabilityChapters.map((chapter) => workspaceUnitFromChapter(chapter, "Math")),
-    english: probabilityChapters.map(workspaceCommunicationFromChapter),
+    math: [
+      {
+        title: "Chapter 1: Foundations of Probability",
+        description: "Core rules and intuition.",
+        media: {
+          graphPrompt: "Foundations visual prompt",
+          podcastSrc: "/static/Probability1.mp3",
+          videoSrc: "/static/Probability11.mov",
+          readerPrompt:
+            "Chapter 1: Foundations of Probability\nProbability begins with the idea of an experiment, which is any process that produces outcomes that cannot be predicted with certainty. Everyday examples include flipping a coin, rolling dice, or measuring daily rainfall. The sample space is the complete set of all outcomes, while an event is any subset of outcomes of interest. Examples: For a coin flip, the sample space includes heads and tails, and in weather prediction, it may include rain or sunshine.\nProbability can be understood in several ways. Classical probability applies when outcomes are equally likely. Example: The chance of drawing a heart from a standard deck is thirteen out of fifty-two. Empirical probability is based on observation and repeated trials. Example: If it rained ninety days last year, the empirical probability of rain on a given day is ninety out of three hundred sixty-five. Axiomatic probability is a rigorous mathematical system built on rules: probabilities are non-negative, the probability of the full sample space is one, and probabilities of disjoint events add together.\nImportant rules include the complement rule, which states that the chance of an event not happening is one minus the chance of it happening. Example: If the probability of rain is 0.3, then the probability of no rain is 0.7. Independence occurs when the outcome of one event does not influence another. Examples: Two separate coin flips are independent, and two machines on different production lines do not affect each other’s failure probabilities.",
+        },
+        questions: probabilityQuestionBank,
+      },
+      {
+        title: "Chapter 2: Conditional Probability and Bayes’ Theorem",
+        description: "Conditionals and updates.",
+        media: {
+          graphPrompt: "Conditionals visual prompt",
+          podcastSrc: "/static/Probability2.mp3",
+          readerPrompt:
+            "Chapter 2: Conditional Probability and Bayes’ Theorem\nConditional probability measures the likelihood of an event occurring given that another event has already taken place. Example: The probability of having the flu increases if we know the person has a fever. If two events are independent, knowing that one occurred does not change the probability of the other. Example: Knowing someone rolled a three on a die has no effect on your coin flip outcome.\nThe total probability theorem is useful when an event may occur under several different scenarios. Example: Determining the probability of high blood pressure may require weighing age groups by their proportion in the population. Bayes’ theorem helps us reverse conditional probabilities, combining new information with prior knowledge. Examples: It is widely used in medical testing to determine the chance of a disease given a positive result, and in spam filtering to classify emails.",
+        },
+        questions: probabilityQuestionBank,
+      },
+      {
+        title: "Chapter 3: Random Variables and Distributions",
+        description: "Discrete/continuous models.",
+        media: {
+          graphPrompt: "Random variables visual prompt",
+          podcastSrc: "/static/Probability3.mp3",
+          readerPrompt:
+            "Chapter 3: Random Variables and Distributions\nA random variable assigns numerical values to outcomes of a random process. Discrete random variables take countable values, such as the number of cars passing an intersection. Continuous random variables take any value within an interval, such as the time needed to walk a kilometer.\nDiscrete distributions include the Bernoulli, binomial, and Poisson distributions. Examples: A Bernoulli trial models success or failure in sending a data packet, a binomial distribution models the number of correct guesses on a quiz, and a Poisson distribution models the number of customers arriving per hour.\nContinuous distributions include the uniform, exponential, and normal distributions. Examples: Computer-generated random numbers follow a uniform distribution, the time between phone calls in a call center tends to follow an exponential distribution, and human heights typically follow a normal distribution.\nExpectation represents the long-term average of a random variable, while variance measures how spread out the outcomes are. Examples: The expected number of heads in ten flips of a fair coin is five, and the variance of bus waiting times indicates how predictable the schedule is. Moment generating functions summarize all moments of a distribution and simplify the analysis of sums of random variables.",
+        },
+        questions: probabilityQuestionBank,
+      },
+      {
+        title: "Chapter 4: Joint Distributions and Limit Theorems",
+        description: "Joins and asymptotics.",
+        media: {
+          graphPrompt: "Joint distributions visual prompt",
+          podcastSrc: "/static/Probability4.mp3",
+          readerPrompt:
+            "Chapter 4: Joint Distributions and Limit Theorems\nJoint distributions describe two or more random variables at once. Examples: Temperature and electricity usage are jointly distributed, as are study hours and exam scores.\nCovariance and correlation describe relationships between variables. Height and weight typically show positive correlation, while fuel efficiency and vehicle weight often show negative correlation.\nThe law of large numbers states that the average outcome of many trials will approach the true expected value. Example: Repeated coin flips tend to stabilize around fifty percent heads. The central limit theorem states that averages of many independent variables tend to be normally distributed. Examples: Manufacturing quality control relies on this principle, as do opinion polls and surveys.\nThese theoretical tools form the basis of modern statistics, enabling scientists, engineers, and analysts to draw reliable conclusions from sample data.",
+        },
+        questions: probabilityQuestionBank,
+      },
+    ],
+    english: [],
   },
 };
 

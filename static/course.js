@@ -466,12 +466,32 @@ const renderMediaTile = (type, media) => {
       </div>
     `;
   }
-  if (type === "graph" && media.graphPrompt) {
+  if (type === "graph" && (media.graphPrompt || media.readerPrompt)) {
+    const isVisual = (customLabel || "").toLowerCase().includes("visual");
+    const isPodcast = (customLabel || "").toLowerCase().includes("podcast");
+    const isGenZ = (customLabel || "").toLowerCase().includes("gen z");
+    const isReader = (customLabel || "").toLowerCase().includes("reader");
+    const promptText = isReader && media.readerPrompt ? media.readerPrompt : media.graphPrompt || "";
+    const promptHtml = promptText ? promptText.replace(/\n/g, "<br>") : "";
     return `
       <div class="media-tile graph">
-        <p class="media-label">Visual Prompt</p>
-        <p>${media.graphPrompt}</p>
-        ${media.modelSrc ? `<model-viewer src="${media.modelSrc}" camera-controls auto-rotate style="width:100%;height:280px;border-radius:16px;background:#0f172a10;"></model-viewer>` : ""}
+        <p class="media-label">${customLabel || "Visual Prompt"}</p>
+        <p>${promptHtml}</p>
+        ${
+          isVisual && media.videoSrc
+            ? `<video controls style="width:100%;margin-top:0.5rem;border-radius:12px;" src="${media.videoSrc}"></video>`
+            : ""
+        }
+        ${
+          isGenZ && media.genzVideoSrc
+            ? `<video controls style="width:100%;margin-top:0.5rem;border-radius:12px;" src="${media.genzVideoSrc}"></video>`
+            : ""
+        }
+        ${
+          isPodcast && media.podcastSrc
+            ? `<audio controls style="width:100%; margin-top:0.5rem;"><source src="${media.podcastSrc}" type="audio/mpeg" />Your browser does not support the audio element.</audio>`
+            : ""
+        }
       </div>
     `;
   }
@@ -1049,6 +1069,119 @@ const dedupeByTitle = (units) => {
 const moduleUnits = dedupeByTitle(flattenUnits(tracks.modules));
 const exerciseUnits = dedupeByTitle(flattenUnits(tracks.exercises));
 let practiceUnits = [];
+
+// Ensure the biology Chapter 1 (cell) module exposes the podcast source in workspace view.
+if (moduleUnits.length) {
+  const first = moduleUnits[0];
+  const title = (first.title || "").toLowerCase();
+  if (title.includes("cell")) {
+    first.media = first.media || {};
+    first.media.podcastSrc = first.media.podcastSrc || "/static/Biology1.mp3";
+    first.media.videoSrc = first.media.videoSrc || "/static/Biology11.mov";
+    first.media.genzVideoSrc = first.media.genzVideoSrc || "/static/bio1.mp4";
+    first.media.readerPrompt =
+      first.media.readerPrompt ||
+      "Chapter 1: The Cell\nCell theory is the foundational principle of biology and states that all living organisms, from the simplest bacteria to the most complex animals, are composed of cells. These cells serve as the basic structural and functional units of life. According to this theory, cells are responsible for carrying out all essential processes that define living systems, including growth, metabolism, and reproduction. Another central idea is that all cells arise from pre-existing cells rather than forming spontaneously. This insight helped scientists understand how tissues heal, how organisms grow, and how hereditary traits are passed from one generation to the next. Examples: A cut on the skin heals because nearby cells divide to replace those that were damaged, and bacterial populations increase through the simple division of one cell into two identical descendants.\nCells exist in two major categories: prokaryotic and eukaryotic. Prokaryotic cells are the simpler of the two and lack internal membrane-bound organelles. Their DNA is not enclosed within a nucleus but is instead located in a region called the nucleoid. Despite their simplicity, they are incredibly adaptable and can survive in extreme environments such as hot springs, deep ocean vents, and frozen soil. Examples: Common bacteria like E. coli inhabit the human digestive system, cyanobacteria carry out photosynthesis in aquatic ecosystems, and archaea thrive in highly acidic or extremely hot environments. Eukaryotic cells, on the other hand, contain a nucleus and various organelles with specialized functions. These cells are larger, more complex, and form organisms such as plants, animals, fungi, and protists. Examples: Yeast used in baking is eukaryotic, plant cells contain chloroplasts for photosynthesis, and animal cells form tissues such as muscles and nerves.\nAlthough cells vary widely in form, they share certain essential components. Every cell possesses a cell membrane composed of a phospholipid bilayer that controls the movement of substances in and out of the cell. This membrane also contains receptors and channels that allow communication with the environment. Examples: Insulin binds to receptors on muscle cells and triggers glucose uptake, and nerve cells transmit electrical signals using ion channels in their membranes. Inside the membrane lies the cytoplasm, a gel-like fluid filled with enzymes and nutrients essential for metabolic reactions. Ribosomes, present in all cells, assemble proteins by translating genetic instructions. Examples: Pancreatic cells rely on ribosomes to produce digestive enzymes, while muscle cells produce large quantities of actin and myosin. At the core of cellular function is genetic material, primarily DNA, which stores the organism’s blueprint. RNA serves as the messenger and helper molecule during protein synthesis.\nCells in multicellular organisms are often highly specialized. Their structures are adapted to the specific tasks they perform. Examples: Nerve cells have long extensions that allow them to transmit impulses across long distances, red blood cells are concave discs optimized for oxygen transport, muscle cells contain abundant mitochondria to power contractions, and plant root hair cells have elongated projections that enhance water and nutrient absorption.";
+    first.media.graphPrompt = first.media.graphPrompt || "Listen to the cell walkthrough while you annotate.";
+  }
+}
+
+// Ensure biology Chapter 2 carries its podcast.
+if (moduleUnits[1]) {
+  const t = (moduleUnits[1].title || "").toLowerCase();
+  if (t.includes("mitochondrion") || t.includes("mitochondria")) {
+    moduleUnits[1].media = moduleUnits[1].media || {};
+    moduleUnits[1].media.podcastSrc = moduleUnits[1].media.podcastSrc || "/static/Biology2.mp3";
+    moduleUnits[1].media.readerPrompt =
+      moduleUnits[1].media.readerPrompt ||
+      "Chapter 2: The Mitochondrion\nMitochondria are double-membraned organelles often called the “powerhouses of the cell” because they produce most of the ATP that fuels cellular activities. The outer membrane acts as a protective boundary, while the inner membrane folds into cristae that greatly increase surface area for energy-generating reactions. Inside the inner membrane is the matrix, which contains enzymes for metabolic pathways, ribosomes, and mitochondrial DNA. These characteristics allow mitochondria to produce some of their own proteins, granting them a degree of independence within the cell. Examples: Heart muscle cells contain many mitochondria because they require continuous energy, and endurance athletes often develop high mitochondrial density in their muscles.\nThe primary function of mitochondria is ATP production via cellular respiration. This begins with the Krebs cycle in the matrix, where nutrient molecules are broken down to release electrons. These electrons flow through the electron transport chain located in the inner membrane. Their movement establishes a proton gradient that powers ATP synthase, the enzyme responsible for producing ATP. Examples: Neurons require ATP to maintain electrical gradients that allow them to generate nerve impulses, and muscle cells need a constant supply of ATP for contraction during physical activity.\nMitochondria also carry out additional vital roles. They help regulate apoptosis, a form of programmed cell death that eliminates damaged or unnecessary cells in a controlled manner. Examples: Immune cells self-destruct after eliminating an infection, and cells with severely damaged DNA undergo apoptosis to prevent cancer formation. In specialized tissues such as brown fat, mitochondria generate heat through non-shivering thermogenesis. Examples: Infants rely on brown fat to maintain body temperature. Mitochondria also regulate calcium levels within cells, which is essential for signaling and muscle contraction.";
+    moduleUnits[1].media.genzVideoSrc = moduleUnits[1].media.genzVideoSrc || "/static/bio2.mp4";
+  }
+}
+
+// Ensure biology Chapter 3 carries its podcast.
+if (moduleUnits[2]) {
+  const t = (moduleUnits[2].title || "").toLowerCase();
+  if (t.includes("golgi")) {
+    moduleUnits[2].media = moduleUnits[2].media || {};
+    moduleUnits[2].media.podcastSrc = moduleUnits[2].media.podcastSrc || "/static/Biology3.mp3";
+    moduleUnits[2].media.readerPrompt =
+      moduleUnits[2].media.readerPrompt ||
+      "Chapter 3: The Golgi Apparatus\nThe Golgi apparatus functions as the cell’s processing, modifying, and packaging center. It consists of flattened membrane-bound sacs called cisternae arranged in a stack. The cis face receives newly synthesized proteins and lipids from the endoplasmic reticulum (ER). As molecules move from the cis to the medial to the trans region, they undergo highly organized modifications. The trans face sorts and packages them for secretion or for delivery to specific cellular locations.\nThe Golgi apparatus performs chemical modifications such as glycosylation and phosphorylation, which determine molecular function and final destination. Processed molecules are packaged into vesicles that either fuse with the cell membrane, become part of lysosomes, or transport materials elsewhere within the cell. Examples: Intestinal cells rely on the Golgi to secrete mucus, and immune cells use it to package antibodies before releasing them into the bloodstream.\nProteins travel from the rough ER to the Golgi apparatus in transport vesicles. As they move through the Golgi’s layers, they are refined into fully functional molecules. Examples: Pancreatic cells manufacture digestive enzymes in the rough ER, process them in the Golgi, and ship them to lysosomes. Insulin is also processed in the Golgi before being released from the pancreas into the bloodstream.";
+    // Attach Golgi model if missing.
+    if (!findModelResource(moduleUnits[2].resources)) {
+      moduleUnits[2].resources = moduleUnits[2].resources || [];
+      moduleUnits[2].resources.push({
+        label: "Golgi Model",
+        href: "/static/Golgi%20Aparatus%20Texture.glb",
+      });
+    }
+  }
+}
+
+// Ensure biology Chapter 4 carries its podcast.
+if (moduleUnits[3]) {
+  const t = (moduleUnits[3].title || "").toLowerCase();
+  if (t.includes("endoplasmic") || t.includes("er")) {
+    moduleUnits[3].media = moduleUnits[3].media || {};
+    moduleUnits[3].media.podcastSrc = moduleUnits[3].media.podcastSrc || "/static/Biology4.mp3";
+    moduleUnits[3].media.readerPrompt =
+      moduleUnits[3].media.readerPrompt ||
+      "Chapter 4: The Endoplasmic Reticulum (ER)\nThe endoplasmic reticulum (ER) is a vast network of membranes connected to the nuclear envelope. It functions as the cell’s primary manufacturing and transportation system. The rough ER is studded with ribosomes and specializes in protein synthesis and folding. Examples: Liver and immune cells rely on the rough ER to produce high volumes of enzymes and antibodies.\nThe smooth ER, which lacks ribosomes, is responsible for lipid synthesis, detoxification, and calcium storage. Examples: Liver cells use the smooth ER to break down toxins such as alcohol, and muscle cells rely on its calcium-storing form, the sarcoplasmic reticulum, for contraction.\nWhen the ER malfunctions, serious diseases may occur. Misfolded proteins can accumulate and cause stress within the ER. Examples: In cystic fibrosis, a misfolded CFTR protein is destroyed in the ER instead of reaching the cell membrane, and disturbances in lipid regulation may result in fatty liver disease.";
+  }
+}
+
+// Ensure probability Chapter 2 includes the podcast asset.
+if (moduleUnits[1]) {
+  const t = (moduleUnits[1].title || "").toLowerCase();
+  if (t.includes("conditional") || t.includes("bayes")) {
+    moduleUnits[1].media = moduleUnits[1].media || {};
+    moduleUnits[1].media.podcastSrc = moduleUnits[1].media.podcastSrc || "/static/Probability2.mp3";
+    moduleUnits[1].media.graphPrompt =
+      moduleUnits[1].media.graphPrompt ||
+      "Listen to the conditional probability walkthrough while following the steps.";
+    moduleUnits[1].media.readerPrompt =
+      moduleUnits[1].media.readerPrompt ||
+      "Chapter 2: Conditional Probability and Bayes’ Theorem\nConditional probability measures the likelihood of an event occurring given that another event has already taken place. Example: The probability of having the flu increases if we know the person has a fever. If two events are independent, knowing that one occurred does not change the probability of the other. Example: Knowing someone rolled a three on a die has no effect on your coin flip outcome.\nThe total probability theorem is useful when an event may occur under several different scenarios. Example: Determining the probability of high blood pressure may require weighing age groups by their proportion in the population. Bayes’ theorem helps us reverse conditional probabilities, combining new information with prior knowledge. Examples: It is widely used in medical testing to determine the chance of a disease given a positive result, and in spam filtering to classify emails.";
+  }
+}
+
+// Ensure probability Chapter 1 includes its podcast asset.
+if (moduleUnits[0]) {
+  const t = (moduleUnits[0].title || "").toLowerCase();
+  if (t.includes("foundation") || t.includes("foundations")) {
+    moduleUnits[0].media = moduleUnits[0].media || {};
+    moduleUnits[0].media.podcastSrc = moduleUnits[0].media.podcastSrc || "/static/Probability1.mp3";
+    moduleUnits[0].media.videoSrc = moduleUnits[0].media.videoSrc || "/static/Probability11.mov";
+    moduleUnits[0].media.readerPrompt =
+      moduleUnits[0].media.readerPrompt ||
+      "Chapter 1: Foundations of Probability\nProbability begins with the idea of an experiment, which is any process that produces outcomes that cannot be predicted with certainty. Everyday examples include flipping a coin, rolling dice, or measuring daily rainfall. The sample space is the complete set of all outcomes, while an event is any subset of outcomes of interest. Examples: For a coin flip, the sample space includes heads and tails, and in weather prediction, it may include rain or sunshine.\nProbability can be understood in several ways. Classical probability applies when outcomes are equally likely. Example: The chance of drawing a heart from a standard deck is thirteen out of fifty-two. Empirical probability is based on observation and repeated trials. Example: If it rained ninety days last year, the empirical probability of rain on a given day is ninety out of three hundred sixty-five. Axiomatic probability is a rigorous mathematical system built on rules: probabilities are non-negative, the probability of the full sample space is one, and probabilities of disjoint events add together.\nImportant rules include the complement rule, which states that the chance of an event not happening is one minus the chance of it happening. Example: If the probability of rain is 0.3, then the probability of no rain is 0.7. Independence occurs when the outcome of one event does not influence another. Examples: Two separate coin flips are independent, and two machines on different production lines do not affect each other’s failure probabilities.";
+  }
+}
+
+// Ensure probability Chapter 3 includes its podcast asset.
+if (moduleUnits[2]) {
+  const t = (moduleUnits[2].title || "").toLowerCase();
+  if (t.includes("random") || t.includes("distribution")) {
+    moduleUnits[2].media = moduleUnits[2].media || {};
+    moduleUnits[2].media.podcastSrc = moduleUnits[2].media.podcastSrc || "/static/Probability3.mp3";
+    moduleUnits[2].media.readerPrompt =
+      moduleUnits[2].media.readerPrompt ||
+      "Chapter 3: Random Variables and Distributions\nA random variable assigns numerical values to outcomes of a random process. Discrete random variables take countable values, such as the number of cars passing an intersection. Continuous random variables take any value within an interval, such as the time needed to walk a kilometer.\nDiscrete distributions include the Bernoulli, binomial, and Poisson distributions. Examples: A Bernoulli trial models success or failure in sending a data packet, a binomial distribution models the number of correct guesses on a quiz, and a Poisson distribution models the number of customers arriving per hour.\nContinuous distributions include the uniform, exponential, and normal distributions. Examples: Computer-generated random numbers follow a uniform distribution, the time between phone calls in a call center tends to follow an exponential distribution, and human heights typically follow a normal distribution.\nExpectation represents the long-term average of a random variable, while variance measures how spread out the outcomes are. Examples: The expected number of heads in ten flips of a fair coin is five, and the variance of bus waiting times indicates how predictable the schedule is. Moment generating functions summarize all moments of a distribution and simplify the analysis of sums of random variables.";
+  }
+}
+
+// Ensure probability Chapter 4 includes its podcast asset.
+if (moduleUnits[3]) {
+  const t = (moduleUnits[3].title || "").toLowerCase();
+  if (t.includes("joint") || t.includes("limit")) {
+    moduleUnits[3].media = moduleUnits[3].media || {};
+    moduleUnits[3].media.podcastSrc = moduleUnits[3].media.podcastSrc || "/static/Probability4.mp3";
+    moduleUnits[3].media.readerPrompt =
+      moduleUnits[3].media.readerPrompt ||
+      "Chapter 4: Joint Distributions and Limit Theorems\nJoint distributions describe two or more random variables at once. Examples: Temperature and electricity usage are jointly distributed, as are study hours and exam scores.\nCovariance and correlation describe relationships between variables. Height and weight typically show positive correlation, while fuel efficiency and vehicle weight often show negative correlation.\nThe law of large numbers states that the average outcome of many trials will approach the true expected value. Example: Repeated coin flips tend to stabilize around fifty percent heads. The central limit theorem states that averages of many independent variables tend to be normally distributed. Examples: Manufacturing quality control relies on this principle, as do opinion polls and surveys.\nThese theoretical tools form the basis of modern statistics, enabling scientists, engineers, and analysts to draw reliable conclusions from sample data.";
+  }
+}
 
 let progressState = {
   modules: [],
