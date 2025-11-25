@@ -300,7 +300,7 @@ const probabilityChapters = [
   {
     id: 3,
     title: "Chapter 3 · Conditional Probability & Independence",
-    focus: "P(A|B) = P(A and B) / P(B) and independence checks.",
+    focus: "Conditional probability and independence checks.",
     sprint: "Build a two-way table or tree, compute conditionals, then test independence.",
     commFocus: "Explain conditionals in plain language and when independence fails.",
     commMove: "Always state the conditioning event and whether sampling is with/without replacement.",
@@ -560,6 +560,47 @@ const loadProbabilityMaterials = async () => {
   }
 };
 
+function setupSettingsDrawer() {
+  const toggle = document.getElementById("settings-toggle");
+  const drawer = document.getElementById("settings-drawer");
+  const overlay = document.getElementById("settings-overlay");
+  const closeBtn = document.getElementById("settings-close");
+  if (!toggle || !drawer) return;
+  const open = () => drawer.classList.remove("hidden");
+  const close = () => drawer.classList.add("hidden");
+  toggle.addEventListener("click", open);
+  overlay?.addEventListener("click", close);
+  closeBtn?.addEventListener("click", close);
+}
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark-mode");
+  } else {
+    document.documentElement.classList.remove("dark-mode");
+  }
+  const select = document.getElementById("settings-theme");
+  if (select) select.value = theme;
+  try {
+    localStorage.setItem("pp-theme", theme);
+  } catch (error) {
+    /* ignore */
+  }
+}
+
+function setupTheme() {
+  let saved = null;
+  try {
+    saved = localStorage.getItem("pp-theme");
+  } catch (error) {
+    saved = null;
+  }
+  const initial = saved === "dark" ? "dark" : "light";
+  applyTheme(initial);
+  const select = document.getElementById("settings-theme");
+  select?.addEventListener("change", (e) => applyTheme(e.target.value));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const openBioBtn = document.getElementById("open-biology-workspace");
   if (openBioBtn) {
@@ -572,4 +613,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderProbabilityOutline();
   loadProbabilityMaterials();
   renderBiologyOutline();
+  setupSettingsDrawer();
+  setupTheme();
 });

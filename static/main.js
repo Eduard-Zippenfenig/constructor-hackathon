@@ -21,6 +21,11 @@ const englishLibrary = document.getElementById("english-library");
 const materialsList = document.getElementById("materials-list");
 const openCourseButton = document.getElementById("open-course");
 const logoutButton = document.getElementById("logout-btn");
+const settingsToggle = document.getElementById("settings-toggle");
+const settingsDrawer = document.getElementById("settings-drawer");
+const settingsOverlay = document.getElementById("settings-overlay");
+const settingsClose = document.getElementById("settings-close");
+const settingsTheme = document.getElementById("settings-theme");
 const stepNodes = {
   account: document.getElementById("step-account"),
   survey: document.getElementById("step-survey"),
@@ -1046,3 +1051,41 @@ if (authTabs.length) {
 setStepState("account");
 hideCourseSections();
 loadSession();
+
+const setupSettingsDrawer = () => {
+  if (!settingsToggle || !settingsDrawer) return;
+  const open = () => settingsDrawer.classList.remove("hidden");
+  const close = () => settingsDrawer.classList.add("hidden");
+  settingsToggle.addEventListener("click", open);
+  settingsClose?.addEventListener("click", close);
+  settingsOverlay?.addEventListener("click", close);
+};
+
+const applyTheme = (theme) => {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark-mode");
+  } else {
+    document.documentElement.classList.remove("dark-mode");
+  }
+  if (settingsTheme) settingsTheme.value = theme;
+  try {
+    localStorage.setItem("pp-theme", theme);
+  } catch (error) {
+    /* ignore */
+  }
+};
+
+const initTheme = () => {
+  let saved = null;
+  try {
+    saved = localStorage.getItem("pp-theme");
+  } catch (error) {
+    saved = null;
+  }
+  const initial = saved === "dark" ? "dark" : "light";
+  applyTheme(initial);
+  settingsTheme?.addEventListener("change", (e) => applyTheme(e.target.value));
+};
+
+setupSettingsDrawer();
+initTheme();

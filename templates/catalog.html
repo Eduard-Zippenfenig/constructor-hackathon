@@ -18,6 +18,7 @@
         <div class="nav-actions">
           <a class="ghost-link" href="/">Home</a>
           <a class="ghost-link" href="/course" target="_blank">Workspace</a>
+          <button class="ghost pill small" id="settings-toggle" type="button">Settings</button>
         </div>
       </nav>
     </div>
@@ -100,6 +101,31 @@
         </div>
       </section>
     </main>
+    <div class="settings-drawer hidden" id="settings-drawer">
+      <div class="settings-overlay" id="settings-overlay"></div>
+      <aside class="settings-panel">
+        <header class="settings-header">
+          <h3>Settings</h3>
+          <button class="ghost pill small" id="settings-close" type="button">Close</button>
+        </header>
+        <div class="settings-body">
+          <label class="settings-row">
+            <span>Notifications</span>
+            <select>
+              <option>On</option>
+              <option>Mute</option>
+            </select>
+          </label>
+          <label class="settings-row">
+            <span>Theme</span>
+            <select id="settings-theme">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+        </div>
+      </aside>
+    </div>
     <script src="{{ url_for('static', filename='catalog.js') }}"></script>
   </body>
 </html>

@@ -22,6 +22,12 @@
             <p>Adaptive probability studio</p>
           </div>
         </div>
+        <div class="nav-actions">
+          <a class="ghost-link" href="/course">Workspace</a>
+          <a class="ghost-link" href="/catalog">Course catalog</a>
+          <button class="ghost pill small" id="settings-toggle" type="button">Settings</button>
+          <button id="logout-btn" class="ghost pill small hidden">Log out</button>
+        </div>
       </nav>
 
       <header class="hero">
@@ -213,6 +219,32 @@
       <p>Need a focused space? Jump straight into the <a href="/course">course workspace</a>.</p>
       <span>Made for learners chasing flow.</span>
     </footer>
+
+    <div class="settings-drawer hidden" id="settings-drawer">
+      <div class="settings-overlay" id="settings-overlay"></div>
+      <aside class="settings-panel">
+        <header class="settings-header">
+          <h3>Settings</h3>
+          <button class="ghost pill small" id="settings-close" type="button">Close</button>
+        </header>
+        <div class="settings-body">
+          <label class="settings-row">
+            <span>Notifications</span>
+            <select>
+              <option>On</option>
+              <option>Mute</option>
+            </select>
+          </label>
+          <label class="settings-row">
+            <span>Theme</span>
+            <select id="settings-theme">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+        </div>
+      </aside>
+    </div>
 
     <script src="{{ url_for('static', filename='main.js') }}"></script>
   </body>

@@ -32,25 +32,7 @@
       <main class="workspace-main">
         <div class="workspace-top-actions">
           <a class="ghost pill back-button" href="/catalog">← Back to catalog</a>
-          <div class="preference-panel">
-            <label>
-              <span>Learning style</span>
-              <select id="learning-style-select">
-                <option value="visual">Visual learner</option>
-                <option value="reader">Reader</option>
-              </select>
-            </label>
-            <label>
-              <span>Music</span>
-              <select id="music-select">
-                <option value="none">No music</option>
-                <option value="white">White noise</option>
-                <option value="classical">Classical music</option>
-                <option value="lofi">Lo-fi</option>
-              </select>
-            </label>
-          </div>
-          <button type="button" class="ghost pill small" id="highlight-btn">Highlight selection</button>
+          <button class="ghost pill small" id="settings-toggle" type="button">Settings</button>
           <button class="primary pill" id="notebook-toggle" type="button">Open notepad</button>
         </div>
         <header class="workspace-hero" id="workspace-hero">
@@ -99,6 +81,31 @@
           <div class="notebook-resize" id="notebook-resize" aria-hidden="true"></div>
         </div>
       </main>
+    </div>
+    <div class="settings-drawer hidden" id="settings-drawer">
+      <div class="settings-overlay" id="settings-overlay"></div>
+      <aside class="settings-panel">
+        <header class="settings-header">
+          <h3>Settings</h3>
+          <button class="ghost pill small" id="settings-close" type="button">Close</button>
+        </header>
+        <div class="settings-body">
+          <label class="settings-row">
+            <span>Notifications</span>
+            <select>
+              <option>On</option>
+              <option>Mute</option>
+            </select>
+          </label>
+          <label class="settings-row">
+            <span>Theme</span>
+            <select id="settings-theme">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+        </div>
+      </aside>
     </div>
     <script src="{{ url_for('static', filename='course.js') }}"></script>
   </body>

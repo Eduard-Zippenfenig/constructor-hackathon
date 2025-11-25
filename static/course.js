@@ -281,7 +281,11 @@ const loadWorkspace = () => {
     if (!data) {
       return DEFAULT_WORKSPACE;
     }
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (!parsed || !parsed.workspaceModules || !parsed.workspaceModules.math || !parsed.workspaceModules.english) {
+      return DEFAULT_WORKSPACE;
+    }
+    return parsed;
   } catch (error) {
     console.error("Unable to parse workspace payload", error);
     return DEFAULT_WORKSPACE;
@@ -488,45 +492,45 @@ const renderMediaTile = (type, media) => {
   return "";
 };
 
+const renderQuestionCard = (q, idx) => `
+  <article class="question-card" data-index="${idx}">
+    <header>
+      <p class="media-label">Single choice</p>
+      <h4>${q.prompt}</h4>
+    </header>
+    ${q.theory ? `<p class="muted theory-block">${q.theory}</p>` : ""}
+    <div class="question-options">
+      ${(q.options || [])
+        .map(
+          (opt, optIdx) => `
+            <label class="option-row">
+              <input type="radio" name="q-${idx}" value="${optIdx}" />
+              <span>${opt}</span>
+            </label>
+          `
+        )
+        .join("")}
+    </div>
+    <div class="question-actions">
+      <button type="button" class="ghost small check-answer" data-question="${idx}">Check answer</button>
+      <span class="answer-feedback muted"></span>
+    </div>
+  </article>
+`;
+
 const renderQuestions = (unit) => {
   if (!unit.questions || !unit.questions.length) return "";
-  const items = unit.questions
-    .map(
-      (q, idx) => `
-      <article class="question-card" data-index="${idx}">
-        <header>
-          <p class="media-label">Single choice</p>
-          <h4>${q.prompt}</h4>
-        </header>
-        ${q.theory ? `<p class="muted theory-block">${q.theory}</p>` : ""}
-        <div class="question-options">
-          ${q.options
-            .map(
-              (opt, optIdx) => `
-                <label class="option-row">
-                  <input type="radio" name="q-${idx}" value="${optIdx}" />
-                  <span>${opt}</span>
-                </label>
-              `
-            )
-            .join("")}
-        </div>
-        <div class="question-actions">
-          <button type="button" class="ghost small check-answer" data-question="${idx}">Check answer</button>
-          <span class="answer-feedback muted"></span>
-        </div>
-      </article>
-    `
-    )
-    .join("");
   return `
     <section class="question-set">
       <div class="actions-header">
         <h4>Quick checks</h4>
-        <p class="muted">Choose one option and verify instantly.</p>
+        <p class="muted">Work one question at a time.</p>
       </div>
-      <div class="question-grid">
-        ${items}
+      <div class="question-view"></div>
+      <div class="question-nav">
+        <button type="button" class="ghost small question-prev">Previous</button>
+        <span class="question-counter"></span>
+        <button type="button" class="primary small question-next">Next</button>
       </div>
     </section>
   `;
@@ -745,6 +749,41 @@ const setupNotebook = () => {
   }
 };
 
+const setupSettingsDrawer = () => {
+  if (!settingsToggle || !settingsDrawer) return;
+  const open = () => settingsDrawer.classList.remove("hidden");
+  const close = () => settingsDrawer.classList.add("hidden");
+  settingsToggle.addEventListener("click", open);
+  settingsClose?.addEventListener("click", close);
+  settingsOverlay?.addEventListener("click", close);
+};
+
+const applyTheme = (theme) => {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark-mode");
+  } else {
+    document.documentElement.classList.remove("dark-mode");
+  }
+  if (settingsTheme) settingsTheme.value = theme;
+  try {
+    localStorage.setItem("pp-theme", theme);
+  } catch (error) {
+    /* ignore */
+  }
+};
+
+const setupTheme = () => {
+  let saved = null;
+  try {
+    saved = localStorage.getItem("pp-theme");
+  } catch (error) {
+    saved = null;
+  }
+  const initial = saved === "dark" ? "dark" : "light";
+  applyTheme(initial);
+  settingsTheme?.addEventListener("change", (e) => applyTheme(e.target.value));
+};
+
 const findPresentationLink = (resources = []) => {
   return (resources || []).find((res = {}) => {
     const label = (res.label || "").toLowerCase();
@@ -867,6 +906,11 @@ const navModuleList = document.getElementById("module-nav");
 const navExerciseList = document.getElementById("exercise-nav");
 const navPracticeList = document.getElementById("practice-nav");
 const contentStage = document.getElementById("content-stage");
+const settingsToggle = document.getElementById("settings-toggle");
+const settingsDrawer = document.getElementById("settings-drawer");
+const settingsOverlay = document.getElementById("settings-overlay");
+const settingsClose = document.getElementById("settings-close");
+const settingsTheme = document.getElementById("settings-theme");
 
 // Hide any stray "Course catalog" links that may linger from previous layouts.
 const hideRogueCatalogLinks = () => {
@@ -963,30 +1007,44 @@ const setProgressStatus = async (track, index, status) => {
 };
 
 const attachQuestionHandlers = (unit, track, index) => {
-  const cards = document.querySelectorAll(".question-card");
-  if (!cards.length) return;
-  const checkCompletion = () => {
-    const allCorrect = Array.from(cards).every((card) => card.dataset.solved === "true");
-    if (allCorrect) {
-      setProgressStatus(track, index, "completed");
-    } else {
-      setProgressStatus(track, index, "progress");
-    }
+  const container = document.querySelector(".question-set");
+  const view = container?.querySelector(".question-view");
+  const prevBtn = container?.querySelector(".question-prev");
+  const nextBtn = container?.querySelector(".question-next");
+  const counter = container?.querySelector(".question-counter");
+  if (!container || !view || !unit.questions?.length) return;
+  const total = unit.questions.length;
+  const solved = Array.from({ length: total }, () => false);
+  let current = 0;
+
+  const updateNav = () => {
+    if (counter) counter.textContent = `Question ${current + 1} of ${total}`;
+    if (prevBtn) prevBtn.disabled = current === 0;
+    if (nextBtn) nextBtn.disabled = current === total - 1;
   };
-  cards.forEach((card) => {
-    const btn = card.querySelector(".check-answer");
-    const feedback = card.querySelector(".answer-feedback");
-    const qIdx = Number(card.dataset.index);
-    btn?.addEventListener("click", () => {
+
+  const checkCompletion = () => {
+    const allCorrect = solved.every(Boolean);
+    setProgressStatus(track, index, allCorrect ? "completed" : "progress");
+  };
+
+  const bindQuestion = () => {
+    const card = view.querySelector(".question-card");
+    const btn = card?.querySelector(".check-answer");
+    const feedback = card?.querySelector(".answer-feedback");
+    if (!btn || !feedback) return;
+    const qIdx = current;
+    btn.addEventListener("click", () => {
       const selected = card.querySelector(`input[name="q-${qIdx}"]:checked`);
       if (!selected) {
         feedback.textContent = "Choose an option first.";
         feedback.classList.remove("correct");
         feedback.classList.add("error");
+        card.classList.remove("correct", "error");
         return;
       }
       const correct = Number(selected.value) === unit.questions[qIdx].correct;
-      card.dataset.solved = correct ? "true" : "false";
+      solved[qIdx] = correct;
       card.classList.remove("correct-burst");
       feedback.textContent = correct
         ? unit.questions[qIdx].explain || "Correct!"
@@ -994,17 +1052,40 @@ const attachQuestionHandlers = (unit, track, index) => {
       feedback.classList.remove("error");
       if (correct) {
         feedback.classList.add("correct");
+        card.classList.remove("error");
+        card.classList.add("correct");
         void card.offsetWidth;
         card.classList.add("correct-burst");
         removeFromPractice(unit.questions[qIdx]);
       } else {
         feedback.classList.remove("correct");
         feedback.classList.add("error");
+        card.classList.remove("correct");
+        card.classList.add("error");
         addToPractice(unit.questions[qIdx]);
       }
       checkCompletion();
     });
+  };
+
+  const renderCurrent = () => {
+    view.innerHTML = renderQuestionCard(unit.questions[current], current);
+    bindQuestion();
+    updateNav();
+  };
+
+  prevBtn?.addEventListener("click", () => {
+    if (current === 0) return;
+    current -= 1;
+    renderCurrent();
   });
+  nextBtn?.addEventListener("click", () => {
+    if (current >= total - 1) return;
+    current += 1;
+    renderCurrent();
+  });
+
+  renderCurrent();
 };
 
 const loadSection = (track, index) => {
@@ -1054,8 +1135,10 @@ const loadProgress = async () => {
   try {
     const response = await fetch("/api/progress");
     if (response.status === 401) {
-      window.location.href = "/";
-      return false;
+      // If not authenticated, continue rendering with default progress so workspace content still shows.
+      progressState.modules = [];
+      progressState.exercises = [];
+      return true;
     }
     const data = await response.json();
     progressState.modules = data.modules || [];
@@ -1063,7 +1146,10 @@ const loadProgress = async () => {
     return true;
   } catch (error) {
     console.error("Unable to load progress", error);
-    return false;
+    // Continue rendering with defaults on error so the workspace stays usable.
+    progressState.modules = [];
+    progressState.exercises = [];
+    return true;
   }
 };
 
@@ -1072,6 +1158,8 @@ const initWorkspace = async () => {
   hydrateHero();
   setupTagDropdown();
   setupNotebook();
+  setupSettingsDrawer();
+  setupTheme();
   await ensureModelViewer();
   wireModelViewers(document);
   const progressLoaded = await loadProgress();
