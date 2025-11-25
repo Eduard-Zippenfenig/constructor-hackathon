@@ -799,6 +799,87 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+.course-rect-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.course-rect {
+  border-radius: 16px;
+  padding: 1.4rem;
+  min-height: 160px;
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.15);
+}
+
+.course-rect h3 {
+  margin: 0 0 0.6rem;
+  color: #fff;
+}
+
+.course-rect .pill {
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+}
+
+.course-progress-mini {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-track-mini {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill-mini {
+  height: 100%;
+  width: 0%;
+  background: #22c55e;
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.progress-value-mini {
+  font-weight: 700;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.answer-row {
+  padding: 0.65rem 0;
+}
+
+.answer-row.correct .user-answer {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.answer-row.wrong .user-answer {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.answer-row .correct-answer {
+  color: var(--slate);
+}
+
+.probability-rect {
+  background: linear-gradient(135deg, #6d6bff, #7c3aed);
+}
+
+.biology-rect {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
 .library-column {
   display: flex;
   flex-direction: column;
@@ -1535,6 +1616,13 @@ model-viewer:not(:defined) .model-fallback {
   border-color: rgba(15, 23, 42, 0.08);
 }
 
+.media-tile video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
 .media-label {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -1682,6 +1770,18 @@ model-viewer:not(:defined) .model-fallback {
   accent-color: var(--accent);
 }
 
+.option-row.correct-ans {
+  background: #ecfdf3;
+  border-color: #22c55e;
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.2);
+}
+
+.option-row.wrong-ans {
+  background: #fff1f2;
+  border-color: #ef4444;
+  box-shadow: 0 8px 18px rgba(239, 68, 68, 0.18);
+}
+
 .dark-mode .option-row {
   background: linear-gradient(120deg, rgba(96, 165, 250, 0.18), rgba(124, 58, 237, 0.12));
   border-color: rgba(255, 255, 255, 0.25);
@@ -1691,6 +1791,18 @@ model-viewer:not(:defined) .model-fallback {
 
 .dark-mode .option-row input[type="radio"] {
   accent-color: #60a5fa;
+}
+
+.dark-mode .option-row.correct-ans {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.6);
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.35);
+}
+
+.dark-mode .option-row.wrong-ans {
+  background: rgba(248, 113, 113, 0.2);
+  border-color: rgba(248, 113, 113, 0.6);
+  box-shadow: 0 8px 18px rgba(248, 113, 113, 0.35);
 }
 
 .question-actions {

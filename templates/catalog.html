@@ -30,66 +30,30 @@
           <p class="eyebrow">Catalog</p>
           <h2>Available courses</h2>
         </div>
-        <div class="library-grid">
-          <article class="card catalog-card probability-card">
-            <div class="course-badge">Adaptive · Probability</div>
-            <h3>Probability · Adaptive track</h3>
-            <p class="muted">
-              Nine probability chapters with quick checks and the real slides/homeworks/solutions.
-            </p>
-            <ul class="profile-list">
-              <li><strong>Chapters:</strong> 9 (Foundations → Bayes → CLT/Markov)</li>
-              <li><strong>Includes:</strong> Slides, homeworks, solutions from <code>~/Desktop/probability</code></li>
-              <li><strong>Mode:</strong> Adaptive + practice-more lane</li>
-            </ul>
-            <div class="pill-row">
-              <span class="pill">Foundations</span>
-              <span class="pill">Bayes</span>
-              <span class="pill">CLT</span>
-              <span class="pill">Simulation</span>
-            </div>
-            <div class="module-teaser">
-              <p class="eyebrow">Chapters &amp; drills</p>
-              <ul class="outline-list" id="probability-module-list"></ul>
-            </div>
-            <div class="cta-row spaced">
-              <button type="button" class="primary pill" id="open-probability-workspace">Open course workspace</button>
+        <div class="course-rect-grid">
+          <article class="course-rect probability-rect">
+            <div>
+              <h3>Probability</h3>
+              <button type="button" class="primary pill" id="open-probability-workspace">Go to the workspace</button>
+              <div class="course-progress-mini">
+                <div class="progress-track-mini">
+                  <div class="progress-fill-mini prob-progress-fill"></div>
+                </div>
+                <span class="progress-value-mini prob-progress-value">0%</span>
+              </div>
             </div>
           </article>
-          <article class="card catalog-card biology-card">
-            <div class="course-badge">Lab-first · Biology</div>
-            <h3>Biology Foundations · Lab-first track</h3>
-            <p class="muted">
-              Cells, genetics, evolution, and ecology with lab-ready checklists and quick MC checks to confirm understanding.
-            </p>
-            <ul class="profile-list">
-              <li><strong>Modules:</strong> Cell biology, genetics, evolution, ecology, systems</li>
-              <li><strong>Includes:</strong> Lab prompts, reflections, graphing cues</li>
-              <li><strong>Mode:</strong> Self-paced with lab notebook discipline</li>
-            </ul>
-            <div class="pill-row">
-              <span class="pill">Cells</span>
-              <span class="pill">Genetics</span>
-              <span class="pill">Evolution</span>
-              <span class="pill">Ecology</span>
+          <article class="course-rect biology-rect">
+            <div>
+              <h3>Biology Foundations</h3>
+              <button type="button" class="primary pill" id="open-biology-workspace">Go to the workspace</button>
+              <div class="course-progress-mini">
+                <div class="progress-track-mini">
+                  <div class="progress-fill-mini bio-progress-fill"></div>
+                </div>
+                <span class="progress-value-mini bio-progress-value">0%</span>
+              </div>
             </div>
-            <div class="module-teaser">
-              <p class="eyebrow">Quick outline</p>
-              <ul class="outline-list" id="biology-module-list">
-                <li>Cell structure &amp; energy flow</li>
-                <li>Genetics &amp; heredity</li>
-                <li>Evolution &amp; natural selection</li>
-                <li>Systems, homeostasis, &amp; ecology</li>
-                <li>Lab writing, graphing, &amp; ethics</li>
-              </ul>
-            </div>
-            <div class="cta-row spaced">
-              <button type="button" class="primary pill" id="open-biology-workspace">Open biology workspace</button>
-            </div>
-          </article>
-          <article class="card muted" style="opacity: 0.6;">
-            <h3>More courses</h3>
-            <p>Additional tracks will appear here. Stay tuned.</p>
           </article>
         </div>
       </section>
@@ -113,6 +77,7 @@
           <label class="settings-row">
             <span>Visuality</span>
             <select id="settings-visuality">
+              <option value="podcast">Podcast</option>
               <option value="genz">Gen Z style</option>
               <option value="visual">Visual style</option>
               <option value="reader">Reader style</option>

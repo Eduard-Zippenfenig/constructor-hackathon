@@ -428,10 +428,10 @@ const openProbabilityWorkspace = () => {
 };
 
 const hydrateProgressBars = () => {
-  const probValue = document.getElementById("probability-progress-value");
-  const bioValue = document.getElementById("biology-progress-value");
-  const probFill = document.querySelector(".probability-progress");
-  const bioFill = document.querySelector(".biology-progress");
+  const probValue = document.querySelector(".prob-progress-value");
+  const bioValue = document.querySelector(".bio-progress-value");
+  const probFill = document.querySelector(".prob-progress-fill");
+  const bioFill = document.querySelector(".bio-progress-fill");
   const clamp = (val) => Math.max(0, Math.min(100, Math.round(Number(val) || 0)));
   const prob = clamp(localStorage.getItem("pp-progress-probability"));
   const bio = clamp(localStorage.getItem("pp-progress-biology"));
@@ -481,8 +481,8 @@ const renderProbabilityOutline = () => {
 
 const applyGradedBadges = () => {
   const courses = [
-    { key: "biology", selector: ".course-tiles article:nth-of-type(2) h3" },
-    { key: "probability", selector: ".course-tiles article:nth-of-type(1) h3" },
+    { key: "biology", selector: ".course-rect.biology-rect h3" },
+    { key: "probability", selector: ".course-rect.probability-rect h3" },
   ];
   const clamp = (val) => Math.max(0, Math.min(100, Math.round(Number(val) || 0)));
   courses.forEach(({ key, selector }) => {

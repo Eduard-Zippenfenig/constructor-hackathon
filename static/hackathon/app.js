@@ -530,20 +530,46 @@ function buildInsights() {
     insights.push('<p>Complete the test to unlock insights.</p>');
   }
 
+  const scoreEntry = (entry) => {
+    if (!entry) return -Infinity;
+    if (!entry.correct) return -1 * (entry.duration || 1);
+    return 100000 - entry.duration;
+  };
+  const soundCandidates = [
+    { key: 'music', label: 'Music', entry: soft },
+    { key: 'white', label: 'White Noise', entry: whiteNoise },
+    { key: 'silent', label: 'Silent', entry: silent },
+  ];
+  const bestSound = soundCandidates.sort((a, b) => scoreEntry(b.entry) - scoreEntry(a.entry))[0];
+  const soundPick = bestSound && scoreEntry(bestSound.entry) > -Infinity ? bestSound : { key: 'silent', label: 'Silent', entry: null };
+
+  const visualCandidates = [
+    { key: 'visual', label: 'Visual learner', entry: visual },
+    { key: 'reader', label: 'Reader', entry: nonVisual },
+    { key: 'genz', label: 'Gen Z', entry: slime },
+    { key: 'podcast', label: 'Podcast', entry: responses.find((r) => r.id === 'read-aloud') },
+  ];
+  const bestVisual = visualCandidates.sort((a, b) => scoreEntry(b.entry) - scoreEntry(a.entry))[0];
+  const visualPick =
+    bestVisual && scoreEntry(bestVisual.entry) > -Infinity
+      ? bestVisual
+      : { key: 'reader', label: 'Reader', entry: null };
+
   const learningStyle =
     styleTags.length > 0 ? styleTags.join(' + ') : 'no dominant learning style detected';
   try {
     let soundPref = null;
-    if (styleTags.includes('music focus')) {
-      soundPref = 'lofi';
-    } else if (styleTags.includes('white-noise focus')) {
-      soundPref = 'white';
-    }
+    if (soundPick.key === 'music') soundPref = 'lofi';
+    else if (soundPick.key === 'white') soundPref = 'white';
+    else if (soundPick.key === 'silent') soundPref = 'silence';
     if (soundPref) {
       localStorage.setItem('pp-sounds', soundPref);
       // signal other pages to resume this sound on next interaction
       localStorage.setItem('pp-sound-pending', '1');
       localStorage.setItem('pp-test-complete', '1');
+    }
+    if (visualPick) {
+      localStorage.setItem('pp-visuality', visualPick.key);
     }
   } catch (error) {
     /* ignore */

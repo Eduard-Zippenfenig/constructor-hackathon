@@ -269,6 +269,54 @@ const gritLabels = {
   coach: "Coaching prompts",
 };
 
+// Graded exam banks
+const GRADED_EXAM_BANK = {
+  biology: [
+    { prompt: "Which feature explains the high adaptability of prokaryotes in extreme environments?", options: ["Complex internal membranes", "Their simplified cellular organization", "Numerous organelles", "Large genomic size"], correct: 1, difficulty: "easy" },
+    { prompt: "A nerve cell relies on membrane ion channels primarily to:", options: ["Synthesize ATP", "Transmit electrical impulses", "Carry out phagocytosis", "Release digestive enzymes"], correct: 1, difficulty: "easy" },
+    { prompt: "Eukaryotic muscle cells have abundant mitochondria mainly because:", options: ["They replicate DNA rapidly", "They require continuous ATP for contraction", "They lack cytoplasm", "They perform photosynthesis"], correct: 1, difficulty: "easy" },
+    { prompt: "Which statement best describes the role of the Golgi apparatus in secretory cells?", options: ["It translates mRNA into proteins", "It modifies, sorts, and packages proteins for secretion", "It stores nuclear DNA", "It performs oxidative phosphorylation"], correct: 1, difficulty: "medium" },
+    { prompt: "Misfolded proteins accumulating in the ER trigger:", options: ["Enhanced ATP synthesis", "ER stress that may lead to cell dysfunction", "Immediate apoptosis in all cases", "DNA condensation"], correct: 1, difficulty: "hard" },
+    { prompt: "The Krebs cycle occurs in which mitochondrial compartment?", options: ["Intermembrane space", "Matrix", "Outer membrane", "Ribosomal lumen"], correct: 1, difficulty: "easy" },
+    { prompt: "A defect in vesicle fusion at the trans-Golgi would directly impair:", options: ["DNA transcription", "Packaging of proteins for final destinations", "Assembly of ribosomal subunits", "Glycolysis"], correct: 1, difficulty: "medium" },
+    { prompt: "The structural connection between the nuclear envelope and rough ER facilitates:", options: ["Rapid ribosome replication", "Immediate entry of nascent polypeptides into the ER", "Formation of Golgi cisternae", "Direct ATP production"], correct: 1, difficulty: "medium" },
+    { prompt: "A red blood cell lacks mitochondria. Which consequence follows?", options: ["It cannot undergo apoptosis", "It produces ATP only through glycolysis", "It cannot transport oxygen", "It synthesizes proteins efficiently"], correct: 1, difficulty: "easy" },
+    { prompt: "Which mitochondrial feature supports the endosymbiotic theory?", options: ["Absence of membranes", "Presence of circular DNA and prokaryotic-type ribosomes", "Lack of enzymes", "Ability to survive outside cells"], correct: 1, difficulty: "medium" },
+    { prompt: "The proton gradient used by ATP synthase is created by:", options: ["Electron transport chain pumping protons across the inner membrane", "Glycolysis in the cytosol", "Passive diffusion of ions", "Protein folding in the ER"], correct: 0, difficulty: "hard" },
+    { prompt: "Brown adipose tissue generates heat by:", options: ["Increasing DNA replication", "Uncoupling oxidative phosphorylation", "Decreasing cellular respiration", "Enhancing Golgi vesicle formation"], correct: 1, difficulty: "hard" },
+    { prompt: "A cell with defective smooth ER in the liver would struggle most with:", options: ["Oxygen binding", "Detoxifying harmful compounds", "Producing ribosomes", "Conducting electrical impulses"], correct: 1, difficulty: "medium" },
+    { prompt: "In pancreatic cells, a failure in Golgi processing primarily affects:", options: ["Hormone secretion such as insulin", "ATP synthesis", "Ion channel function", "DNA repair"], correct: 0, difficulty: "medium" },
+    { prompt: "Why are root hair cells elongated?", options: ["To aid photosynthesis", "To increase absorption surface area", "To minimize ATP use", "To resist osmotic pressure"], correct: 1, difficulty: "easy" },
+    { prompt: "Which organelle is most responsible for calcium storage in muscle contraction?", options: ["Mitochondrion", "Sarcoplasmic reticulum", "Golgi", "Nucleus"], correct: 1, difficulty: "medium" },
+    { prompt: "In apoptosis, mitochondria release factors that:", options: ["Block transcription", "Initiate controlled cell death pathways", "Destroy ribosomes", "Stabilize cell membranes"], correct: 1, difficulty: "hard" },
+    { prompt: "If ribosomes detach from the ER, the cell will lose capacity to produce:", options: ["Cytosolic enzymes", "Membrane and secreted proteins", "Mitochondrial DNA", "Glycogen"], correct: 1, difficulty: "hard" },
+    { prompt: "What is the functional significance of Golgi cisternae?", options: ["They regulate ion channels", "They allow sequential protein modification", "They degrade damaged proteins", "They synthesize ribosomes"], correct: 1, difficulty: "hard" },
+    { prompt: "Which structure is shared by all cells?", options: ["Mitochondria", "Ribosomes", "Nucleus", "ER"], correct: 1, difficulty: "easy" },
+  ],
+  probability: [
+    { prompt: "Axiomatic probability requires that for any event A:", options: ["P(A) <0", "P(A) ≥0", "P(A) >1", "P(A) = 0.5"], correct: 1, difficulty: "easy" },
+    { prompt: "In a fair six-sided die, the probability of rolling an even number is:", options: ["1/6", "2/6", "3/6", "4/6"], correct: 2, difficulty: "easy" },
+    { prompt: "Two events are independent if:", options: ["P(A∩B) = 0", "P(A|B) = P(A)", "They cannot occur together", "Their probabilities sum to 1"], correct: 1, difficulty: "easy" },
+    { prompt: "Empirical probability is based on:", options: ["Theory alone", "Repeated observations", "Simulation only", "Intuition"], correct: 1, difficulty: "easy" },
+    { prompt: "If A and B are disjoint, then:", options: ["P(A∪B) = P(A) + P(B)", "P(A∩B) = P(A)P(B)", "P(A∪B) = 1", "P(A|B) = 1"], correct: 0, difficulty: "easy" },
+    { prompt: "Conditional probability P(A|B) is defined only if:", options: ["P(A) = 1", "P(B) >0", "A and B are disjoint", "A= B"], correct: 1, difficulty: "easy" },
+    { prompt: "Bayes’ Theorem allows computing:", options: ["P(A) from no information", "P(A|B) using P(B |A) and priors", "The size of the sample space", "Deterministic predictions"], correct: 1, difficulty: "medium" },
+    { prompt: "A binomial random variable counts:", options: ["Failures only", "Successes in independent trials", "Time between events", "Values on a continuous interval"], correct: 1, difficulty: "medium" },
+    { prompt: "A Poisson distribution is appropriate when:", options: ["Time is continuous", "Events occur rarely and independently", "Outcomes are always equally likely", "There are only two outcomes"], correct: 1, difficulty: "medium" },
+    { prompt: "The expected value of a random variable is best interpreted as:", options: ["Always the most common value", "The long-run average outcome", "Its maximum possible value", "The probability of success"], correct: 1, difficulty: "easy" },
+    { prompt: "A continuous random variable can take:", options: ["Only integer values", "A finite set of values", "Any value in an interval", "No real values"], correct: 2, difficulty: "easy" },
+    { prompt: "The variance of a distribution quantifies:", options: ["Central tendency", "Spread around the mean", "Number of outcomes", "Mode frequency"], correct: 1, difficulty: "medium" },
+    { prompt: "The law of large numbers states that sample averages:", options: ["Always equal the true mean", "Approach the true mean as sample size increases", "Are unaffected by sample size", "Become less stable with more trials"], correct: 1, difficulty: "medium" },
+    { prompt: "The central limit theorem implies that:", options: ["All variables are normally distributed", "Sums/averages tend toward normality for large samples", "Small samples are always adequate", "Distributions cannot be skewed"], correct: 1, difficulty: "hard" },
+    { prompt: "Correlation between two variables measures:", options: ["Causation", "Linear association", "Probability of events", "Marginal frequencies"], correct: 1, difficulty: "medium" },
+    { prompt: "If covariance between X and Y is zero, then:", options: ["They must be independent", "There is no linear relationship", "They are identical", "X causes Y"], correct: 1, difficulty: "hard" },
+    { prompt: "A joint distribution describes:", options: ["Only one variable", "How two or more random variables behave together", "Deterministic relationships", "Independent outcomes only"], correct: 1, difficulty: "medium" },
+    { prompt: "In many polling situations, the sampling distribution of the mean is approximately normal because of:", options: ["The Poisson process", "The central limit theorem", "Bayes’ rule", "Independence of the sample space"], correct: 1, difficulty: "medium" },
+    { prompt: "For a Bernoulli trial, the probability of success is denoted by:", options: ["n", "λ", "p", "σ"], correct: 2, difficulty: "easy" },
+    { prompt: "A uniform distribution on [0,1] is appropriate for:", options: ["Random number generators", "Human heights", "Poisson events", "Test scores"], correct: 0, difficulty: "easy" },
+  ],
+};
+
 const loadWorkspace = () => {
   try {
     const data = localStorage.getItem("satCourseWorkspace");
@@ -451,45 +499,107 @@ const setupTagDropdown = () => {
   });
 };
 
-const renderMediaTile = (type, media) => {
+const renderMediaTile = (type, media, labelOverride) => {
   if (!media) return "";
-  if (type === "video") {
-    const problems = (media.guideProblems || [])
-      .map((problem) => `<li>${problem}</li>`) 
-      .join("");
-    return `
-      <div class="media-tile video">
-        ${media.guideTitle ? `<p class="media-label">${media.guideTitle}</p>` : ""}
-        ${media.guideIntro ? `<p><strong>${media.guideIntro}</strong></p>` : ""}
-        <p class="muted-small">${media.guideIntro || ""}</p>
-        ${problems ? `<ul>${problems}</ul>` : ""}
-      </div>
-    `;
-  }
+  const label = labelOverride || "Visual Prompt";
   if (type === "graph" && media.graphPrompt) {
     return `
       <div class="media-tile graph">
-        <p class="media-label">Visual Prompt</p>
+        <p class="media-label">${label}</p>
         <p>${media.graphPrompt}</p>
-        ${media.modelSrc ? `<model-viewer src="${media.modelSrc}" camera-controls auto-rotate style="width:100%;height:280px;border-radius:16px;background:#0f172a10;"></model-viewer>` : ""}
+        ${
+          media.videoSrc
+            ? `<video src="${media.videoSrc}" controls style="width:100%;border-radius:12px;margin-top:0.5rem;" playsinline></video>`
+            : ""
+        }
       </div>
     `;
   }
-  if (media.notesPrompt) {
+  if (type === "reader" && media.readerPrompt) {
     return `
-      <div class="media-tile notes">
-        <p class="media-label">Reflection</p>
-        <p>${media.notesPrompt}</p>
+      <div class="media-tile graph">
+        <p class="media-label">${label}</p>
+        <p>${media.readerPrompt.replace(/\\n/g, "<br>")}</p>
+      </div>
+    `;
+  }
+  if (type === "podcast" && media.podcastSrc) {
+    return `
+      <div class="media-tile graph">
+        <p class="media-label">${label}</p>
+        <audio controls style="width:100%;">
+          <source src="${media.podcastSrc}" />
+          Your browser does not support audio playback.
+        </audio>
+      </div>
+    `;
+  }
+  if (type === "genz" && (media.genzVideoSrc || media.videoSrc)) {
+    const src = media.genzVideoSrc || media.videoSrc;
+    return `
+      <div class="media-tile graph">
+        <p class="media-label">${label}</p>
+        <video src="${src}" controls style="width:100%;border-radius:12px;" playsinline></video>
       </div>
     `;
   }
   return "";
 };
 
-const renderQuestionCard = (q, idx) => `
+const renderVisualTiles = (media = {}) => {
+  const tiles = [
+    renderMediaTile("graph", media, "Visual learner"),
+    renderMediaTile("reader", media, "Reader learner"),
+    renderMediaTile("podcast", media, "Podcast"),
+    renderMediaTile("genz", media, "Gen Z"),
+  ].filter(Boolean);
+  return tiles.join("");
+};
+
+// Build graded exam unit
+const buildGradedUnits = () => {
+  const isBio = courseName.toLowerCase().includes("bio");
+  const questions = isBio ? GRADED_EXAM_BANK.biology : GRADED_EXAM_BANK.probability;
+  return [
+    {
+      title: "Graded Exercises",
+      description: "Final graded, adaptive 10-question session with results at the end.",
+      questions,
+    },
+  ];
+};
+
+const applyVisualFilter = () => {
+  let choice = "visual";
+  try {
+    const saved = localStorage.getItem("pp-visuality");
+    if (saved) choice = saved.toLowerCase();
+  } catch (error) {
+    /* ignore */
+  }
+  if (settingsVisuality && settingsVisuality.value) {
+    choice = settingsVisuality.value.toLowerCase();
+  }
+  const labelMap = {
+    genz: "gen z",
+    "gen z": "gen z",
+    visual: "visual learner",
+    reader: "reader learner",
+    podcast: "podcast",
+  };
+  const target = (labelMap[choice] || labelMap.visual).toLowerCase();
+  document.querySelectorAll(".media-tile.graph").forEach((tile) => {
+    const label = (tile.querySelector(".media-label")?.textContent || "").trim().toLowerCase();
+    tile.style.display = label === target ? "" : "none";
+  });
+};
+
+const renderQuestionCard = (q, idx, withCheck = true) => {
+  const level = (q.difficulty || "easy").toLowerCase();
+  return `
   <article class="question-card" data-index="${idx}">
     <header>
-      <p class="media-label">Single choice</p>
+      <p class="media-label">Single choice · <span class="difficulty-badge ${level}">${level}</span></p>
       <h4>${q.prompt}</h4>
     </header>
     ${q.theory ? `<p class="muted theory-block">${q.theory}</p>` : ""}
@@ -505,15 +615,58 @@ const renderQuestionCard = (q, idx) => `
         )
         .join("")}
     </div>
-    <div class="question-actions">
+      ${
+        withCheck
+          ? `<div class="question-actions">
       <button type="button" class="ghost small check-answer" data-question="${idx}">Check answer</button>
       <span class="answer-feedback muted"></span>
-    </div>
+    </div>`
+        : ""
+    }
   </article>
 `;
+};
 
-const renderQuestions = (unit) => {
+const renderQuestions = (unit, track = "modules") => {
   if (!unit.questions || !unit.questions.length) return "";
+  if (track === "exercises") {
+    return `
+    <section class="question-set exercises-mode">
+      <div class="actions-header">
+        <h4>Quick checks</h4>
+        <p class="muted">Answer each question; submit to move to the next. Results at the end.</p>
+      </div>
+      <div class="question-view"></div>
+      <div class="question-nav">
+        <span class="question-counter"></span>
+        <div class="question-actions">
+          <button type="button" class="primary small submit-exercise">Submit answer</button>
+          <button type="button" class="ghost small next-question" disabled>Next</button>
+        </div>
+      </div>
+      <div class="answer-feedback muted"></div>
+    </section>
+  `;
+  }
+  if (track === "graded") {
+    return `
+    <section class="question-set exercises-mode graded-mode">
+      <div class="actions-header">
+        <h4>Graded Exercises</h4>
+        <p class="muted">Answer all, then submit to see your score.</p>
+      </div>
+      <div class="question-view"></div>
+      <div class="question-nav">
+        <button type="button" class="ghost small question-prev">Previous</button>
+        <span class="question-counter"></span>
+        <button type="button" class="primary small question-next">Next</button>
+      </div>
+      <div class="question-actions module-complete">
+        <button type="button" class="primary small submit-all">Submit all</button>
+      </div>
+    </section>
+  `;
+  }
   return `
     <section class="question-set">
       <div class="actions-header">
@@ -953,14 +1106,16 @@ const renderModelBlock = (modelRes) => {
 
 const buildModuleMarkup = (unit, track) => {
   const tasks = (unit.tasks || []).map((task) => `<li>${task}</li>`).join("");
-  const resources = (unit.resources || [])
-    .map((res) => `<li><a href="${res.href}" target="_blank">${res.label}</a></li>`)
-    .join("");
+  // Fallback: ensure Biology Chapter 1 has its podcast wired.
+  const titleLower = (unit.title || "").toLowerCase();
+  if (courseName.toLowerCase().includes("bio") && titleLower.includes("cell")) {
+    unit.media = unit.media || {};
+    if (!unit.media.podcastSrc) {
+      unit.media.podcastSrc = "/static/Biology1.mp3";
+    }
+  }
   const presentation = findPresentationLink(unit.resources);
-  const modelRes = findModelResource(unit.resources);
-  const presentationCta = presentation
-    ? `<div class="module-presentation"><a class="ghost small" target="_blank" href="${presentation.href}">Open presentation</a></div>`
-    : "";
+  const modelRes = findModelResource(unit.resources || unit.media?.resources || []);
   return `
     <div class="module-card">
       <header class="module-header">
@@ -969,16 +1124,18 @@ const buildModuleMarkup = (unit, track) => {
           <p class="module-eyebrow">Practice set</p>
           <h3>${unit.title}</h3>
           <p>${unit.description}</p>
-          ${presentationCta}
+          ${
+            presentation
+              ? `<div class="module-presentation"><a class="ghost small" target="_blank" href="${presentation.href}">Open presentation</a></div>`
+              : ""
+          }
         </div>
       </header>
       <div class="module-media">
-        ${renderMediaTile("graph", unit.media)}
-        ${renderMediaTile("notes", unit.media)}
+        ${renderVisualTiles(unit.media)}
         ${renderPresentationBlock(presentation)}
         ${renderModelBlock(modelRes)}
       </div>
-      ${resources ? `<div class="module-resources"><h4>Resources</h4><ul>${resources}</ul></div>` : ""}
       <section class="module-actions">
         <div class="actions-header">
           <h4>Practice moves</h4>
@@ -1049,15 +1206,69 @@ const dedupeByTitle = (units) => {
 const moduleUnits = dedupeByTitle(flattenUnits(tracks.modules));
 const exerciseUnits = dedupeByTitle(flattenUnits(tracks.exercises));
 let practiceUnits = [];
+const gradedUnits = buildGradedUnits();
+
+// Ensure key podcast assets are present on modules.
+const ensurePodcast = (index, src) => {
+  if (!moduleUnits[index]) return;
+  moduleUnits[index].media = moduleUnits[index].media || {};
+  if (!moduleUnits[index].media.podcastSrc) {
+    moduleUnits[index].media.podcastSrc = src;
+  }
+};
+
+// Ensure key videos for visual/genz modes.
+const ensureVideo = (index, src, key = "videoSrc") => {
+  if (!moduleUnits[index]) return;
+  moduleUnits[index].media = moduleUnits[index].media || {};
+  if (!moduleUnits[index].media[key]) {
+    moduleUnits[index].media[key] = src;
+  }
+};
+
+// Biology podcasts
+moduleUnits.forEach((unit, idx) => {
+  const title = (unit.title || "").toLowerCase();
+  if (title.includes("cell")) ensurePodcast(idx, "/static/Biology1.mp3");
+  if (title.includes("mitochond")) ensurePodcast(idx, "/static/Biology2.mp3");
+  if (title.includes("golgi")) ensurePodcast(idx, "/static/Biology3.mp3");
+  if (title.includes("endoplasmic") || title.includes("er")) ensurePodcast(idx, "/static/Biology4.mp3");
+});
+
+// Biology Chapter 1 Gen Z video
+moduleUnits.forEach((unit, idx) => {
+  const title = (unit.title || "").toLowerCase();
+  if (title.includes("cell")) ensureVideo(idx, "/static/bio1.mp4", "genzVideoSrc");
+  if (title.includes("mitochond")) ensureVideo(idx, "/static/bio2.mp4", "genzVideoSrc");
+  if (title.includes("golgi")) ensureVideo(idx, "/static/bio3.mp4", "genzVideoSrc");
+  if (title.includes("endoplasmic") || title.includes("er")) ensureVideo(idx, "/static/bio4.mp4", "genzVideoSrc");
+});
+
+// Probability chapter 2 podcast
+moduleUnits.forEach((unit, idx) => {
+  const title = (unit.title || "").toLowerCase();
+  if (title.includes("foundations")) ensurePodcast(idx, "/static/Probability1.mp3");
+  if (title.includes("conditional") || title.includes("bayes")) ensurePodcast(idx, "/static/Probability2.mp3");
+  if (title.includes("random variables") || title.includes("random")) ensurePodcast(idx, "/static/Probability3.mp3");
+  if (title.includes("joint") || title.includes("limit")) ensurePodcast(idx, "/static/Probability4.mp3");
+  if (title.includes("foundations")) ensureVideo(idx, "/static/pro1.mp4", "genzVideoSrc");
+  if (title.includes("conditional") || title.includes("bayes")) ensureVideo(idx, "/static/pro2.mp4", "genzVideoSrc");
+  if (title.includes("random variables") || title.includes("random")) ensureVideo(idx, "/static/pro3.mp4", "genzVideoSrc");
+  if (title.includes("joint") || title.includes("limit")) ensureVideo(idx, "/static/pro4.mp4", "genzVideoSrc");
+});
 
 let progressState = {
   modules: [],
   exercises: [],
   practice: [],
+  graded: [],
 };
 let currentSelection = { track: "modules", index: 0 };
 
 const ensureStatusLength = (track, length) => {
+  if (!progressState[track]) {
+    progressState[track] = [];
+  }
   const list = progressState[track];
   while (list.length < length) {
     list.push("not-started");
@@ -1070,24 +1281,46 @@ const statusForIndex = (track, index) => {
 };
 
 const renderNav = (listEl, units, track) => {
+  if (!listEl) return;
   listEl.innerHTML = "";
   units.forEach((unit, index) => {
     const item = document.createElement("li");
-    item.className = "nav-item";
+    item.className = track === "modules" ? "nav-item accordion-item" : "nav-item";
     item.dataset.track = track;
     item.dataset.index = index;
     const status = statusForIndex(track, index);
     const kind =
       track === "modules" ? "Module" : track === "exercises" ? "Exercise" : "Adaptive practice";
     item.innerHTML = `
-      <span class="status ${status}"></span>
-      <div>
-        <div class="nav-item-title">${unit.title}</div>
-        <div class="nav-item-subtitle">${unit.track || courseName} · ${kind}</div>
-      </div>
+      <button class="accordion-toggle">
+        <span class="status ${status}"></span>
+        <div>
+          <div class="nav-item-title">${unit.title}</div>
+          <div class="nav-item-subtitle">${unit.track || courseName} · ${kind}</div>
+        </div>
+      </button>
     `;
     listEl.appendChild(item);
   });
+
+  if (track === "modules") {
+    // Append standalone graded item
+    const gradedStatus = statusForIndex("graded", 0);
+    const gradedItem = document.createElement("li");
+    gradedItem.className = "nav-item accordion-item";
+    gradedItem.dataset.track = "graded";
+    gradedItem.dataset.index = "0";
+    gradedItem.innerHTML = `
+      <button class="accordion-toggle">
+        <span class="status ${gradedStatus}"></span>
+        <div>
+          <div class="nav-item-title">Graded Exercises</div>
+          <div class="nav-item-subtitle">${courseName} · Final exam</div>
+        </div>
+      </button>
+    `;
+    listEl.appendChild(gradedItem);
+  }
 };
 
 const setProgressStatus = async (track, index, status) => {
@@ -1099,7 +1332,7 @@ const setProgressStatus = async (track, index, status) => {
   if (statusEl) {
     statusEl.className = `status ${status}`;
   }
-  if (track === "practice") return;
+  if (track === "practice" || track === "graded") return;
   try {
     const response = await fetch("/api/progress", {
       method: "POST",
@@ -1120,10 +1353,132 @@ const attachQuestionHandlers = (unit, track, index) => {
   const prevBtn = container?.querySelector(".question-prev");
   const nextBtn = container?.querySelector(".question-next");
   const counter = container?.querySelector(".question-counter");
+  const submitAllBtn = container?.querySelector(".submit-all");
+  const submitExerciseBtn = container?.querySelector(".submit-exercise");
+  const nextAdaptiveBtn = container?.querySelector(".next-question");
+  const feedback = container?.querySelector(".answer-feedback");
+  const isExerciseMode = container?.classList.contains("exercises-mode");
+  const isAdaptiveExercises = track === "exercises" && isExerciseMode;
   if (!container || !view || !unit.questions?.length) return;
   const total = unit.questions.length;
   const solved = Array.from({ length: total }, () => false);
+  const selections = Array.from({ length: total }, () => null);
   let current = 0;
+
+  // Adaptive one-by-one flow for ungraded exercises
+  if (isAdaptiveExercises) {
+    const buckets = { easy: [], medium: [], hard: [] };
+    unit.questions.forEach((q) => {
+      const level = (q.difficulty || "easy").toLowerCase();
+      if (!buckets[level]) buckets[level] = [];
+      buckets[level].push(q);
+    });
+    const bucketIdx = { easy: 0, medium: 0, hard: 0 };
+    const history = [];
+    const maxQuestions = 10;
+    let currentDifficulty = "easy";
+    let currentQuestion = null;
+
+    const pickQuestion = (diff) => {
+      const list = buckets[diff] || [];
+      if (!list.length) return null;
+      const idx = bucketIdx[diff] % list.length;
+      bucketIdx[diff] += 1;
+      return list[idx];
+    };
+
+    const renderAdaptive = () => {
+      currentQuestion =
+        pickQuestion(currentDifficulty) ||
+        pickQuestion("easy") ||
+        pickQuestion("medium") ||
+        pickQuestion("hard");
+      if (!currentQuestion) return;
+      view.innerHTML = renderQuestionCard(currentQuestion, history.length, false);
+      if (counter)
+        counter.textContent = `Question ${history.length + 1} of ${maxQuestions} · ${currentDifficulty}`;
+      if (feedback) {
+        feedback.textContent = "";
+        feedback.className = "answer-feedback muted";
+      }
+      if (submitExerciseBtn) submitExerciseBtn.disabled = false;
+      if (nextAdaptiveBtn) nextAdaptiveBtn.disabled = true;
+    };
+
+    const showResults = () => {
+      const correctCount = history.filter((h) => h.isCorrect).length;
+      const trajectory = history.map((h) => h.difficulty).join(" → ");
+      const answersHtml = history
+        .map(
+          (h, idx) => `
+            <li class="${h.isCorrect ? "correct" : "wrong"}">
+              <strong>Q${idx + 1} (${h.difficulty}):</strong> ${h.prompt}<br>
+              Your answer: ${h.userAnswerText || "None"}${h.isCorrect ? " ✅" : " ❌"}<br>
+              Correct answer: ${h.correctAnswerText}
+            </li>
+          `
+        )
+        .join("");
+      container.innerHTML = `
+        <div class="question-set results-panel">
+          <div class="actions-header">
+            <h4>Results</h4>
+            <p class="muted">Exercises · Session complete.</p>
+          </div>
+          <p><strong>Total score:</strong> ${correctCount} / ${history.length}</p>
+          <p><strong>Difficulty path:</strong> ${trajectory}</p>
+          <ul class="outline-list">${answersHtml}</ul>
+        </div>
+      `;
+      setProgressStatus("exercises", index, correctCount === history.length ? "completed" : "progress");
+    };
+
+    submitExerciseBtn?.addEventListener("click", () => {
+      const selected = view.querySelector("input[type=radio]:checked");
+      if (!selected) {
+        if (feedback) {
+          feedback.textContent = "Choose an option first.";
+          feedback.classList.remove("muted");
+          feedback.classList.add("error");
+        }
+        return;
+      }
+      const chosen = Number(selected.value);
+      const isCorrect = chosen === currentQuestion.correct;
+      history.push({
+        prompt: currentQuestion.prompt,
+        userAnswerText: currentQuestion.options[chosen],
+        correctAnswerText: currentQuestion.options[currentQuestion.correct],
+        isCorrect,
+        difficulty: currentDifficulty,
+      });
+      if (isCorrect) {
+        if (currentDifficulty === "easy") currentDifficulty = "medium";
+        else currentDifficulty = "hard";
+      } else {
+        if (currentDifficulty === "hard") currentDifficulty = "medium";
+        else currentDifficulty = "easy";
+      }
+      if (feedback) {
+        feedback.textContent = "Answer recorded. Click Next.";
+        feedback.classList.remove("error");
+        feedback.classList.add("muted");
+      }
+      if (submitExerciseBtn) submitExerciseBtn.disabled = true;
+      if (nextAdaptiveBtn) nextAdaptiveBtn.disabled = false;
+      if (history.length >= maxQuestions) {
+        showResults();
+      }
+    });
+
+    nextAdaptiveBtn?.addEventListener("click", () => {
+      if (history.length >= maxQuestions) return;
+      renderAdaptive();
+    });
+
+    renderAdaptive();
+    return;
+  }
 
   const updateNav = () => {
     if (counter) counter.textContent = `Question ${current + 1} of ${total}`;
@@ -1136,12 +1491,33 @@ const attachQuestionHandlers = (unit, track, index) => {
     setProgressStatus(track, index, allCorrect ? "completed" : "progress");
   };
 
+  const markOptionRows = (cardEl, correctIndex, chosenIndex, isCorrect) => {
+    const rows = cardEl.querySelectorAll(".option-row");
+    rows.forEach((row, idx) => {
+      row.classList.remove("correct-ans", "wrong-ans");
+      const input = row.querySelector("input[type=radio]");
+      if (!input) return;
+      if (idx === correctIndex) {
+        row.classList.add("correct-ans");
+      }
+      if (idx === chosenIndex && !isCorrect) {
+        row.classList.add("wrong-ans");
+      }
+    });
+  };
+
   const bindQuestion = () => {
     const card = view.querySelector(".question-card");
-    const btn = card?.querySelector(".check-answer");
-    const feedback = card?.querySelector(".answer-feedback");
-    if (!btn || !feedback) return;
+    if (!card) return;
+    const btn = card.querySelector(".check-answer");
+    const feedback = card.querySelector(".answer-feedback");
     const qIdx = current;
+    card.querySelectorAll(`input[name="q-${qIdx}"]`).forEach((input) => {
+      input.addEventListener("change", () => {
+        selections[qIdx] = Number(input.value);
+      });
+    });
+    if (!btn || !feedback || isExerciseMode) return;
     btn.addEventListener("click", () => {
       const selected = card.querySelector(`input[name="q-${qIdx}"]:checked`);
       if (!selected) {
@@ -1152,6 +1528,7 @@ const attachQuestionHandlers = (unit, track, index) => {
         return;
       }
       const correct = Number(selected.value) === unit.questions[qIdx].correct;
+      markOptionRows(card, unit.questions[qIdx].correct, Number(selected.value), correct);
       solved[qIdx] = correct;
       card.classList.remove("correct-burst");
       feedback.textContent = correct
@@ -1177,7 +1554,11 @@ const attachQuestionHandlers = (unit, track, index) => {
   };
 
   const renderCurrent = () => {
-    view.innerHTML = renderQuestionCard(unit.questions[current], current);
+    view.innerHTML = renderQuestionCard(unit.questions[current], current, !isExerciseMode);
+    if (selections[current] !== null) {
+      const preset = view.querySelector(`input[name="q-${current}"][value="${selections[current]}"]`);
+      if (preset) preset.checked = true;
+    }
     bindQuestion();
     updateNav();
   };
@@ -1193,23 +1574,92 @@ const attachQuestionHandlers = (unit, track, index) => {
     renderCurrent();
   });
 
+  submitAllBtn?.addEventListener("click", () => {
+    if (selections.some((val) => val === null)) {
+      alert("Please answer all questions before submitting.");
+      return;
+    }
+    let correctCount = 0;
+    const rows = unit.questions.map((q, idx) => {
+      const isCorrect = selections[idx] === q.correct;
+      if (isCorrect) correctCount += 1;
+      return `<li class="answer-row ${isCorrect ? "correct" : "wrong"}"><strong>Q${idx + 1}:</strong> ${
+        q.prompt
+      }<br><span class="user-answer">Your answer: ${q.options[selections[idx]]}${
+        isCorrect ? " ✅" : " ❌"
+      }</span><br><span class="correct-answer">Correct: ${q.options[q.correct]}</span></li>`;
+    });
+    const scorePct = Math.round((correctCount / total) * 100);
+    if (track === "graded") {
+      const key = courseName.toLowerCase().includes("bio")
+        ? "biology"
+        : courseName.toLowerCase().includes("probability")
+        ? "probability"
+        : "general";
+      try {
+        localStorage.setItem(`pp-graded-score-${key}`, String(scorePct));
+      } catch (e) {
+        /* ignore */
+      }
+    }
+    container.innerHTML = `
+      <div class="question-set results-panel">
+        <div class="actions-header">
+          <h4>Results</h4>
+          <p class="muted">Exercises · Score: ${correctCount}/${total} (${scorePct}%)</p>
+        </div>
+        <ul class="outline-list">${rows.join("")}</ul>
+      </div>
+    `;
+    setProgressStatus(track, index, scorePct === 100 ? "completed" : "progress");
+  });
+
   renderCurrent();
+};
+
+const buildQuizOnlyMarkup = (unit) => {
+  const limitedUnit = { ...unit, questions: (unit.questions || []).slice(0, 10) };
+  return `
+    <div class="module-card">
+      <header class="module-header">
+        <div class="module-icon">🧠</div>
+        <div>
+          <p class="module-eyebrow">Exercises</p>
+          <h3>${unit.title}</h3>
+          <p>${unit.description || "Work through the questions, then submit."}</p>
+        </div>
+      </header>
+      ${renderQuestions(limitedUnit, "graded")}
+    </div>
+  `;
 };
 
 const loadSection = (track, index) => {
   const units =
-    track === "modules" ? moduleUnits : track === "exercises" ? exerciseUnits : practiceUnits;
+    track === "modules"
+      ? moduleUnits
+      : track === "exercises"
+      ? exerciseUnits
+      : track === "graded"
+      ? gradedUnits
+      : practiceUnits;
   const unit = units[index] || units[0];
   if (!unit) return;
   currentSelection = { track, index };
-  contentStage.innerHTML = buildModuleMarkup(unit, track);
-  document.querySelectorAll(".nav-item").forEach((item) => item.classList.remove("active"));
-  document
-    .querySelector(`.nav-item[data-track="${track}"][data-index="${index}"]`)
-    ?.classList.add("active");
+  const markup =
+    track === "graded"
+      ? buildQuizOnlyMarkup(unit)
+      : track === "exercises"
+      ? buildQuizOnlyMarkup(unit)
+      : buildModuleMarkup(unit, track);
+  contentStage.innerHTML = markup;
+  document.querySelectorAll(".nav-item").forEach((item) => item.classList.remove("active", "open"));
+  const activeItem = document.querySelector(`.nav-item[data-track="${track}"][data-index="${index}"]`);
+  activeItem?.classList.add("active", "open");
   if (statusForIndex(track, index) !== "completed") {
     setProgressStatus(track, index, "progress");
   }
+  applyVisualFilter();
   const completeBtn = document.querySelector(".mark-complete");
   completeBtn?.addEventListener("click", () => {
     setProgressStatus(track, index, "completed");
@@ -1268,6 +1718,20 @@ const initWorkspace = async () => {
   setupNotebook();
   setupSettingsDrawer();
   setupTheme();
+  try {
+    const savedVis = localStorage.getItem("pp-visuality");
+    if (savedVis && settingsVisuality) settingsVisuality.value = savedVis;
+  } catch (error) {
+    /* ignore */
+  }
+  settingsVisuality?.addEventListener("change", (e) => {
+    try {
+      localStorage.setItem("pp-visuality", e.target.value);
+    } catch (error) {
+      /* ignore */
+    }
+    applyVisualFilter();
+  });
   setupSounds();
   await ensureModelViewer();
   wireModelViewers(document);
@@ -1275,6 +1739,7 @@ const initWorkspace = async () => {
   if (!progressLoaded) return;
   rebuildPracticeUnits();
   setupNav();
+  applyVisualFilter();
 };
 
 initWorkspace();
