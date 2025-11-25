@@ -913,11 +913,6 @@ const settingsClose = document.getElementById("settings-close");
 const settingsTheme = document.getElementById("settings-theme");
 const settingsSounds = document.getElementById("settings-sounds");
 const settingsVisuality = document.getElementById("settings-visuality");
-const settingsToggle = document.getElementById("settings-toggle");
-const settingsDrawer = document.getElementById("settings-drawer");
-const settingsOverlay = document.getElementById("settings-overlay");
-const settingsClose = document.getElementById("settings-close");
-const settingsTheme = document.getElementById("settings-theme");
 
 // Hide any stray "Course catalog" links that may linger from previous layouts.
 const hideRogueCatalogLinks = () => {
