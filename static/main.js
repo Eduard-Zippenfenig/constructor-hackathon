@@ -26,6 +26,8 @@ const settingsDrawer = document.getElementById("settings-drawer");
 const settingsOverlay = document.getElementById("settings-overlay");
 const settingsClose = document.getElementById("settings-close");
 const settingsTheme = document.getElementById("settings-theme");
+const settingsSounds = document.getElementById("settings-sounds");
+const settingsVisuality = document.getElementById("settings-visuality");
 const stepNodes = {
   account: document.getElementById("step-account"),
   survey: document.getElementById("step-survey"),
@@ -1087,5 +1089,39 @@ const initTheme = () => {
   settingsTheme?.addEventListener("change", (e) => applyTheme(e.target.value));
 };
 
+const initSounds = () => {
+  try {
+    const saved = localStorage.getItem("pp-sounds");
+    if (saved && settingsSounds) settingsSounds.value = saved;
+  } catch (error) {
+    /* ignore */
+  }
+  settingsSounds?.addEventListener("change", (e) => {
+    try {
+      localStorage.setItem("pp-sounds", e.target.value);
+    } catch (error) {
+      /* ignore */
+    }
+  });
+};
+
+const initVisuality = () => {
+  try {
+    const saved = localStorage.getItem("pp-visuality");
+    if (saved && settingsVisuality) settingsVisuality.value = saved;
+  } catch (error) {
+    /* ignore */
+  }
+  settingsVisuality?.addEventListener("change", (e) => {
+    try {
+      localStorage.setItem("pp-visuality", e.target.value);
+    } catch (error) {
+      /* ignore */
+    }
+  });
+};
+
 setupSettingsDrawer();
 initTheme();
+initSounds();
+initVisuality();

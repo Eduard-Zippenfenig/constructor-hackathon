@@ -82,26 +82,35 @@
         </div>
       </main>
     </div>
-    <div class="settings-drawer hidden" id="settings-drawer">
-      <div class="settings-overlay" id="settings-overlay"></div>
-      <aside class="settings-panel">
-        <header class="settings-header">
-          <h3>Settings</h3>
+        <div class="settings-drawer hidden" id="settings-drawer">
+          <div class="settings-overlay" id="settings-overlay"></div>
+          <aside class="settings-panel">
+            <header class="settings-header">
+              <h3>Settings</h3>
           <button class="ghost pill small" id="settings-close" type="button">Close</button>
         </header>
         <div class="settings-body">
           <label class="settings-row">
-            <span>Notifications</span>
-            <select>
-              <option>On</option>
-              <option>Mute</option>
-            </select>
-          </label>
-          <label class="settings-row">
-            <span>Theme</span>
-            <select id="settings-theme">
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
+            <span>Sounds</span>
+            <select id="settings-sounds">
+              <option value="white">White noise</option>
+              <option value="lofi">Lo-Fi music</option>
+                <option value="silence">Silence</option>
+              </select>
+            </label>
+            <label class="settings-row">
+              <span>Visuality</span>
+              <select id="settings-visuality">
+                <option value="genz">Gen Z style</option>
+                <option value="visual">Visual style</option>
+                <option value="reader">Reader style</option>
+              </select>
+            </label>
+            <label class="settings-row">
+              <span>Theme</span>
+              <select id="settings-theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
             </select>
           </label>
         </div>

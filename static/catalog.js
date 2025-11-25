@@ -601,6 +601,33 @@ function setupTheme() {
   select?.addEventListener("change", (e) => applyTheme(e.target.value));
 }
 
+function setupSettingsExtras() {
+  const sounds = document.getElementById("settings-sounds");
+  const visuality = document.getElementById("settings-visuality");
+  try {
+    const savedSounds = localStorage.getItem("pp-sounds");
+    if (savedSounds && sounds) sounds.value = savedSounds;
+    const savedVisuality = localStorage.getItem("pp-visuality");
+    if (savedVisuality && visuality) visuality.value = savedVisuality;
+  } catch (error) {
+    /* ignore */
+  }
+  sounds?.addEventListener("change", (e) => {
+    try {
+      localStorage.setItem("pp-sounds", e.target.value);
+    } catch (error) {
+      /* ignore */
+    }
+  });
+  visuality?.addEventListener("change", (e) => {
+    try {
+      localStorage.setItem("pp-visuality", e.target.value);
+    } catch (error) {
+      /* ignore */
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const openBioBtn = document.getElementById("open-biology-workspace");
   if (openBioBtn) {
@@ -615,4 +642,5 @@ document.addEventListener("DOMContentLoaded", () => {
   renderBiologyOutline();
   setupSettingsDrawer();
   setupTheme();
+  setupSettingsExtras();
 });
