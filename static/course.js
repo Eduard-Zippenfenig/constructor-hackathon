@@ -53,7 +53,6 @@ const DEFAULT_WORKSPACE = {
         description:
           "Name the experiment, outcomes, and events; compute simple probabilities with complements.",
         media: {
-          guideTitle: "Guided Exercise · Events & Complements",
           guideIntro:
             "For each situation, list the sample space, define two events, and find a complement.",
           guideProblems: [
@@ -77,7 +76,6 @@ const DEFAULT_WORKSPACE = {
         title: "Counting Basics",
         description: "Multiplication rule, permutations, and combinations with short stories.",
         media: {
-          guideTitle: "Guided Exercise · Count It",
           guideIntro:
             "Decide whether order matters, then compute using a sketch, permutation, or combination.",
           guideProblems: [
@@ -102,7 +100,6 @@ const DEFAULT_WORKSPACE = {
         description:
           "Use two-way tables and trees to compute conditional probabilities and test independence.",
         media: {
-          guideTitle: "Guided Exercise · Table & Tree",
           guideIntro:
             "Fill the missing cells, compute P(A|B), and decide whether A and B look independent.",
           guideProblems: [
@@ -128,7 +125,6 @@ const DEFAULT_WORKSPACE = {
         title: "Probability Narratives",
         description: "Write clear stories for experiments, outcomes, and events before using symbols.",
         media: {
-          guideTitle: "Guided Exercise · Story First",
           guideIntro:
             "Rewrite each scenario in your own words, then define events with short labels.",
           guideProblems: [
@@ -152,7 +148,6 @@ const DEFAULT_WORKSPACE = {
         title: "Visual Proofs",
         description: "Use trees, Venns, and tables to justify probability answers.",
         media: {
-          guideTitle: "Guided Exercise · Draw & Justify",
           guideIntro:
             "For each problem, pick a visual (tree, Venn, or table) and annotate it.",
           guideProblems: [
@@ -176,7 +171,6 @@ const DEFAULT_WORKSPACE = {
         title: "Assumptions Check",
         description: "State independence, replacement, and model-fit assumptions explicitly.",
         media: {
-          guideTitle: "Guided Exercise · Call the Assumptions",
           guideIntro:
             "Identify which assumptions are needed and whether they hold in each prompt.",
           guideProblems: [
@@ -387,7 +381,6 @@ const rebuildPracticeUnits = () => {
     title: `Practice More · ${q.prompt.substring(0, 42)}${q.prompt.length > 42 ? "…" : ""}`,
     description: "Auto-generated from your recent misses.",
     media: {
-      guideTitle: "Redo this concept",
       guideIntro: q.theory || "Review the setup, then try again.",
       guideProblems: q.options.map((opt, i) => `${i + 1}) ${opt}`),
       notesPrompt: q.explain || "",
@@ -416,7 +409,6 @@ const hydrateHero = () => {
   heroSubtitle.textContent =
     workspace.heroSubtitle ||
     `Focus: ${mathFocusLabel}. Goal: ${workspace.account?.goal || "Climb your next score band"}.`;
-  heroTags.innerHTML = "";
   const defaultTags = [
     audioLabels[workspace?.survey?.audio] || "Lo-fi music",
     `Structure score: ${workspace?.survey?.structure || "3"}`,
@@ -428,8 +420,10 @@ const hydrateHero = () => {
   const tags = Array.isArray(workspace.heroTags) && workspace.heroTags.length
     ? workspace.heroTags
     : defaultTags;
-  heroTags.innerHTML = "";
-  tags.forEach((tag) => heroTags.appendChild(createTag(tag)));
+  if (heroTags) {
+    heroTags.innerHTML = "";
+    tags.forEach((tag) => heroTags.appendChild(createTag(tag)));
+  }
   renderTagDropdown(tags);
 };
 
@@ -465,8 +459,8 @@ const renderMediaTile = (type, media) => {
       .join("");
     return `
       <div class="media-tile video">
-        <p class="media-label">Guided Exercise</p>
-        <p><strong>${media.guideTitle || "Guided practice"}</strong></p>
+        ${media.guideTitle ? `<p class="media-label">${media.guideTitle}</p>` : ""}
+        ${media.guideIntro ? `<p><strong>${media.guideIntro}</strong></p>` : ""}
         <p class="muted-small">${media.guideIntro || ""}</p>
         ${problems ? `<ul>${problems}</ul>` : ""}
       </div>
@@ -553,13 +547,43 @@ const setupNotebook = () => {
   let resizePointerId = null;
   let resizeStart = { x: 0, y: 0, width: 0, height: 0, left: 0, top: 0 };
 
+  const adjustNotebookLayout = () => {
+    const body = notebookPanel.querySelector(".notebook-body");
+    if (!body) return;
+    const header = notebookPanel.querySelector(".notebook-header");
+    const toggle = notebookPanel.querySelector(".notebook-mode-toggle");
+    const chrome =
+      (header?.offsetHeight || 0) + (toggle?.offsetHeight || 0) + (notebookResize ? notebookResize.offsetHeight : 0) + 32;
+    const available = notebookPanel.clientHeight - chrome;
+    body.style.height = available > 160 ? `${available}px` : "auto";
+    const textSection = notebookPanel.querySelector(".notebook-text");
+    const textArea = document.getElementById("notebook-textarea");
+    if (textSection && textArea) {
+      const styles = getComputedStyle(textSection);
+      const padY = parseFloat(styles.paddingTop || "0") + parseFloat(styles.paddingBottom || "0");
+      const labelHeight = textSection.querySelector("label")?.offsetHeight || 0;
+      const usable = (textSection.clientHeight || available) - padY - labelHeight - 12;
+      textArea.style.height = `${Math.max(120, usable)}px`;
+    }
+    resizeCanvas();
+  };
+
   const resizeCanvas = () => {
-    const { width, height } = notebookCanvas.getBoundingClientRect();
+    const container = notebookCanvas.closest(".notebook-canvas");
+    if (!container) return;
+    const toolbar = container.querySelector(".canvas-toolbar");
+    const styles = getComputedStyle(container);
+    const padX = parseFloat(styles.paddingLeft || "0") + parseFloat(styles.paddingRight || "0");
+    const padY = parseFloat(styles.paddingTop || "0") + parseFloat(styles.paddingBottom || "0");
+    const usableWidth = Math.max(1, container.clientWidth - padX);
+    const usableHeight = Math.max(120, container.clientHeight - padY - (toolbar?.offsetHeight || 0));
     const data = notebookCanvas.toDataURL();
-    notebookCanvas.width = Math.floor(width);
-    notebookCanvas.height = Math.floor(height);
+    notebookCanvas.style.width = `${usableWidth}px`;
+    notebookCanvas.style.height = `${usableHeight}px`;
+    notebookCanvas.width = Math.floor(usableWidth);
+    notebookCanvas.height = Math.floor(usableHeight);
     const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
+    img.onload = () => ctx.drawImage(img, 0, 0, notebookCanvas.width, notebookCanvas.height);
     img.src = data;
   };
 
@@ -570,7 +594,10 @@ const setupNotebook = () => {
     textSection?.classList.toggle("hidden", mode !== "text");
     drawSection?.classList.toggle("hidden", mode !== "draw");
     notebookModeButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.mode === mode));
-    if (mode === "draw") resizeCanvas();
+    if (mode === "draw") {
+      adjustNotebookLayout();
+      resizeCanvas();
+    }
   };
 
   const setActiveTool = (tool, color) => {
@@ -652,6 +679,7 @@ const setupNotebook = () => {
     notebookPanel.classList.toggle("hidden");
     if (!notebookPanel.classList.contains("hidden")) {
       setMode(currentMode);
+      adjustNotebookLayout();
       resizeCanvas();
       // Ensure inline dimensions exist for resizing math
       const rect = notebookPanel.getBoundingClientRect();
@@ -665,6 +693,11 @@ const setupNotebook = () => {
   });
 
   window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("resize", adjustNotebookLayout);
+  if (window.ResizeObserver) {
+    const observer = new ResizeObserver(() => adjustNotebookLayout());
+    observer.observe(notebookPanel);
+  }
   setActiveTool("pen", currentColor);
   resizeCanvas();
   if (notebookModeButtons.length) {
@@ -725,7 +758,7 @@ const setupNotebook = () => {
       const maxHeight = window.innerHeight - resizeStart.top - 12;
       notebookPanel.style.width = `${Math.min(newWidth, maxWidth)}px`;
       notebookPanel.style.height = `${Math.min(newHeight, maxHeight)}px`;
-      resizeCanvas();
+      adjustNotebookLayout();
     } else if (event.type === "pointerup" || event.type === "pointercancel") {
       if (event.pointerId !== resizePointerId) return;
       resizing = false;
@@ -782,6 +815,79 @@ const setupTheme = () => {
   const initial = saved === "dark" ? "dark" : "light";
   applyTheme(initial);
   settingsTheme?.addEventListener("change", (e) => applyTheme(e.target.value));
+};
+
+const setupSounds = () => {
+  const attachSoundResume = () => {
+    const pendingFlag = localStorage.getItem("pp-sound-pending");
+    if (pendingFlag === "1" && !pendingSound) {
+      const saved = localStorage.getItem("pp-sounds");
+      if (saved === "lofi" || saved === "white") {
+        pendingSound = saved;
+      }
+      localStorage.removeItem("pp-sound-pending");
+    }
+    if (!pendingSound) return;
+    const handler = () => {
+      const val = pendingSound;
+      pendingSound = null;
+      document.removeEventListener("pointerdown", handler);
+      playSound(val);
+    };
+    document.addEventListener("pointerdown", handler);
+  };
+
+  const stopSound = () => {
+    if (activeSound) {
+      activeSound.pause();
+      activeSound = null;
+    }
+  };
+
+  const playSound = (val) => {
+    stopSound();
+    let sources = [];
+    if (val === "lofi") sources = ["/static/lofi.mp3"];
+    if (val === "white") sources = ["/static/rain.mp3", "/static/rain.wav"];
+    if (!sources.length) return;
+    const audio = new Audio();
+    audio.loop = true;
+    audio.volume = 0.35;
+    const tryNext = () => {
+      const src = sources.shift();
+      if (!src) {
+        pendingSound = val;
+        attachSoundResume();
+        return;
+      }
+      audio.src = src;
+      audio.play().then(() => {
+        activeSound = audio;
+        pendingSound = null;
+      }).catch(() => tryNext());
+    };
+    tryNext();
+  };
+
+  let saved = null;
+  try {
+    saved = localStorage.getItem("pp-sounds");
+    if (saved && settingsSounds) settingsSounds.value = saved;
+  } catch (error) {
+    saved = null;
+  }
+  if (saved === "lofi" || saved === "white") {
+    playSound(saved);
+  }
+  settingsSounds?.addEventListener("change", (e) => {
+    const val = e.target.value;
+    playSound(val);
+    try {
+      localStorage.setItem("pp-sounds", val);
+    } catch (error) {
+      /* ignore */
+    }
+  });
 };
 
 const findPresentationLink = (resources = []) => {
@@ -867,7 +973,6 @@ const buildModuleMarkup = (unit, track) => {
         </div>
       </header>
       <div class="module-media">
-        ${renderMediaTile("video", unit.media)}
         ${renderMediaTile("graph", unit.media)}
         ${renderMediaTile("notes", unit.media)}
         ${renderPresentationBlock(presentation)}
@@ -913,6 +1018,7 @@ const settingsClose = document.getElementById("settings-close");
 const settingsTheme = document.getElementById("settings-theme");
 const settingsSounds = document.getElementById("settings-sounds");
 const settingsVisuality = document.getElementById("settings-visuality");
+let activeSound = null;
 
 // Hide any stray "Course catalog" links that may linger from previous layouts.
 const hideRogueCatalogLinks = () => {
@@ -1162,6 +1268,7 @@ const initWorkspace = async () => {
   setupNotebook();
   setupSettingsDrawer();
   setupTheme();
+  setupSounds();
   await ensureModelViewer();
   wireModelViewers(document);
   const progressLoaded = await loadProgress();

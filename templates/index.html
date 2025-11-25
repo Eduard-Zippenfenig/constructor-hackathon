@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PulsePrep · Adaptive Probability Studio</title>
+    <title>CO-OP · Adaptive Probability Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,15 +18,16 @@
         <div class="brand">
           <span class="brand-icon">◎</span>
           <div>
-            <strong>PulsePrep</strong>
-            <p>Adaptive probability studio</p>
+            <strong>CO-OP</strong>
+            <p>Powered by You</p>
           </div>
         </div>
         <div class="nav-actions">
-          <a class="ghost-link" href="/course">Workspace</a>
-          <a class="ghost-link" href="/catalog">Course catalog</a>
+          <a class="ghost-link nav-protected hidden" href="/course">Workspace</a>
+          <a class="ghost-link nav-protected hidden" href="/catalog">Course catalog</a>
+          <button class="ghost pill small nav-protected hidden" id="logout-btn" type="button">Log out</button>
+          <button class="ghost pill small" id="nav-login-btn" type="button">Log in</button>
           <button class="ghost pill small" id="settings-toggle" type="button">Settings</button>
-          <button id="logout-btn" class="ghost pill small hidden">Log out</button>
         </div>
       </nav>
 
@@ -37,23 +38,20 @@
             Spin up your courses that mirror <span>your</span> attention span, soundscape, and pace.
           </h1>
           <p>
-            PulsePrep blends an adaptability survey and a full-stack course builder. Each step tunes the probability experience—music, format, explanations—so learners get into flow faster.
-          </p>
-          <p class="microcopy" style="margin-top:1.25rem;">
-            3 simple moves: 01 create profile, 02 capture adaptability, 03 explore your adaptive course—unlock a living workspace instantly.
+            CO-OP blends an adaptability survey and a full-stack course builder. Each step tunes the probability experience—music, format, explanations—so learners get into flow faster.
           </p>
           <div class="hero-metrics">
             <div>
-              <strong>3-step</strong>
-              <p>diagnostic funnel</p>
+              <strong>6+</strong>
+              <p>Learning Styles</p>
             </div>
             <div>
-              <strong>18+</strong>
-              <p>adaptive levers</p>
+              <strong>2+</strong>
+              <p>Courses</p>
             </div>
             <div>
-              <strong>6 week</strong>
-              <p>launch plan</p>
+              <strong>100%</strong>
+              <p>Deeply Tailored Experience</p>
             </div>
           </div>
         </div>
@@ -94,7 +92,6 @@
           <header>
             <p class="eyebrow">Step 01</p>
             <h2>Account fingerprint</h2>
-            <p>Create or access your learner profile so the system can personalize tone and reminders.</p>
           </header>
           <div class="auth-tabs">
             <button type="button" class="auth-tab active" data-auth="signup">Sign up</button>
@@ -132,17 +129,6 @@
             </label>
             <button type="submit" class="primary pill large">Log in</button>
           </form>
-
-          <div class="google-inline">
-            <input type="text" id="google-name" placeholder="Google display name" />
-            <input type="email" id="google-email" placeholder="google_account@email.com" />
-            <button type="button" class="google-btn" id="google-signup">
-              <span>Continue with Google</span>
-            </button>
-          </div>
-          <p class="muted" style="margin-top:1rem;">
-            Want the classic secure signup? <a href="/auth">Open the standalone signup page.</a>
-          </p>
         </article>
 
       </section>

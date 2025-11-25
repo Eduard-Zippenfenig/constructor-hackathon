@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Course Catalog · PulsePrep</title>
+    <title>Course Catalog · CO-OP</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
   </head>
   <body class="landing">
@@ -12,7 +12,8 @@
         <div class="brand">
           <span class="brand-icon">◎</span>
           <div>
-            <strong>PulsePrep</strong>
+            <strong>CO-OP</strong>
+            <p>Powered by You</p>
           </div>
         </div>
         <div class="nav-actions">
@@ -28,15 +29,13 @@
         <div class="panel-header">
           <p class="eyebrow">Catalog</p>
           <h2>Available courses</h2>
-          <p>Probability is live; Biology Foundations just landed.</p>
         </div>
         <div class="library-grid">
           <article class="card catalog-card probability-card">
             <div class="course-badge">Adaptive · Probability</div>
             <h3>Probability · Adaptive track</h3>
             <p class="muted">
-              Nine probability chapters with guided exercises, quick checks, and the real slides/homeworks/solutions
-              from your desktop archive.
+              Nine probability chapters with quick checks and the real slides/homeworks/solutions.
             </p>
             <ul class="profile-list">
               <li><strong>Chapters:</strong> 9 (Foundations → Bayes → CLT/Markov)</li>
@@ -53,13 +52,8 @@
               <p class="eyebrow">Chapters &amp; drills</p>
               <ul class="outline-list" id="probability-module-list"></ul>
             </div>
-            <div class="module-teaser">
-              <p class="eyebrow">Downloads from your archive</p>
-              <div id="probability-materials" class="material-columns"></div>
-            </div>
             <div class="cta-row spaced">
               <button type="button" class="primary pill" id="open-probability-workspace">Open course workspace</button>
-              <a class="ghost pill" href="/survey">Tune settings</a>
             </div>
           </article>
           <article class="card catalog-card biology-card">
@@ -70,7 +64,7 @@
             </p>
             <ul class="profile-list">
               <li><strong>Modules:</strong> Cell biology, genetics, evolution, ecology, systems</li>
-              <li><strong>Includes:</strong> Guided lab prompts, reflections, graphing cues</li>
+              <li><strong>Includes:</strong> Lab prompts, reflections, graphing cues</li>
               <li><strong>Mode:</strong> Self-paced with lab notebook discipline</li>
             </ul>
             <div class="pill-row">
@@ -91,7 +85,6 @@
             </div>
             <div class="cta-row spaced">
               <button type="button" class="primary pill" id="open-biology-workspace">Open biology workspace</button>
-              <a class="ghost pill" href="/course" target="_blank">Preview layout</a>
             </div>
           </article>
           <article class="card muted" style="opacity: 0.6;">

@@ -35,6 +35,7 @@ let activeAudioNode = null;
 let slimeVideoPrimed = false;
 let slimeAnimationStarted = false;
 let catalogRedirectTimer = null;
+let settingsAudio = null;
 
 const mediaLibrary = {
   whiteNoise: createLoopedAudio(buildMediaPath('rain.wav'), 0.2),
@@ -529,6 +530,22 @@ function buildInsights() {
 
   const learningStyle =
     styleTags.length > 0 ? styleTags.join(' + ') : 'no dominant learning style detected';
+  try {
+    let soundPref = null;
+    if (styleTags.includes('music focus')) {
+      soundPref = 'lofi';
+    } else if (styleTags.includes('white-noise focus')) {
+      soundPref = 'white';
+    }
+    if (soundPref) {
+      localStorage.setItem('pp-sounds', soundPref);
+      // signal other pages to resume this sound on next interaction
+      localStorage.setItem('pp-sound-pending', '1');
+      localStorage.setItem('pp-test-complete', '1');
+    }
+  } catch (error) {
+    /* ignore */
+  }
   insights.push(
     `<p class="learning-style-callout"><strong>Your learning style</strong><br /><span class="learning-style-value">${learningStyle}</span><br />Accuracy ${accuracy}%, avg time ${formatSeconds(
       avgResponse || 0

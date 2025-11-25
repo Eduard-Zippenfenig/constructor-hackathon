@@ -68,7 +68,6 @@ const BIOLOGY_WORKSPACE = {
         description:
           "Organelles, membranes, and how cells capture/store energy through respiration and photosynthesis.",
         media: {
-          guideTitle: "Guided Lab Prep · Cell Tour",
           guideIntro: "Map each organelle to its role, then trace how glucose becomes ATP.",
           guideProblems: [
             "Identify where glycolysis, Krebs, and ETC occur in a cell diagram.",
@@ -94,7 +93,6 @@ const BIOLOGY_WORKSPACE = {
         title: "Genetics & Heredity",
         description: "DNA → RNA → protein, Punnett squares, and interpreting pedigrees.",
         media: {
-          guideTitle: "Guided Exercise · Traits & Tracking",
           guideIntro: "Work a mono- and dihybrid cross, then connect genotype to phenotype.",
           guideProblems: [
             "Complete Aa × Aa Punnett; mark genotype ratios and phenotype ratios.",
@@ -118,7 +116,6 @@ const BIOLOGY_WORKSPACE = {
         title: "Evolution & Natural Selection",
         description: "Mechanisms of evolution, evidence, and reading phylogenetic trees.",
         media: {
-          guideTitle: "Guided Exercise · Evidence & Trees",
           guideIntro: "Connect variation, selection pressure, and fitness; practice tree reading.",
           guideProblems: [
             "List the four conditions for natural selection using a real example.",
@@ -139,7 +136,6 @@ const BIOLOGY_WORKSPACE = {
         title: "Systems, Homeostasis, & Ecology",
         description: "Body systems integration, feedback loops, cycles, and energy flow in ecosystems.",
         media: {
-          guideTitle: "Guided Exercise · Feedbacks",
           guideIntro: "Trace a feedback loop and follow matter/energy through an ecosystem snapshot.",
           guideProblems: [
             "Diagram negative feedback for blood glucose (insulin/glucagon).",
@@ -402,7 +398,6 @@ const workspaceUnitFromChapter = (chapter, track) => ({
   title: chapter.title,
   description: chapter.focus,
   media: {
-    guideTitle: "Guided Exercise",
     guideIntro: chapter.focus,
     guideProblems: [chapter.focus, chapter.sprint],
     graphPrompt: chapter.commFocus,
@@ -601,6 +596,83 @@ function setupTheme() {
   select?.addEventListener("change", (e) => applyTheme(e.target.value));
 }
 
+let activeSound = null;
+let pendingSound = null;
+
+function stopSound() {
+  if (activeSound) {
+    activeSound.pause();
+    activeSound = null;
+  }
+}
+
+function playSound(val) {
+  stopSound();
+  let sources = [];
+  if (val === "lofi") sources = ["/static/lofi.mp3"];
+  if (val === "white") sources = ["/static/rain.mp3", "/static/rain.wav"];
+  if (!sources.length) return;
+  const audio = new Audio();
+  audio.loop = true;
+  audio.volume = 0.35;
+  const tryNext = () => {
+    const src = sources.shift();
+    if (!src) {
+      pendingSound = val;
+      attachSoundResume();
+      return;
+    }
+    audio.src = src;
+    audio.play().then(() => {
+      activeSound = audio;
+      pendingSound = null;
+    }).catch(() => tryNext());
+  };
+  tryNext();
+}
+
+function attachSoundResume() {
+  const pendingFlag = localStorage.getItem("pp-sound-pending");
+  if (pendingFlag === "1" && !pendingSound) {
+    const saved = localStorage.getItem("pp-sounds");
+    if (saved === "lofi" || saved === "white") {
+      pendingSound = saved;
+    }
+    localStorage.removeItem("pp-sound-pending");
+  }
+  if (!pendingSound) return;
+  const handler = () => {
+    const val = pendingSound;
+    pendingSound = null;
+    document.removeEventListener("pointerdown", handler);
+    playSound(val);
+  };
+  document.addEventListener("pointerdown", handler);
+}
+
+function setupSounds() {
+  const select = document.getElementById("settings-sounds");
+  let saved = null;
+  try {
+    saved = localStorage.getItem("pp-sounds");
+    if (saved && select) select.value = saved;
+  } catch (error) {
+    saved = null;
+  }
+  if (saved === "lofi" || saved === "white") {
+    playSound(saved);
+  }
+  select?.addEventListener("change", (e) => {
+    const val = e.target.value;
+    playSound(val);
+    try {
+      localStorage.setItem("pp-sounds", val);
+    } catch (error) {
+      /* ignore */
+    }
+  });
+}
+
 function setupSettingsExtras() {
   const sounds = document.getElementById("settings-sounds");
   const visuality = document.getElementById("settings-visuality");
@@ -642,5 +714,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderBiologyOutline();
   setupSettingsDrawer();
   setupTheme();
+  setupSounds();
   setupSettingsExtras();
 });

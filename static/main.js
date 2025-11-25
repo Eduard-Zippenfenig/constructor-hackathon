@@ -21,6 +21,7 @@ const englishLibrary = document.getElementById("english-library");
 const materialsList = document.getElementById("materials-list");
 const openCourseButton = document.getElementById("open-course");
 const logoutButton = document.getElementById("logout-btn");
+const navLoginButton = document.getElementById("nav-login-btn");
 const settingsToggle = document.getElementById("settings-toggle");
 const settingsDrawer = document.getElementById("settings-drawer");
 const settingsOverlay = document.getElementById("settings-overlay");
@@ -28,6 +29,8 @@ const settingsClose = document.getElementById("settings-close");
 const settingsTheme = document.getElementById("settings-theme");
 const settingsSounds = document.getElementById("settings-sounds");
 const settingsVisuality = document.getElementById("settings-visuality");
+let activeSound = null;
+let pendingSound = null;
 const stepNodes = {
   account: document.getElementById("step-account"),
   survey: document.getElementById("step-survey"),
@@ -180,12 +183,14 @@ const loadSession = async () => {
       }
       hideCourseSections();
       logoutButton?.classList.add("hidden");
+      navLoginButton?.classList.remove("hidden");
+      gateNavUntilTestComplete();
       return;
     }
     state.account = data.user;
     state.survey = data.survey;
     setStepState(state.survey ? "course" : "survey");
-    logoutButton?.classList.remove("hidden");
+    navLoginButton?.classList.add("hidden");
     if (accountSection) {
       accountSection.classList.add("hidden");
     }
@@ -194,10 +199,13 @@ const loadSession = async () => {
     } else {
       hideCourseSections();
     }
+    gateNavUntilTestComplete();
   } catch (error) {
     console.error("Unable to load session", error);
     showAuthError(error.message || "Session error");
     setStepState("account");
+    state.account = null;
+    gateNavUntilTestComplete();
   }
 };
 
@@ -1032,6 +1040,14 @@ if (logoutButton) {
     }
   });
 }
+if (navLoginButton) {
+  navLoginButton.addEventListener("click", () => {
+    setAuthView("login");
+    if (accountSection) {
+      accountSection.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+}
 
 document.querySelectorAll("[data-scroll]").forEach((trigger) => {
   trigger.addEventListener("click", (event) => {
@@ -1089,16 +1105,91 @@ const initTheme = () => {
   settingsTheme?.addEventListener("change", (e) => applyTheme(e.target.value));
 };
 
-const initSounds = () => {
-  try {
+const stopActiveSound = () => {
+  if (activeSound) {
+    activeSound.pause();
+    activeSound = null;
+  }
+};
+
+const playSound = (type) => {
+  stopActiveSound();
+  let sources = [];
+  if (type === "lofi") {
+    sources = ["/static/lofi.mp3"];
+  } else if (type === "white") {
+    sources = ["/static/rain.mp3", "/static/rain.wav"];
+  } else {
+    return;
+  }
+  const audio = new Audio();
+  audio.loop = true;
+  audio.volume = 0.35;
+  const tryNext = () => {
+    const src = sources.shift();
+    if (!src) {
+      pendingSound = type;
+      attachSoundResume();
+      return;
+    }
+    audio.src = src;
+    audio.play().then(() => {
+      activeSound = audio;
+      pendingSound = null;
+    }).catch(() => tryNext());
+  };
+  tryNext();
+};
+
+const attachSoundResume = () => {
+  const pendingFlag = localStorage.getItem("pp-sound-pending");
+  if (pendingFlag === "1" && !pendingSound) {
     const saved = localStorage.getItem("pp-sounds");
+    if (saved === "lofi" || saved === "white") {
+      pendingSound = saved;
+    }
+    localStorage.removeItem("pp-sound-pending");
+  }
+  if (!pendingSound) return;
+  const handler = () => {
+    const val = pendingSound;
+    pendingSound = null;
+    document.removeEventListener("pointerdown", handler);
+    playSound(val);
+  };
+  document.addEventListener("pointerdown", handler);
+};
+
+const gateNavUntilTestComplete = () => {
+  const protectedLinks = document.querySelectorAll(".nav-protected");
+  const authed = !!state.account;
+  protectedLinks.forEach((el) => {
+    el.classList.toggle("hidden", !authed);
+  });
+  if (navLoginButton) {
+    navLoginButton.classList.toggle("hidden", authed);
+  }
+  if (logoutButton) {
+    logoutButton.classList.toggle("hidden", !authed);
+  }
+};
+
+const initSounds = () => {
+  let saved = null;
+  try {
+    saved = localStorage.getItem("pp-sounds");
     if (saved && settingsSounds) settingsSounds.value = saved;
   } catch (error) {
-    /* ignore */
+    saved = null;
+  }
+  if (saved === "lofi" || saved === "white") {
+    playSound(saved);
   }
   settingsSounds?.addEventListener("change", (e) => {
+    const val = e.target.value;
+    playSound(val);
     try {
-      localStorage.setItem("pp-sounds", e.target.value);
+      localStorage.setItem("pp-sounds", val);
     } catch (error) {
       /* ignore */
     }
@@ -1125,3 +1216,4 @@ setupSettingsDrawer();
 initTheme();
 initSounds();
 initVisuality();
+gateNavUntilTestComplete();

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Course Workspace · PulsePrep</title>
+    <title>Course Workspace · CO-OP</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
     <script type="module" src="{{ url_for('static', filename='model-viewer.min.js') }}"></script>
   </head>
@@ -32,19 +32,9 @@
       <main class="workspace-main">
         <div class="workspace-top-actions">
           <a class="ghost pill back-button" href="/catalog">← Back to catalog</a>
-          <button class="ghost pill small" id="settings-toggle" type="button">Settings</button>
           <button class="primary pill" id="notebook-toggle" type="button">Open notepad</button>
+          <button class="ghost pill small" id="settings-toggle" type="button">Settings</button>
         </div>
-        <header class="workspace-hero" id="workspace-hero">
-          <div class="tag-dropdown" id="workspace-tag-dropdown">
-            <button type="button" class="dropdown-toggle" id="tag-dropdown-toggle">
-              Focus areas
-              <span class="chevron">▾</span>
-            </button>
-            <ul class="dropdown-menu" id="tag-dropdown-menu"></ul>
-          </div>
-          <div class="pill-row" id="workspace-tags" style="display:none;"></div>
-        </header>
 
         <div id="workspace-content" class="workspace-content">
           <article class="stage-screen" id="content-stage"></article>
