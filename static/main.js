@@ -1217,3 +1217,16 @@ initTheme();
 initSounds();
 initVisuality();
 gateNavUntilTestComplete();
+window.addEventListener("storage", (e) => {
+  if (e.key === "pp-sounds") {
+    if (settingsSounds && e.newValue) settingsSounds.value = e.newValue;
+    if (e.newValue === "lofi" || e.newValue === "white") {
+      playSound(e.newValue);
+    } else {
+      stopSound();
+    }
+  }
+  if (e.key === "pp-visuality" && settingsVisuality && e.newValue) {
+    settingsVisuality.value = e.newValue;
+  }
+});
