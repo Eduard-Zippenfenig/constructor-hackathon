@@ -14,6 +14,8 @@ const inlineFeedback = document.getElementById('inline-feedback');
 const accuracyStat = document.getElementById('accuracy-stat');
 const speedStat = document.getElementById('speed-stat');
 const fastestStat = document.getElementById('fastest-stat');
+const soundResultEl = document.getElementById('sound-result');
+const visualResultEl = document.getElementById('visual-result');
 const insightPanel = document.getElementById('insight-panel');
 const slimeWrapper = document.getElementById('slime-wrapper');
 const slimeVideo = document.getElementById('slime-video');
@@ -546,6 +548,8 @@ function buildInsights() {
   } catch (error) {
     /* ignore */
   }
+  if (soundResultEl) soundResultEl.textContent = soundPick.label;
+  if (visualResultEl) visualResultEl.textContent = visualPick.label;
   insights.push(
     `<p class="learning-style-callout"><strong>Your learning style</strong><br /><span class="learning-style-value">${learningStyle}</span><br />Accuracy ${accuracy}%, avg time ${formatSeconds(
       avgResponse || 0
