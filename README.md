@@ -1,34 +1,23 @@
-constructor-hackathon — Local workflow notes
+# Constructor Hackathon Project
 
-Quick reminder for working with the shared repository:
+This repository contains the code and assets created for the **Constructor Hackathon** project — a collaborative coding challenge at Constructor University. :contentReference[oaicite:0]{index=0}
 
-- Always fetch and rebase onto the latest `main` before pushing your changes. This helps avoid merge conflicts and keeps history linear.
+## Overview
 
-Commands to run locally before pushing (recommended):
+This project includes a small application with associated static and template assets. It was built as part of a hackathon event focused on creative and functional development. :contentReference[oaicite:1]{index=1}
 
-```bash
-# fetch latest changes from origin
-git fetch origin
+### 📁 What's Inside
 
-# rebase your current branch onto origin/main
-git pull --rebase origin main
+- `app.py` – main application code :contentReference[oaicite:2]{index=2}  
+- `static/` – static assets (3D models, textures) :contentReference[oaicite:3]{index=3}  
+- `templates/` – HTML templates :contentReference[oaicite:4]{index=4}  
+- `scripts/` – developer scripts :contentReference[oaicite:5]{index=5}  
+- `githooks/` – Git workflow helpers :contentReference[oaicite:6]{index=6}  
+- `requirements.txt` – Python dependencies :contentReference[oaicite:7]{index=7}
 
-# resolve any conflicts, then continue the rebase
-git rebase --continue
+## 🛠️ Setup
 
-# now push
-git push origin <your-branch>
-```
-
-Optional: install the repo's pre-push hook to automatically attempt a rebase before pushing.
-
-Install steps (one-time per clone):
-
-```bash
-# from repo root
-./scripts/install-git-hooks.sh
-```
-
-If the hook finds conflicts during rebase it will abort and stop the push — resolve conflicts and try again.
-
-This workflow protects shared branches and reduces accidental force-pushes.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Eduard-Zippenfenig/constructor-hackathon.git
+   cd constructor-hackathon
